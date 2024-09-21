@@ -1,0 +1,102 @@
+<!-- 4 cuadrados arriba -->
+<div
+  class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 justify-center"
+>
+  <div class="">
+    <a
+      routerLink="/app/crear_animal"
+      class="flex items-center justify-center p-2 bg-blue-500 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-blue-800 group"
+    >
+      <svg
+        class="w-6 h-6 text-gray-800 dark:text-white"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+        />
+      </svg>
+
+      <span class="ml-2">Añadir animal</span>
+    </a>
+  </div>
+  <!-- <div
+    class="border-2 border-dashed border-blue-600 rounded-lg dark:border-red-700 h-20 "
+  ></div>
+  <div
+    class="border-2 border-dashed rounded-lg border-blue-600 dark:border-red-700 h-20 "
+  ></div>
+  <div
+    class="border-2 border-dashed rounded-lg border-blue-600 dark:border-red-700 h-20 "
+  ></div> -->
+</div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <ng-container *ngIf="animales.length > 0; else noAnimals">
+    <table
+      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+    >
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+      >
+        <tr>
+          <th scope="col" class="px-6 py-3">Imagen</th>
+          <th scope="col" class="px-6 py-3">Nombre comun</th>
+          <th scope="col" class="px-6 py-3">Nombre cientifico</th>
+          <th scope="col" class="px-6 py-3">Estado</th>
+          <th scope="col" class="px-6 py-3">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let animal of animales"
+          class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+        >
+          <td class="px-6 py-4">
+            <img
+              [src]="animal.imagen"
+              alt="Imagen de {{ animal.nombre_comun }}"
+              class="h-16 w-16 object-cover rounded-lg"
+            />
+          </td>
+          <td
+            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+          >
+            {{ animal.nombre_comun }}
+          </td>
+          <td
+            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+          >
+            {{ animal.nombre_cientifico }}
+          </td>
+          <td class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+            {{ animal.estado }}
+          </td>
+          <td class="px-6 py-4">
+            <a
+              [routerLink]="['/app/modificar_animal',animal.id]"
+              class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              >Editar</a
+            >
+          </td>
+
+
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <ng-template #noAnimals>
+    <div class="p-6 text-center text-gray-500 dark:text-gray-400">
+      <p class="text-lg font-semibold">Aún no hay animales</p>
+    </div>
+  </ng-template>
+</div>

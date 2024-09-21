@@ -1,0 +1,319 @@
+<!-- Main modal -->
+<div
+  id="updateProductModal"
+  tabindex="-1"
+  aria-hidden="true"
+  class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
+>
+  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+    <!-- Modal content -->
+    <div
+      class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+    >
+      <!-- Modal header -->
+      <div
+        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600"
+      >
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Crear Animal
+        </h3>
+      </div>
+      <!-- Modal body -->
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="grid gap-4 mb-4 sm:grid-cols-2">
+          <div *ngIf="errorMessage" class="text-sm text-red-600">
+            {{ errorMessage }}
+          </div>
+
+          <div>
+            <label
+              for="nombre_comun"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Nombre Comun</label
+            >
+            <input
+              type="text"
+              name="nombre_comun"
+              id="nombre_comun"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Nombre comun"
+              formControlName="nombre_comun"
+            />
+
+            <div
+              *ngIf="
+                form.get('nombre_comun')?.touched &&
+                form.get('nombre_comun')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('nombre_comun')?.errors?.['required']"
+                >Ingrese un nombre comun</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="nombre_cientifico"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Nombre Cientifico</label
+            >
+            <input
+              type="text"
+              name="nombre_cientifico"
+              id="nombre_cientifico"
+              formControlName="nombre_cientifico"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Nombre Cientifico"
+            />
+
+            <div
+              *ngIf="
+                form.get('nombre_cientifico')?.touched &&
+                form.get('nombre_cientifico')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('nombre_cientifico')?.errors?.['required']"
+                >Ingrese un nombre cientifico</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="especie"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Especie</label
+            >
+            <select
+              id="especie"
+              formControlName="especie"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            >
+              <option selected disabled>Escoga una opcion</option>
+              <option value="Mamifero">Mamifero</option>
+              <option value="Acuatico">Acuatico</option>
+              <option value="Ave">Ave</option>
+            </select>
+
+            <div
+              *ngIf="
+                form.get('especie')?.touched && form.get('especie')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('especie')?.errors?.['required']"
+                >Seleccione una especie</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="estado"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Estado</label
+            >
+            <select
+              id="estado"
+              formControlName="estado"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            >
+              <option selected disabled>Escoga una opcion</option>
+              <option value="Disponible">Disponible</option>
+              <option value="Tratamiento">Tratamiento</option>
+              <option value="Proximamente">Proximamente</option>
+            </select>
+
+            <div
+              *ngIf="form.get('estado')?.touched && form.get('estado')?.invalid"
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('estado')?.errors?.['required']"
+                >Seleccione un estado</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="numero_mapa"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Posicion mapa</label
+            >
+            <input
+              type="number"
+              name="numero_mapa"
+              id="numero_mapa"
+              formControlName="numero_mapa"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Posicion mapa"
+            />
+
+            <div
+              *ngIf="
+                form.get('numero_mapa')?.touched &&
+                form.get('numero_mapa')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('numero_mapa')?.errors?.['required']"
+                >Ingrese la posicion del mapa</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="curiosidad"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Curiosidad</label
+            >
+            <input
+              type="text"
+              name="curiosidad"
+              id="curiosidad"
+              formControlName="curiosidad"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Curiosidad"
+            />
+
+            <div
+              *ngIf="
+                form.get('curiosidad')?.touched &&
+                form.get('curiosidad')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('curiosidad')?.errors?.['required']"
+                >Ingrese una curiosidad</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="precaucion"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Precaución</label
+            >
+            <input
+              type="text"
+              name="precaucion"
+              id="precaucion"
+              formControlName="precaucion"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Ej: no meter las manos"
+            />
+
+            <div
+              *ngIf="
+                form.get('precaucion')?.touched &&
+                form.get('precaucion')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('precaucion')?.errors?.['required']"
+                >Ingrese una precaucion</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="precaucion"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Imagen</label
+            >
+            <input
+            type="file"
+            id="imagen"
+            accept=".png, .jpg"
+            formControlName="imagen"
+            accept="image/*"
+            (change)="cargarFoto($event)"
+            class="block w-full text-sm text-gray-500
+                   file:mr-4 file:py-2 file:px-4
+                   file:rounded-lg file:border file:border-gray-300
+                   file:text-sm file:font-medium
+                   hover:file:bg-blue-500 hover:file:text-white"
+          />
+
+            <div
+              *ngIf="
+                form.get('imagen')?.touched &&
+                form.get('imagen')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('imagen')?.errors?.['required']"
+                >Seleccione una imagen</span
+              >
+            </div>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label
+              for="descripcion"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Descripcion</label
+            >
+
+            <textarea
+              id="descripcion"
+              formControlName="descripcion"
+              name="descripcion"
+              rows="5"
+              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="Escriba una descripción"
+            ></textarea>
+
+            <div
+              *ngIf="
+                form.get('descripcion')?.touched &&
+                form.get('descripcion')?.invalid
+              "
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('descripcion')?.errors?.['required']"
+                >Ingrese una descripcion</span
+              >
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="flex items-center space-x-4">
+          <button
+            [disabled]="loading()"
+            type="button submit"
+            class="w-full text-white bg-blue-600 hover:bg-blue-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            <svg
+              class="w-6 h-6 text-gray-800 dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+            {{ loading() ? "Guardando ..." : "Guardar animal" }}
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
