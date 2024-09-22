@@ -6,6 +6,7 @@ import {ListarAnimalesComponent} from './Paginas/listar-animales/listar-animales
 import {CrearAnimalComponent} from './Paginas/animal/crear-animal/crear-animal.component';
 import {ModificarAnimalComponent} from './Paginas/animal/modificar-animal/modificar-animal.component';
 import {EstadisticasComponent} from './Paginas/estadisticas/estadisticas.component';
+import { MapaComponent } from './Paginas/mapa/mapa.component';
 
 
 export const routes: Routes = [
@@ -25,6 +26,8 @@ export const routes: Routes = [
       { path:'crear_animal',component:CrearAnimalComponent},
       { path:'modificar_animal/:idAnimal',component:ModificarAnimalComponent},
       { path:'estadisticas',component:EstadisticasComponent},
+      { path:'mapa',component:MapaComponent},
+
 
     ],
   },

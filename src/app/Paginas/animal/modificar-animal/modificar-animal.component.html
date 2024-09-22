@@ -92,10 +92,17 @@
               formControlName="especie"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             >
-              <option selected disabled>Escoga una opcion</option>
-              <option value="Mamifero">Mamifero</option>
-              <option value="Acuatico">Acuatico</option>
-              <option value="Ave">Ave</option>
+              <option selected disabled>Escoja una opción</option>
+              <option value="Mamífero">Mamíferos</option>
+              <option value="Ave">Aves</option>
+              <option value="Reptil">Reptiles</option>
+              <option value="Anfibio">Anfibios</option>
+              <option value="Pez">Peces</option>
+              <option value="Insecto">Insectos</option>
+              <option value="Molusco">Moluscos</option>
+              <option value="Arácnido">Arácnidos</option>
+              <option value="Crustáceo">Crustáceos</option>
+              <option value="Equinodermo">Equinodermos</option>
             </select>
 
             <div
@@ -293,7 +300,7 @@
             (click)="borrarAnimal()"
             class="w-full text-white bg-blue-600 hover:bg-blue-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
-          {{ loading2() ? "Eliminando ..." : "Eliminar animal" }}
+            {{ loading2() ? "Eliminando ..." : "Eliminar animal" }}
           </button>
         </div>
       </form>
