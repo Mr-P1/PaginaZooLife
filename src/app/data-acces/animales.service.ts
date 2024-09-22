@@ -19,11 +19,18 @@ export interface Animal {
   imagen: string,
 }
 
+export interface Mapa {
+  id: string,
+  imagen: string
+}
+
 
 //Lo siguiente tiene para omitir el id porque recien lo vamos a crear
 export type CrearAnimal = Omit<Animal, 'id'>
+export type CambiarMapa = Omit<Mapa, 'id'>
 
-const PATH = 'Animales';
+const PATH_Animal = 'Animales';
+const PATH_Mapa = 'Mapa';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +40,8 @@ export class AnimalesService {
   constructor() { }
 
   private _firestore = inject(Firestore);
-  private _rutaAnimal = collection(this._firestore, PATH)
+  private _rutaAnimal = collection(this._firestore, PATH_Animal)
+  private _rutaMapa = collection(this._firestore, PATH_Mapa)
   private _authState = inject(AuthStateService);
 
 
@@ -43,6 +51,10 @@ export class AnimalesService {
 
   getAnimales(): Observable<Animal[]> {
     return collectionData(this._rutaAnimal,{idField: 'id'}) as Observable<Animal[]>;
+  }
+
+  getMapa(): Observable<any[]>{
+    return collectionData(this._rutaMapa,{idField:'id'}) as Observable<any[]>;
   }
 
   getAnimal(id: string): Observable<Animal | null> {
@@ -56,6 +68,11 @@ export class AnimalesService {
   editarAnimal( id:string,animal:CrearAnimal){
     const document = doc(this._rutaAnimal,id)
     return updateDoc(document,{...animal})
+  }
+
+  editarMapa( id:string,mapa:CambiarMapa){
+    const document = doc(this._rutaMapa,id)
+    return updateDoc(document,{...mapa})
   }
 
 

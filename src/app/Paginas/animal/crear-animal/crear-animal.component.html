@@ -92,10 +92,17 @@
               formControlName="especie"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
             >
-              <option selected disabled>Escoga una opcion</option>
-              <option value="Mamifero">Mamifero</option>
-              <option value="Acuatico">Acuatico</option>
-              <option value="Ave">Ave</option>
+              <option selected disabled>Escoja una opción</option>
+              <option value="Mamífero">Mamíferos</option>
+              <option value="Ave">Aves</option>
+              <option value="Reptil">Reptiles</option>
+              <option value="Anfibio">Anfibios</option>
+              <option value="Pez">Peces</option>
+              <option value="Insecto">Insectos</option>
+              <option value="Molusco">Moluscos</option>
+              <option value="Arácnido">Arácnidos</option>
+              <option value="Crustáceo">Crustáceos</option>
+              <option value="Equinodermo">Equinodermos</option>
             </select>
 
             <div
@@ -228,24 +235,17 @@
               >Imagen</label
             >
             <input
-            type="file"
-            id="imagen"
-            accept=".png, .jpg"
-            formControlName="imagen"
-            accept="image/*"
-            (change)="cargarFoto($event)"
-            class="block w-full text-sm text-gray-500
-                   file:mr-4 file:py-2 file:px-4
-                   file:rounded-lg file:border file:border-gray-300
-                   file:text-sm file:font-medium
-                   hover:file:bg-blue-500 hover:file:text-white"
-          />
+              type="file"
+              id="imagen"
+              accept=".png, .jpg"
+              formControlName="imagen"
+              accept="image/*"
+              (change)="cargarFoto($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
+            />
 
             <div
-              *ngIf="
-                form.get('imagen')?.touched &&
-                form.get('imagen')?.invalid
-              "
+              *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid"
               class="text-sm text-red-600"
             >
               <span *ngIf="form.get('imagen')?.errors?.['required']"
@@ -284,8 +284,6 @@
           </div>
         </div>
 
-
-
         <div class="flex items-center space-x-4">
           <button
             [disabled]="loading()"
@@ -313,7 +311,6 @@
           </button>
         </div>
       </form>
-
     </div>
   </div>
 </div>
