@@ -1,1 +1,38 @@
-<p>estadisticas works!</p>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table
+    class="w-full text-sm text-left rtl:text-right  text-gray-400"
+  >
+    <thead
+      class="text-xs  uppercase  bg-gray-700 text-gray-400"
+    >
+      <tr>
+        <th scope="col" class="px-6 py-3">Imagen</th>
+        <th scope="col" class="px-6 py-3">Nombre comun</th>
+        <th scope="col" class="px-6 py-3">Likes | Dislikes </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let animal of animales"
+        class=" odd:bg-gray-900  even:bg-gray-800 border-b border-gray-700"
+      >
+        <td class="px-6 py-4">
+
+          <img alt="Imagen de "  [src]="animal.imagen" class="h-16 w-16 object-cover rounded-lg" />
+        </td>
+        <td
+          class="px-6 py-4 font-medium whitespace-nowrap text-white"
+        >
+          {{ animal.nombre_comun }}
+        </td>
+
+        <td class="px-6 py-4 whitespace-nowrap text-white">
+          {{ animal.likes }} | {{ animal.dislikes }}
+
+        </td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+

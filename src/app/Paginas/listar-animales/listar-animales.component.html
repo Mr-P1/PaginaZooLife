@@ -42,10 +42,10 @@
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
   <ng-container *ngIf="animales.length > 0; else noAnimals">
     <table
-      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+      class="w-full text-sm text-left rtl:text-right  text-gray-400"
     >
       <thead
-        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        class="text-xs  uppercase  bg-gray-700 text-gray-400"
       >
         <tr>
           <th scope="col" class="px-6 py-3">Imagen</th>
@@ -58,7 +58,7 @@
       <tbody>
         <tr
           *ngFor="let animal of animales"
-          class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+          class=" odd:bg-gray-900  even:bg-gray-800 border-b border-gray-700"
         >
           <td class="px-6 py-4">
             <img
@@ -68,22 +68,22 @@
             />
           </td>
           <td
-            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            class="px-6 py-4 font-medium  whitespace-nowrap text-white"
           >
             {{ animal.nombre_comun }}
           </td>
           <td
-            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            class="px-6 py-4 font-medium  whitespace-nowrap text-white"
           >
             {{ animal.nombre_cientifico }}
           </td>
-          <td class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+          <td class="px-6 py-4  whitespace-nowrap text-white">
             {{ animal.estado }}
           </td>
           <td class="px-6 py-4">
             <a
               [routerLink]="['/app/modificar_animal',animal.id]"
-              class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              class="font-medium  text-blue-500 hover:underline"
               >Editar</a
             >
           </td>

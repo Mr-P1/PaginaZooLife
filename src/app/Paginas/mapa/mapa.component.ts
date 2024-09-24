@@ -4,6 +4,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import {AnimalesService, CambiarMapa, Mapa} from '../../data-acces/animales.service';
 
+// Sweetalert2
+import Swal from 'sweetalert2';
+
+
 @Component({
   selector: 'app-mapa',
   standalone: true,
@@ -58,30 +62,58 @@ export class MapaComponent implements OnInit{
   })};
 
 
-  async submit(){
-    if (this.form.invalid) return;
+  async submit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    try{
-      this.loading.set(true);
+    // Mostrar alerta de confirmación antes de realizar la acción
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Deseas confirmar el cambio de mapa?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cambiar',
+      cancelButtonText: 'Cancelar',
+      backdrop: 'rgba(0, 0, 0, 0.8)',
+    });
+
+    // Si el usuario confirma, se procede con el cambio de mapa
+    if (result.isConfirmed) {
+      try {
+        this.loading.set(true);
+
+        const cambioMapa: CambiarMapa = {
+          imagen: this.imagenBase64,
+        };
 
 
-      const cambioMapa:CambiarMapa={
-        imagen: this.imagenBase64
+        await this._animalService.editarMapa(this.mapa[0].id, cambioMapa);
+
+        Swal.fire({
+          title: "Listo !",
+          text: "El mapa ha sido modificado correctamente",
+          icon: "success",
+          backdrop: 'rgba(0, 0, 0, 0.8)',
+        });
+
+        this._router.navigate(['/app/animales']);
+
+      } catch (error) {
+
+        Swal.fire({
+          title: "Error !",
+          text: "Ha ocurrido un problema inesperado",
+          icon: "error",
+          backdrop: 'rgba(0, 0, 0, 0.8)',
+        });
+
+      } finally {
+
+        this.loading.set(false);
       }
-
-      await this._animalService.editarMapa(this.mapa[0].id, cambioMapa);
-
-      this._router.navigate(['/app/animales']);
-
-
     }
-    catch{
-
-    }
-    finally{
-
-    }
-
   }
 
 

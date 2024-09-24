@@ -6,9 +6,6 @@ import { Router, RouterLink } from '@angular/router';
 
 
 // Sweetalert2
-
-import 'sweetalert2/src/sweetalert2.scss';
-
 import Swal from 'sweetalert2';
 
 
