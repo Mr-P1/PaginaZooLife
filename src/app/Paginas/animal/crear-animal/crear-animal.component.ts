@@ -4,6 +4,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CrearAnimal,AnimalesService} from '../../../data-acces/animales.service';
 import { Router, RouterLink } from '@angular/router';
 
+// Sweetalert2
+
+import 'sweetalert2/src/sweetalert2.scss';
+
+import Swal from 'sweetalert2';
+
+
+
+
 @Component({
   selector: 'app-crear-animal',
   standalone: true,
@@ -15,6 +24,7 @@ export class CrearAnimalComponent {
   private _formBuilder = inject(FormBuilder)
   private _animalService = inject(AnimalesService)
   private _router = inject(Router);
+
 
 
   loading = signal(false);
@@ -29,9 +39,13 @@ export class CrearAnimalComponent {
     curiosidad: this._formBuilder.control("", [Validators.required]),
     precaucion: this._formBuilder.control("", [Validators.required]),
     imagen: this._formBuilder.control("", [Validators.required]),
+
+
   })
 
   errorMessage: string | null = null;
+
+
 
 
 
@@ -51,7 +65,6 @@ export class CrearAnimalComponent {
       reader.readAsDataURL(archivo);
       reader.onload = () =>{
         this.imagenCargando= false;
-
         this.imagenBase64 = reader.result as string
       }
     }
@@ -62,11 +75,12 @@ export class CrearAnimalComponent {
     console.log(this.form.getRawValue());
 
     if (this.form.invalid) return;
-
     try {
       this.loading.set(true);
-      const { nombre_comun, nombre_cientifico, especie, estado, numero_mapa, descripcion, curiosidad, precaucion } = this.form.value;
 
+
+
+      const { nombre_comun, nombre_cientifico, especie, estado, numero_mapa, descripcion, curiosidad, precaucion } = this.form.value;
 
 
       const animal: CrearAnimal = {
@@ -79,10 +93,13 @@ export class CrearAnimalComponent {
         curiosidad: curiosidad!,
         precaucion: precaucion !,
         imagen: this.imagenBase64,
+
+
+
       };
 
-      await this._animalService.create(animal);
 
+      await this._animalService.create(animal);
       this._router.navigate(['/app/animales']);
 
     }
@@ -91,8 +108,16 @@ export class CrearAnimalComponent {
 
     }finally{
       this.loading.set(false);
-    }
 
+      Swal.fire({
+        icon: "success",
+        title: "Animal agregado correctamente",
+        showConfirmButton: false,
+        timer: 3000, // Cambiar el tiempo
+        position: "center", // Centra la alerta
+        backdrop: 'rgba(0,0,0,0.5)', // Fondo oscuro semi-transparente
+      });
+    }
 
 
   }
