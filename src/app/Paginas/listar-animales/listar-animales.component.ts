@@ -23,6 +23,8 @@ export class ListarAnimalesComponent {
     });
   }
 
+  console.log("");
+
 
 
 }
