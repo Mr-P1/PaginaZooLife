@@ -8,13 +8,13 @@
   <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
     <!-- Modal content -->
     <div
-      class="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+      class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5"
     >
       <!-- Modal header -->
       <div
-        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600"
+        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-gray-600"
       >
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+        <h3 class="text-lg font-semibold  text-white">
           Crear Animal
         </h3>
       </div>
@@ -28,14 +28,14 @@
           <div>
             <label
               for="nombre_comun"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Nombre Comun</label
             >
             <input
               type="text"
               name="nombre_comun"
               id="nombre_comun"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
               placeholder="Nombre comun"
               formControlName="nombre_comun"
             />
@@ -56,7 +56,7 @@
           <div>
             <label
               for="nombre_cientifico"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Nombre Cientifico</label
             >
             <input
@@ -64,7 +64,7 @@
               name="nombre_cientifico"
               id="nombre_cientifico"
               formControlName="nombre_cientifico"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
               placeholder="Nombre Cientifico"
             />
 
@@ -84,13 +84,13 @@
           <div>
             <label
               for="especie"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Especie</label
             >
             <select
               id="especie"
               formControlName="especie"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class=" border   text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
             >
               <option selected disabled>Escoja una opción</option>
               <option value="Mamífero">Mamíferos</option>
@@ -120,13 +120,13 @@
           <div>
             <label
               for="estado"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Estado</label
             >
             <select
               id="estado"
               formControlName="estado"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class=" border   text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
             >
               <option selected disabled>Escoga una opcion</option>
               <option value="Disponible">Disponible</option>
@@ -147,7 +147,7 @@
           <div>
             <label
               for="numero_mapa"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Posicion mapa</label
             >
             <input
@@ -155,7 +155,8 @@
               name="numero_mapa"
               id="numero_mapa"
               formControlName="numero_mapa"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              min="1"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
               placeholder="Posicion mapa"
             />
 
@@ -175,7 +176,7 @@
           <div>
             <label
               for="curiosidad"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Curiosidad</label
             >
             <input
@@ -183,7 +184,7 @@
               name="curiosidad"
               id="curiosidad"
               formControlName="curiosidad"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
               placeholder="Curiosidad"
             />
 
@@ -203,7 +204,7 @@
           <div>
             <label
               for="precaucion"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Precaución</label
             >
             <input
@@ -211,7 +212,7 @@
               name="precaucion"
               id="precaucion"
               formControlName="precaucion"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
               placeholder="Ej: no meter las manos"
             />
 
@@ -231,7 +232,7 @@
           <div>
             <label
               for="precaucion"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Imagen</label
             >
             <input
@@ -241,7 +242,7 @@
               formControlName="imagen"
               accept="image/*"
               (change)="cargarFoto($event)"
-              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file: file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
             />
 
             <div
@@ -257,7 +258,7 @@
           <div class="sm:col-span-2">
             <label
               for="descripcion"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              class="block mb-2 text-sm font-medium  text-white"
               >Descripcion</label
             >
 
@@ -266,7 +267,7 @@
               formControlName="descripcion"
               name="descripcion"
               rows="5"
-              class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="block p-2.5 w-full text-sm   rounded-lg border  focus:ring-primary-500 focus:border-primary-500 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500"
               placeholder="Escriba una descripción"
             ></textarea>
 
@@ -291,7 +292,7 @@
             class="w-full text-white bg-blue-600 hover:bg-blue-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             <svg
-              class="w-6 h-6 text-gray-800 dark:text-white"
+              class="w-6 h-6  text-white"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"

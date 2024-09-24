@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {Firestore,collection,addDoc,collectionData,doc,getDoc,updateDoc,query,where, deleteDoc,} from '@angular/fire/firestore';
+import {Firestore,collection,addDoc,collectionData,doc,getDoc,updateDoc,query,where, deleteDoc,getDocs} from '@angular/fire/firestore';
 import { catchError, Observable, tap, throwError,from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
@@ -19,10 +19,26 @@ export interface Animal {
   imagen: string,
 }
 
+
+export interface AnimalConValoraciones extends Animal {
+  likes: number;
+  dislikes: number;
+}
+
+
+
 export interface Mapa {
   id: string,
   imagen: string
 }
+
+export interface Reaccion {
+  id: string;
+  ID_animal: string;  // ID del animal al que le dieron like/dislike
+  ID_usuario: string;  // ID del usuario que reaccionó
+  reaccion: boolean;   // true para like, false para dislike
+}
+
 
 
 //Lo siguiente tiene para omitir el id porque recien lo vamos a crear
@@ -31,6 +47,7 @@ export type CambiarMapa = Omit<Mapa, 'id'>
 
 const PATH_Animal = 'Animales';
 const PATH_Mapa = 'Mapa';
+const PATH_Reacciones = 'Reacciones';
 
 @Injectable({
   providedIn: 'root'
@@ -40,8 +57,9 @@ export class AnimalesService {
   constructor() { }
 
   private _firestore = inject(Firestore);
-  private _rutaAnimal = collection(this._firestore, PATH_Animal)
-  private _rutaMapa = collection(this._firestore, PATH_Mapa)
+  private _rutaAnimal = collection(this._firestore, PATH_Animal);
+  private _rutaMapa = collection(this._firestore, PATH_Mapa);
+  private _rutaReacciones = collection(this._firestore,PATH_Reacciones);
   private _authState = inject(AuthStateService);
 
 
@@ -79,6 +97,38 @@ export class AnimalesService {
   eliminarAnimal(id: string) {
     const animalDoc = doc(this._rutaAnimal, id);
     return deleteDoc(animalDoc);
+  }
+
+
+  async getAnimalesConValoraciones(): Promise<AnimalConValoraciones[]> {
+    const animalesSnapshot = await getDocs(this._rutaAnimal);
+    const reaccionesSnapshot = await getDocs(this._rutaReacciones);
+
+    const animales = animalesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Animal[];
+
+    const conteo: { [key: string]: { likes: number; dislikes: number } } = {};
+
+    reaccionesSnapshot.docs.forEach(doc => {
+      const reaccion = doc.data() as Reaccion;
+      const id = reaccion.ID_animal;
+
+      if (!conteo[id]) {
+        conteo[id] = { likes: 0, dislikes: 0 };
+      }
+      if (reaccion.reaccion) {
+        conteo[id].likes++;
+      } else {
+        conteo[id].dislikes++;
+      }
+    });
+
+    const resultado = animales.map(animal => ({
+      ...animal,
+      likes: conteo[animal.id]?.likes || 0,
+      dislikes: conteo[animal.id]?.dislikes || 0
+    })) as AnimalConValoraciones[];
+
+    return resultado;
   }
 
 

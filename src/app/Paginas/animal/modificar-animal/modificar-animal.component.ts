@@ -6,9 +6,6 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
 
 // Sweetalert2
-
-import 'sweetalert2/src/sweetalert2.scss';
-
 import Swal from 'sweetalert2';
 
 
@@ -115,74 +112,85 @@ export class ModificarAnimalComponent implements OnInit {
   }
 
 
-
   async actualizar() {
-
-
-    console.log(this.form)
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    try {
-      this.loading.set(true);
-      const { nombre_comun, nombre_cientifico, especie, estado, numero_mapa, descripcion, curiosidad, precaucion } = this.form.value;
 
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¿Deseas actualizar la información del animal?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, actualizar',
+      cancelButtonText: 'Cancelar',
+      backdrop: 'rgba(0, 0, 0, 0.8)',
+    });
 
-      const animal: CrearAnimal = {
-        nombre_comun: nombre_comun!,
-        nombre_cientifico: nombre_cientifico!,
-        especie: especie!,
-        estado: estado!,
-        posicion_mapa: Number(numero_mapa)!,
-        descripcion: descripcion!,
-        curiosidad: curiosidad!,
-        precaucion: precaucion!,
-        imagen: this.imagenBase64,
-      };
+    if (result.isConfirmed) {
+      try {
+        this.loading.set(true);
+        const { nombre_comun, nombre_cientifico, especie, estado, numero_mapa, descripcion, curiosidad, precaucion } = this.form.value;
 
-      await this._animalService.editarAnimal(this.idActiva, animal);
+        const animal: CrearAnimal = {
+          nombre_comun: nombre_comun!,
+          nombre_cientifico: nombre_cientifico!,
+          especie: especie!,
+          estado: estado!,
+          posicion_mapa: Number(numero_mapa)!,
+          descripcion: descripcion!,
+          curiosidad: curiosidad!,
+          precaucion: precaucion!,
+          imagen: this.imagenBase64,
+        };
 
-      Swal.fire({
-        title: "Éxito",
-        text: "El animal ha sido modificado correctamente",
-        icon: "success",
-        backdrop: 'rgba(0, 0, 0, 0.8)',
-      });
-      this._router.navigate(['/app/animales']);
+        await this._animalService.editarAnimal(this.idActiva, animal);
+
+        Swal.fire({
+          title: "Listo !",
+          text: "El animal ha sido modificado correctamente",
+          icon: "success",
+          backdrop: 'rgba(0, 0, 0, 0.8)',
+        });
+        this._router.navigate(['/app/animales']);
+      } catch {
+        this.errorMessage = 'Ha ocurrido un problema, revisa los datos ingresados';
+      } finally {
+        this.loading.set(false);
+      }
     }
-
-    catch {
-      this.errorMessage = 'Ha ocurrido un problema, revisa los datos ingresados';
-
-    }
-    finally {
-      this.loading.set(false);
-    }
-
-
-
   }
 
   async borrarAnimal() {
-    this.loading2.set(true);
-    try {
-      await this._animalService.eliminarAnimal(this.idActiva);
-      Swal.fire({
-        title: "Error",
-        text: "Animal eliminado correctamente",
-        icon: "error",
-        backdrop: 'rgba(0, 0, 0, 0.8)', // Aumenta la opacidad
-      });
-      this._router.navigate(['/app/animales']);
-    }
-    catch{
-      this.errorMessage = 'Ha ocurrido un problema inesperado, vuelva a intentarlo';
-    }
-    finally{
-      this.loading2.set(false);
-    }
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción eliminará el animal de forma permanente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      backdrop: 'rgba(0, 0, 0, 0.8)',
+    });
 
+    if (result.isConfirmed) {
+      try {
+        this.loading2.set(true);
+        await this._animalService.eliminarAnimal(this.idActiva);
+
+        Swal.fire({
+          title: "Listo !",
+          text: "Animal eliminado correctamente",
+          icon: "success",
+          backdrop: 'rgba(0, 0, 0, 0.8)',
+        });
+        this._router.navigate(['/app/animales']);
+      } catch {
+        this.errorMessage = 'Ha ocurrido un problema inesperado, vuelva a intentarlo';
+      } finally {
+        this.loading2.set(false);
+      }
+    }
   }
 
 
