@@ -5,6 +5,14 @@ import { CrearAnimal, AnimalesService, Animal } from '../../../data-acces/animal
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 
 
+// Sweetalert2
+
+import 'sweetalert2/src/sweetalert2.scss';
+
+import Swal from 'sweetalert2';
+
+
+
 @Component({
   selector: 'app-modificar-animal',
   standalone: true,
@@ -135,6 +143,12 @@ export class ModificarAnimalComponent implements OnInit {
 
       await this._animalService.editarAnimal(this.idActiva, animal);
 
+      Swal.fire({
+        title: "Éxito",
+        text: "El animal ha sido modificado correctamente",
+        icon: "success",
+        backdrop: 'rgba(0, 0, 0, 0.8)',
+      });
       this._router.navigate(['/app/animales']);
     }
 
@@ -154,6 +168,12 @@ export class ModificarAnimalComponent implements OnInit {
     this.loading2.set(true);
     try {
       await this._animalService.eliminarAnimal(this.idActiva);
+      Swal.fire({
+        title: "Error",
+        text: "Animal eliminado correctamente",
+        icon: "error",
+        backdrop: 'rgba(0, 0, 0, 0.8)', // Aumenta la opacidad
+      });
       this._router.navigate(['/app/animales']);
     }
     catch{
@@ -162,7 +182,6 @@ export class ModificarAnimalComponent implements OnInit {
     finally{
       this.loading2.set(false);
     }
-
 
   }
 

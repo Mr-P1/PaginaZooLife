@@ -5,6 +5,13 @@ import { ServicioLoginService } from '../../servicio/servicio-login.service';
 import { Router, RouterLink } from '@angular/router';
 
 
+// Sweetalert2
+
+import 'sweetalert2/src/sweetalert2.scss';
+
+import Swal from 'sweetalert2';
+
+
 
 interface FormSignin{
   email:FormControl<string  >;
@@ -30,6 +37,7 @@ export class LoginComponent {
     {
       email:this._formBuilder.control('',[Validators.required,Validators.email]),
       password:this._formBuilder.control('',[Validators.required, Validators.minLength(5)])
+
     }
   )
 
@@ -47,11 +55,29 @@ export class LoginComponent {
 
       await this._authService.logearse({ email, password });
 
+      Swal.fire({
+        icon: "success",
+        title: "Sesion iniciada",
+        showConfirmButton: false,
+        timer: 3000, // Cambiar el tiempo
+        position: "center", // Centra la alerta
+        backdrop: 'rgba(0,0,0,0.5)', // Fondo oscuro semi-transparente
+      });
 
       this._router.navigate(['/app/animales']);
     } catch (error) {
-      this.errorMessage = 'Usuario o contraseña incorrectos';
+
+      Swal.fire({
+        title: "Error",
+        text: "Usuario no encontrado",
+        icon: "error",
+        backdrop: 'rgba(0, 0, 0, 0.8)', // Aumenta la opacidad
+      });
+
     }
+
+
+
   }
 
 }
