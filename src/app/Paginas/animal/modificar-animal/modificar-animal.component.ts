@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
   templateUrl: './modificar-animal.component.html',
   styleUrl: './modificar-animal.component.scss'
 })
-export class ModificarAnimalComponent implements OnInit {
+export class ModificarAnimalComponent  {
 
 
   errorMessage: string | null = null;
@@ -36,18 +36,34 @@ export class ModificarAnimalComponent implements OnInit {
   loading = signal(false);
   loading2 = signal(false);
 
+
   form = this._formBuilder.group({
     nombre_comun: this._formBuilder.control("", [Validators.required]),
     nombre_cientifico: this._formBuilder.control("", [Validators.required]),
-    especie: this._formBuilder.control("", [Validators.required]),
-    estado: this._formBuilder.control("", [Validators.required]),
-    numero_mapa: this._formBuilder.control<number | null>(null, [Validators.required]),
-    descripcion: this._formBuilder.control("", [Validators.required]),
-    curiosidad: this._formBuilder.control("", [Validators.required]),
-    precaucion: this._formBuilder.control("", [Validators.required]),
+    descripcion_1: this._formBuilder.control("", [Validators.required]),
+    descripcion_2: this._formBuilder.control("", [Validators.required]),
+    descripcion_3: this._formBuilder.control("", [Validators.required]),
+    dato_curioso: this._formBuilder.control("", [Validators.required]),
+    precaucion_1: this._formBuilder.control("", [Validators.required]),
+    precaucion_2: this._formBuilder.control("", [Validators.required]),
+    precaucion_3: this._formBuilder.control("", [Validators.required]),
+    peso: this._formBuilder.control("", [Validators.required]),
+    unidad_peso: this._formBuilder.control("", [Validators.required]),
+    altura: this._formBuilder.control("", [Validators.required]),
+    unidad_altura: this._formBuilder.control("", [Validators.required]),
+    habitad: this._formBuilder.control("", [Validators.required]),
+    zona: this._formBuilder.control("", [Validators.required]),
+    dieta: this._formBuilder.control("", [Validators.required]),
+    dieta_descripcion: this._formBuilder.control("", [Validators.required]),
+    comportamiento: this._formBuilder.control("", [Validators.required]),
+    clase: this._formBuilder.control("", [Validators.required]), //Especie
+    posicion_mapa: this._formBuilder.control("", [Validators.required]),
+    cuidados: this._formBuilder.control("", [Validators.required]),
+    estado_conservacion: this._formBuilder.control("", [Validators.required]),
+    disponibilidad: this._formBuilder.control("", [Validators.required]),
     imagen: this._formBuilder.control("", [Validators.required]),
-  })
 
+  })
 
 
 
@@ -56,32 +72,41 @@ export class ModificarAnimalComponent implements OnInit {
     this._rutaActiva.paramMap.subscribe(parametros => {
       this.idActiva = parametros.get("idAnimal")!;
 
-      const animal = this._animalService.getAnimal(this.idActiva)
-
-      if (!animal) return;
       this._animalService.getAnimal(this.idActiva).subscribe(animal => {
         if (animal) {
-
           this.form.patchValue({
             nombre_comun: animal.nombre_comun,
             nombre_cientifico: animal.nombre_cientifico,
-            especie: animal.especie,
-            estado: animal.estado,
-            numero_mapa: animal.posicion_mapa,
-            descripcion: animal.descripcion,
-            curiosidad: animal.curiosidad,
-            precaucion: animal.precaucion,
-
+            descripcion_1: animal.descripcion_1,
+            descripcion_2: animal.descripcion_2,
+            descripcion_3: animal.descripcion_3,
+            dato_curioso: animal.dato_curioso,
+            precaucion_1: animal.precaucion_1,
+            precaucion_2: animal.precaucion_2,
+            precaucion_3: animal.precaucion_3,
+            peso: "",
+            unidad_peso: "",
+            altura: "",
+            unidad_altura:"",
+            habitad: animal.habitat,
+            zona: animal.zona,
+            dieta: animal.dieta,
+            dieta_descripcion: "",
+            comportamiento: animal.comportamiento,
+            clase: animal.clase,
+            posicion_mapa: String(animal.posicion_mapa),
+            cuidados: animal.cuidados,
+            estado_conservacion: animal.estado_conservacion,
+            disponibilidad: animal.disponibilidad,
+            imagen: "",
           });
-
-
         } else {
           this.errorMessage = "Animal no encontrado.";
         }
       });
     });
-
   }
+
 
 
 
@@ -131,18 +156,55 @@ export class ModificarAnimalComponent implements OnInit {
     if (result.isConfirmed) {
       try {
         this.loading.set(true);
-        const { nombre_comun, nombre_cientifico, especie, estado, numero_mapa, descripcion, curiosidad, precaucion } = this.form.value;
+        const {
+          nombre_comun,
+          nombre_cientifico,
+          descripcion_1,
+          descripcion_2,
+          descripcion_3,
+          dato_curioso,
+          precaucion_1,
+          precaucion_2,
+          precaucion_3,
+          peso,
+          unidad_peso,
+          altura,
+          unidad_altura,
+          habitad,
+          zona,
+          dieta,
+          dieta_descripcion,
+          comportamiento,
+          clase,
+          posicion_mapa,
+          cuidados,
+          estado_conservacion,
+          disponibilidad,
+          imagen
+        } = this.form.value;
 
         const animal: CrearAnimal = {
           nombre_comun: nombre_comun!,
           nombre_cientifico: nombre_cientifico!,
-          especie: especie!,
-          estado: estado!,
-          posicion_mapa: Number(numero_mapa)!,
-          descripcion: descripcion!,
-          curiosidad: curiosidad!,
-          precaucion: precaucion!,
-          imagen: this.imagenBase64,
+          descripcion_1: descripcion_1!,
+          descripcion_2: descripcion_2!,
+          descripcion_3: descripcion_3!,
+          dato_curioso: dato_curioso!,
+          precaucion_1: precaucion_1!,
+          precaucion_2: precaucion_2!,
+          precaucion_3: precaucion_3!,
+          peso: `${peso} ${unidad_peso}`,
+          altura: `${altura} ${unidad_altura}`,
+          dieta: `${dieta}: ${dieta_descripcion}`,  // Altura combinada con la unidad
+          habitat: habitad!,
+          zona: zona!,
+          comportamiento: comportamiento!,
+          estado_conservacion: estado_conservacion!,
+          clase: clase!,  // Clase se refiere a la especie
+          posicion_mapa: Number(posicion_mapa),
+          cuidados: cuidados!,
+          disponibilidad: disponibilidad!,
+          imagen: this.imagenBase64 || imagen!,  // Si tienes una imagen en base64
         };
 
         await this._animalService.editarAnimal(this.idActiva, animal);
@@ -192,6 +254,7 @@ export class ModificarAnimalComponent implements OnInit {
       }
     }
   }
+
 
 
 
