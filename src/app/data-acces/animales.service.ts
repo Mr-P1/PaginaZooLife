@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {Firestore,collection,addDoc,collectionData,doc,getDoc,updateDoc,query,where, deleteDoc,getDocs} from '@angular/fire/firestore';
-import { catchError, Observable, tap, throwError,from } from 'rxjs';
+import { Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query, where, deleteDoc, getDocs } from '@angular/fire/firestore';
+import { catchError, Observable, tap, throwError, from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
 
@@ -10,13 +10,25 @@ export interface Animal {
   id: string;
   nombre_comun: string,
   nombre_cientifico: string,
-  especie: string,
-  estado: string,
+  descripcion_1: string,
+  descripcion_2: string,
+  descripcion_3: string,
+  dato_curioso: string,
+  precaucion_1: string,
+  precaucion_2: string,
+  precaucion_3: string,
+  peso: string,
+  altura: string,
+  habitat: string,
+  zona: string,
+  dieta: string,
+  comportamiento: string,
+  estado_conservacion: string,
+  clase: string,
   posicion_mapa: number,
-  descripcion: string,
-  curiosidad: string,
-  precaucion: string,
-  imagen: string,
+  cuidados: string,
+  disponibilidad: string,
+  imagen: string
 }
 
 
@@ -59,7 +71,7 @@ export class AnimalesService {
   private _firestore = inject(Firestore);
   private _rutaAnimal = collection(this._firestore, PATH_Animal);
   private _rutaMapa = collection(this._firestore, PATH_Mapa);
-  private _rutaReacciones = collection(this._firestore,PATH_Reacciones);
+  private _rutaReacciones = collection(this._firestore, PATH_Reacciones);
   private _authState = inject(AuthStateService);
 
 
@@ -68,11 +80,11 @@ export class AnimalesService {
   }
 
   getAnimales(): Observable<Animal[]> {
-    return collectionData(this._rutaAnimal,{idField: 'id'}) as Observable<Animal[]>;
+    return collectionData(this._rutaAnimal, { idField: 'id' }) as Observable<Animal[]>;
   }
 
-  getMapa(): Observable<any[]>{
-    return collectionData(this._rutaMapa,{idField:'id'}) as Observable<any[]>;
+  getMapa(): Observable<any[]> {
+    return collectionData(this._rutaMapa, { idField: 'id' }) as Observable<any[]>;
   }
 
   getAnimal(id: string): Observable<Animal | null> {
@@ -83,14 +95,14 @@ export class AnimalesService {
   }
 
 
-  editarAnimal( id:string,animal:CrearAnimal){
-    const document = doc(this._rutaAnimal,id)
-    return updateDoc(document,{...animal})
+  editarAnimal(id: string, animal: CrearAnimal) {
+    const document = doc(this._rutaAnimal, id)
+    return updateDoc(document, { ...animal })
   }
 
-  editarMapa( id:string,mapa:CambiarMapa){
-    const document = doc(this._rutaMapa,id)
-    return updateDoc(document,{...mapa})
+  editarMapa(id: string, mapa: CambiarMapa) {
+    const document = doc(this._rutaMapa, id)
+    return updateDoc(document, { ...mapa })
   }
 
 
