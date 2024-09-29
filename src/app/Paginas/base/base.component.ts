@@ -1,33 +1,29 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink ,Router, RouterModule} from '@angular/router';
-import {AuthStateService} from '../../data-acces/auth-state.service'
+import { Component, inject } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { AuthStateService } from '../../data-acces/auth-state.service';
+
 
 // Sweetalert2
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-base',
   standalone: true,
   imports: [RouterModule],
   templateUrl: './base.component.html',
-  styles: ``
+  styles: ``,
 })
 export class BaseComponent {
-
-
   private _authState = inject(AuthStateService);
   private _router = inject(Router);
 
-  async logOut2(){
-    await this._authState.logOut();
-    this._router.navigate(['']);
-  }
+
+
 
   async logOut() {
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Se cerrara la sesión actual.',
+      text: 'Se cerrará la sesión actual.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, Cerrar sesión',
@@ -37,14 +33,9 @@ export class BaseComponent {
 
     if (result.isConfirmed) {
       try {
-
         await this._authState.logOut();
         this._router.navigate(['']);
-
-
-      } catch {
-
-      }
+      } catch {}
     }
   }
 }
