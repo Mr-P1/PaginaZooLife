@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query, where, deleteDoc, getDocs } from '@angular/fire/firestore';
+import {  Storage, ref, uploadBytes, getDownloadURL, deleteObject} from '@angular/fire/storage';
 import { catchError, Observable, tap, throwError, from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
@@ -28,7 +29,9 @@ export interface Animal {
   posicion_mapa: number,
   cuidados: string,
   disponibilidad: string,
-  imagen: string
+  imagen: string,
+  video?: string;
+  audio?: string;
 }
 export interface evento{
 
@@ -84,6 +87,7 @@ export class AnimalesService {
   private _rutaMapa = collection(this._firestore, PATH_Mapa);
   private _rutaReacciones = collection(this._firestore, PATH_Reacciones);
   private _authState = inject(AuthStateService);
+  private _storage = inject(Storage); // Agrega Storage
 
 
 
@@ -103,9 +107,7 @@ export class AnimalesService {
     return collectionData(this._rutaEventos, { idField: 'id' }) as Observable<evento[]>;
   }
 
-  getMapa(): Observable<any[]> {
-    return collectionData(this._rutaMapa, { idField: 'id' }) as Observable<any[]>;
-  }
+
 
   getAnimal(id: string): Observable<Animal | null> {
     const docRef = doc(this._rutaAnimal, id);
@@ -122,25 +124,44 @@ export class AnimalesService {
   }
 
 
-  editarAnimal(id: string, animal: CrearAnimal) {
-    const document = doc(this._rutaAnimal, id)
-    return updateDoc(document, { ...animal })
-  }
 
   editarEvento(id: string, evento: CrearEvento) {
     const document = doc(this._rutaEventos, id)
     return updateDoc(document, { ...evento })
   }
 
-  editarMapa(id: string, mapa: CambiarMapa) {
-    const document = doc(this._rutaMapa, id)
-    return updateDoc(document, { ...mapa })
+  getMapa(): Observable<Mapa[]> {
+    return collectionData(this._rutaMapa, { idField: 'id' }) as Observable<Mapa[]>;
   }
 
+  async editarMapa(id: string, imagenFile: File): Promise<void> {
+    const docRef = doc(this._rutaMapa, id);
+    const docSnapshot = await getDoc(docRef);
 
-  eliminarAnimal(id: string) {
-    const animalDoc = doc(this._rutaAnimal, id);
-    return deleteDoc(animalDoc);
+    if (docSnapshot.exists()) {
+      const mapaData = docSnapshot.data() as Mapa;
+
+      // Eliminar la imagen anterior de Firebase Storage si existe
+      if (mapaData.imagen) {
+        const oldImageRef = ref(this._storage, mapaData.imagen);
+        await deleteObject(oldImageRef).catch(() => {
+          console.warn('No se pudo eliminar la imagen anterior.');
+        });
+      }
+
+      // Subir la nueva imagen a Firebase Storage
+      const filePath = `mapas/${imagenFile.name}`;
+      const storageRef = ref(this._storage, filePath);
+      const snapshot = await uploadBytes(storageRef, imagenFile);
+
+      // Obtener la URL de la nueva imagen
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      // Actualizar el documento en Firestore con la nueva URL
+      await updateDoc(docRef, { imagen: downloadURL });
+    } else {
+      throw new Error('Mapa no encontrado');
+    }
   }
 
   eliminarEvento(id: string) {
@@ -179,6 +200,105 @@ export class AnimalesService {
 
     return resultado;
   }
+
+
+   // Subir imagen a Cloud Storage
+   async uploadImage(file: File): Promise<string> {
+    const filePath = `animales/${file.name}`; // Ruta donde se almacenará la imagen en Cloud Storage
+    const storageRef = ref(this._storage, filePath);
+    const snapshot = await uploadBytes(storageRef, file); // Sube el archivo
+    return getDownloadURL(snapshot.ref); // Obtiene la URL pública de la imagen
+  }
+
+
+  async uploadVideo(file: File): Promise<string> {
+    const filePath = `animales/videos/${file.name}`;
+    const storageRef = ref(this._storage, filePath);
+    const snapshot = await uploadBytes(storageRef, file);
+    return getDownloadURL(snapshot.ref);
+  }
+
+  // Subir audio a Cloud Storage
+  async uploadAudio(file: File): Promise<string> {
+    const filePath = `animales/audios/${file.name}`;
+    const storageRef = ref(this._storage, filePath);
+    const snapshot = await uploadBytes(storageRef, file);
+    return getDownloadURL(snapshot.ref);
+  }
+
+
+  async createAnimal(animal: CrearAnimal, imagenFile: File, videoFile?: File, audioFile?: File) {
+    // Sube la imagen, video y audio
+    const imageUrl = await this.uploadImage(imagenFile);
+    const videoUrl = videoFile ? await this.uploadVideo(videoFile) : '';
+    const audioUrl = audioFile ? await this.uploadAudio(audioFile) : '';
+
+    const animalData = {
+      ...animal,
+      imagen: imageUrl,
+      video: videoUrl,
+      audio: audioUrl
+    };
+    return addDoc(this._rutaAnimal, animalData);
+  }
+
+  async editarAnimal(id: string, animal: CrearAnimal, imagenFile?: File, videoFile?: File, audioFile?: File) {
+    // Subir los nuevos archivos solo si se proporcionan
+    const imageUrl = imagenFile ? await this.uploadImage(imagenFile) : animal.imagen;
+    const videoUrl = videoFile ? await this.uploadVideo(videoFile) : animal.video || '';
+    const audioUrl = audioFile ? await this.uploadAudio(audioFile) : animal.audio || '';
+
+    const animalData = {
+      ...animal,
+      imagen: imageUrl,
+      video: videoUrl,
+      audio: audioUrl
+    };
+
+    const document = doc(this._rutaAnimal, id);
+    return updateDoc(document, animalData);
+  }
+
+
+  async eliminarAnimal(id: string): Promise<void> {
+    // Obtener el documento del animal
+    const animalDoc = doc(this._rutaAnimal, id);
+    const animalSnapshot = await getDoc(animalDoc);
+
+    if (animalSnapshot.exists()) {
+      const animalData = animalSnapshot.data() as Animal;
+
+      // Eliminar imagen de Firebase Storage si existe
+      if (animalData.imagen) {
+        const imageRef = ref(this._storage, animalData.imagen);
+        await deleteObject(imageRef).catch(() => {
+          console.warn(`No se pudo eliminar la imagen: ${animalData.imagen}`);
+        });
+      }
+
+      // Eliminar video de Firebase Storage si existe
+      if (animalData.video) {
+        const videoRef = ref(this._storage, animalData.video);
+        await deleteObject(videoRef).catch(() => {
+          console.warn(`No se pudo eliminar el video: ${animalData.video}`);
+        });
+      }
+
+      // Eliminar audio de Firebase Storage si existe
+      if (animalData.audio) {
+        const audioRef = ref(this._storage, animalData.audio);
+        await deleteObject(audioRef).catch(() => {
+          console.warn(`No se pudo eliminar el audio: ${animalData.audio}`);
+        });
+      }
+
+      // Finalmente, eliminar el documento del animal en Firestore
+      await deleteDoc(animalDoc);
+    } else {
+      throw new Error('Animal no encontrado');
+    }
+  }
+
 
 
 

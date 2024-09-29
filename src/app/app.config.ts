@@ -6,6 +6,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAnalytics } from "firebase/analytics";
+import { getStorage, provideStorage } from '@angular/fire/storage'; // Importa Storage
 
 
 export const appConfig: ApplicationConfig = {
@@ -28,5 +29,6 @@ export const appConfig: ApplicationConfig = {
       measurementId: "G-J0ZQJR6W0K"
     })),
       provideAuth(() => getAuth()),
-      provideFirestore(() => getFirestore())]
+      provideFirestore(() => getFirestore()),
+      provideStorage(() => getStorage())]
 };

@@ -23,8 +23,11 @@ export class CrearAnimalComponent {
   private _router = inject(Router);
 
 
-
   loading = signal(false);
+  imagenFile: File | null = null; // Almacenar el archivo de imagen seleccionado
+  videoFile: File | null = null; // Almacenar el archivo de imagen seleccionado
+  audioFile: File | null = null; // Almacenar el archivo de imagen seleccionado
+
 
   form = this._formBuilder.group({
     nombre_comun: this._formBuilder.control("", [Validators.required]),
@@ -51,6 +54,8 @@ export class CrearAnimalComponent {
     estado_conservacion: this._formBuilder.control("", [Validators.required]),
     disponibilidad: this._formBuilder.control("", [Validators.required]),
     imagen: this._formBuilder.control("", [Validators.required]),
+    video: this._formBuilder.control("", [Validators.required]),
+    audio: this._formBuilder.control("", [Validators.required]),
 
   })
 
@@ -64,106 +69,32 @@ export class CrearAnimalComponent {
   public imagenBase64 = '';
 
 
-  public cargarFoto(e: Event) {
-    this.imagenCargando = true;
-    const elemento = e.target as HTMLInputElement;
-    const archivo = elemento.files ? elemento.files[0] : null;
-    console.log(archivo)
 
-    if (archivo) {
-      const reader = new FileReader();
-      reader.readAsDataURL(archivo);
-      reader.onload = () => {
-        this.imagenCargando = false;
-        this.imagenBase64 = reader.result as string
+    // Método para cargar la imagen seleccionada
+    public cargarFoto(event: Event) {
+      const elemento = event.target as HTMLInputElement;
+      const archivo = elemento.files ? elemento.files[0] : null;
+      if (archivo) {
+        this.imagenFile = archivo; // Almacena el archivo de imagen seleccionado
       }
     }
 
-  }
 
+    public cargarVideo(e: Event) {
+      const elemento = e.target as HTMLInputElement;
+      const archivo = elemento.files ? elemento.files[0] : null;
+      if (archivo) {
+        this.videoFile = archivo;  // Almacena el archivo de video seleccionado
+      }
+    }
 
-
-  // async submit() {
-  //   console.log(this.form.getRawValue());
-
-  //   if (this.form.invalid) {
-  //         this.form.markAllAsTouched();
-  //         return;
-  //       }
-
-  //   try {
-  //     this.loading.set(true);
-  //     const {
-  //       nombre_comun,
-  //       nombre_cientifico,
-  //       descripcion_1,
-  //       descripcion_2,
-  //       descripcion_3,
-  //       dato_curioso,
-  //       precaucion_1,
-  //       precaucion_2,
-  //       precaucion_3,
-  //       peso,
-  //       unidad_peso,
-  //       altura,
-  //       unidad_altura,
-  //       habitad,
-  //       zona,
-  //       dieta,
-  //       dieta_descripcion,
-  //       comportamiento,
-  //       clase,
-  //       posicion_mapa,
-  //       cuidados,
-  //       estado_conservacion,
-  //       disponibilidad,
-  //       imagen
-  //     } = this.form.value;
-
-  //     const animal: CrearAnimal = {
-  //       nombre_comun: nombre_comun!,
-  //       nombre_cientifico: nombre_cientifico!,
-  //       descripcion_1: descripcion_1!,
-  //       descripcion_2: descripcion_2!,
-  //       descripcion_3: descripcion_3!,
-  //       dato_curioso: dato_curioso!,
-  //       precaucion_1: precaucion_1!,
-  //       precaucion_2: precaucion_2!,
-  //       precaucion_3: precaucion_3!,
-  //       peso: `${peso} ${unidad_peso}`,  // Peso combinado con la unidad
-  //       altura: `${altura} ${unidad_altura}`,  // Altura combinada con la unidad
-  //       habitat: habitad!,
-  //       zona: zona!,
-  //       dieta: `${dieta}: ${dieta_descripcion}`, // Dieta combinada con su descripción
-  //       comportamiento: comportamiento!,
-  //       estado_conservacion: estado_conservacion!,
-  //       clase: clase!,  // Clase se refiere a la especie
-  //       posicion_mapa: Number(posicion_mapa),
-  //       cuidados: cuidados!,
-  //       disponibilidad: disponibilidad!,
-  //       imagen: this.imagenBase64 || imagen!,  // Si tienes una imagen en base64
-  //     };
-
-  //     await this._animalService.create(animal);
-
-  //     this._router.navigate(['/app/animales']);
-  //   }
-  //   catch (error) {
-  //     this.errorMessage = 'Ha ocurrido un problema, revisa los datos ingresados';
-  //   } finally {
-  //     this.loading.set(false);
-
-  //     Swal.fire({
-  //       icon: "success",
-  //       title: "Animal agregado correctamente",
-  //       showConfirmButton: false,
-  //       timer: 3000, // Cambiar el tiempo
-  //       position: "center", // Centra la alerta
-  //       backdrop: 'rgba(0,0,0,0.5)', // Fondo oscuro semi-transparente
-  //     });
-  //   }
-  // }
-
+    public cargarAudio(e: Event) {
+      const elemento = e.target as HTMLInputElement;
+      const archivo = elemento.files ? elemento.files[0] : null;
+      if (archivo) {
+        this.audioFile = archivo;  // Almacena el archivo de audio seleccionado
+      }
+    }
 
 
   async submit() {
@@ -226,10 +157,11 @@ export class CrearAnimalComponent {
         posicion_mapa: Number(posicion_mapa),
         cuidados: cuidados!,
         disponibilidad: disponibilidad!,
-        imagen: this.imagenBase64 || imagen!,  // Si tienes una imagen en base64
+        imagen: ''
       };
 
-      await this._animalService.create(animal);
+      // await this._animalService.create(animal);
+      await this._animalService.createAnimal(animal, this.imagenFile!, this.videoFile! , this.audioFile! );
 
       this._router.navigate(['/app/animales']);
 
@@ -250,6 +182,7 @@ export class CrearAnimalComponent {
 
 
   }
+
 
 
 
