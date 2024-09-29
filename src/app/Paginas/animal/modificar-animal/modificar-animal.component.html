@@ -616,29 +616,76 @@
 
 
           <div>
-            <label
-              for="imagen"
-              class="block mb-2 text-sm font-medium  text-white"
-              >Imagen</label
-            >
+            <label for="imagen" class="block mb-2 text-sm font-medium text-white">Imagen</label>
             <input
               type="file"
               id="imagen"
-              accept=".png, .jpg"
-              formControlName="imagen"
               accept="image/*"
               (change)="cargarFoto($event)"
-              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file: file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
+              formControlName="imagen"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
             />
 
             <div
-              *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid"
-              class="text-sm text-red-600"
+            *ngIf="
+              form.get('imagen')?.touched &&
+              form.get('imagen')?.invalid
+            "
+            class="text-sm text-red-600"
+          >
+            <span *ngIf="form.get('imagen')?.errors?.['required']"
+              >Seleccione una imagen</span
             >
-              <span *ngIf="form.get('imagen')?.errors?.['required']"
-                >Seleccione una imagen</span
-              >
-            </div>
+          </div>
+          </div>
+
+          <div>
+            <label for="video" class="block mb-2 text-sm font-medium text-white">Video</label>
+            <input
+              type="file"
+              id="video"
+              accept="video/*"
+              formControlName="video"
+              (change)="cargarVideo($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
+            />
+
+            <div
+            *ngIf="
+              form.get('video')?.touched &&
+              form.get('video')?.invalid
+            "
+            class="text-sm text-red-600"
+          >
+            <span *ngIf="form.get('video')?.errors?.['required']"
+              >Seleccione una video</span
+            >
+          </div>
+          </div>
+
+          <div>
+            <label for="audio" class="block mb-2 text-sm font-medium text-white">Audio</label>
+            <input
+              type="file"
+              id="audio"
+              accept="audio/*"
+              formControlName="audio"
+              (change)="cargarAudio($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
+            />
+
+            <div
+            *ngIf="
+              form.get('audio')?.touched &&
+              form.get('audio')?.invalid
+            "
+            class="text-sm text-red-600"
+          >
+            <span *ngIf="form.get('audio')?.errors?.['required']"
+              >Seleccione una audio</span
+            >
+          </div>
+
           </div>
 
 

@@ -62,6 +62,8 @@ export class ModificarAnimalComponent  {
     estado_conservacion: this._formBuilder.control("", [Validators.required]),
     disponibilidad: this._formBuilder.control("", [Validators.required]),
     imagen: this._formBuilder.control("", [Validators.required]),
+    video: this._formBuilder.control("", [Validators.required]),
+    audio: this._formBuilder.control("", [Validators.required]),
 
   })
 
@@ -109,31 +111,32 @@ export class ModificarAnimalComponent  {
 
 
 
+  imagenFile: File | null = null;
+  videoFile: File | null = null;
+  audioFile: File | null = null;
 
-
-
-
-
-  public imagenCargando = false;
-  public imagenBase64 = '';
-
-
-  public cargarFoto(e: Event) {
-    this.imagenCargando = true;
-    const elemento = e.target as HTMLInputElement;
+  public cargarFoto(event: Event) {
+    const elemento = event.target as HTMLInputElement;
     const archivo = elemento.files ? elemento.files[0] : null;
-    console.log(archivo)
-
     if (archivo) {
-      const reader = new FileReader();
-      reader.readAsDataURL(archivo);
-      reader.onload = () => {
-        this.imagenCargando = false;
-
-        this.imagenBase64 = reader.result as string
-      }
+      this.imagenFile = archivo;
     }
+  }
 
+  public cargarVideo(event: Event) {
+    const elemento = event.target as HTMLInputElement;
+    const archivo = elemento.files ? elemento.files[0] : null;
+    if (archivo) {
+      this.videoFile = archivo;
+    }
+  }
+
+  public cargarAudio(event: Event) {
+    const elemento = event.target as HTMLInputElement;
+    const archivo = elemento.files ? elemento.files[0] : null;
+    if (archivo) {
+      this.audioFile = archivo;
+    }
   }
 
 
@@ -156,6 +159,7 @@ export class ModificarAnimalComponent  {
     if (result.isConfirmed) {
       try {
         this.loading.set(true);
+
         const {
           nombre_comun,
           nombre_cientifico,
@@ -179,8 +183,7 @@ export class ModificarAnimalComponent  {
           posicion_mapa,
           cuidados,
           estado_conservacion,
-          disponibilidad,
-          imagen
+          disponibilidad
         } = this.form.value;
 
         const animal: CrearAnimal = {
@@ -195,28 +198,32 @@ export class ModificarAnimalComponent  {
           precaucion_3: precaucion_3!,
           peso: `${peso} ${unidad_peso}`,
           altura: `${altura} ${unidad_altura}`,
-          dieta: `${dieta}: ${dieta_descripcion}`,  // Altura combinada con la unidad
+          dieta: `${dieta}: ${dieta_descripcion}`,
           habitat: habitad!,
           zona: zona!,
           comportamiento: comportamiento!,
           estado_conservacion: estado_conservacion!,
-          clase: clase!,  // Clase se refiere a la especie
+          clase: clase!,
           posicion_mapa: Number(posicion_mapa),
           cuidados: cuidados!,
           disponibilidad: disponibilidad!,
-          imagen: this.imagenBase64 || imagen!,  // Si tienes una imagen en base64
+          imagen: '',  // Este campo se actualizará en el servicio
+          video: '',
+          audio: ''
         };
 
-        await this._animalService.editarAnimal(this.idActiva, animal);
+        // Llamada al servicio pasando los archivos de imagen, video y audio, si fueron seleccionados
+        await this._animalService.editarAnimal(this.idActiva, animal, this.imagenFile!, this.videoFile!, this.audioFile!);
 
         Swal.fire({
-          title: "Listo !",
+          title: "Listo!",
           text: "El animal ha sido modificado correctamente",
           icon: "success",
           backdrop: 'rgba(0, 0, 0, 0.8)',
         });
+
         this._router.navigate(['/app/animales']);
-      } catch {
+      } catch (error) {
         this.errorMessage = 'Ha ocurrido un problema, revisa los datos ingresados';
       } finally {
         this.loading.set(false);
@@ -227,7 +234,7 @@ export class ModificarAnimalComponent  {
   async borrarAnimal() {
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Esta acción eliminará el animal de forma permanente.',
+      text: 'Esta acción eliminará el animal de forma permanente, incluyendo su imagen, video y audio asociados.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
@@ -241,13 +248,14 @@ export class ModificarAnimalComponent  {
         await this._animalService.eliminarAnimal(this.idActiva);
 
         Swal.fire({
-          title: "Listo !",
-          text: "Animal eliminado correctamente",
+          title: "Listo!",
+          text: "Animal eliminado correctamente, junto con sus archivos asociados.",
           icon: "success",
           backdrop: 'rgba(0, 0, 0, 0.8)',
         });
+
         this._router.navigate(['/app/animales']);
-      } catch {
+      } catch (error) {
         this.errorMessage = 'Ha ocurrido un problema inesperado, vuelva a intentarlo';
       } finally {
         this.loading2.set(false);
