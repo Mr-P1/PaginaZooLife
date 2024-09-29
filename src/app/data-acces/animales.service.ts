@@ -30,7 +30,15 @@ export interface Animal {
   disponibilidad: string,
   imagen: string
 }
+export interface evento{
 
+  id:string,
+  nombre_evento: string,
+  imagen: string,
+  descripcion:string,
+  fecha_inicio:string,
+  fecha_termino:string
+}
 
 export interface AnimalConValoraciones extends Animal {
   likes: number;
@@ -56,10 +64,12 @@ export interface Reaccion {
 //Lo siguiente tiene para omitir el id porque recien lo vamos a crear
 export type CrearAnimal = Omit<Animal, 'id'>
 export type CambiarMapa = Omit<Mapa, 'id'>
+export type CrearEvento = Omit<evento, 'id'>
 
 const PATH_Animal = 'Animales';
 const PATH_Mapa = 'Mapa';
 const PATH_Reacciones = 'Reacciones';
+const PATH_Eventos = 'Eventos';
 
 @Injectable({
   providedIn: 'root'
@@ -70,17 +80,27 @@ export class AnimalesService {
 
   private _firestore = inject(Firestore);
   private _rutaAnimal = collection(this._firestore, PATH_Animal);
+  private _rutaEventos = collection(this._firestore, PATH_Eventos);
   private _rutaMapa = collection(this._firestore, PATH_Mapa);
   private _rutaReacciones = collection(this._firestore, PATH_Reacciones);
   private _authState = inject(AuthStateService);
+
 
 
   create(animal: CrearAnimal) {
     return addDoc(this._rutaAnimal, animal);
   }
 
+  createEvento(Evento: CrearEvento) {
+    return addDoc(this._rutaEventos, Evento);
+  }
+
   getAnimales(): Observable<Animal[]> {
     return collectionData(this._rutaAnimal, { idField: 'id' }) as Observable<Animal[]>;
+  }
+
+  getEventos(): Observable<evento[]> {
+    return collectionData(this._rutaEventos, { idField: 'id' }) as Observable<evento[]>;
   }
 
   getMapa(): Observable<any[]> {
@@ -94,10 +114,22 @@ export class AnimalesService {
     );
   }
 
+  getEvento(id: string): Observable<evento| null> {
+    const docRef = doc(this._rutaEventos, id);
+    return from(getDoc(docRef)).pipe(
+      map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as evento : null)
+    );
+  }
+
 
   editarAnimal(id: string, animal: CrearAnimal) {
     const document = doc(this._rutaAnimal, id)
     return updateDoc(document, { ...animal })
+  }
+
+  editarEvento(id: string, evento: CrearEvento) {
+    const document = doc(this._rutaEventos, id)
+    return updateDoc(document, { ...evento })
   }
 
   editarMapa(id: string, mapa: CambiarMapa) {
@@ -109,6 +141,11 @@ export class AnimalesService {
   eliminarAnimal(id: string) {
     const animalDoc = doc(this._rutaAnimal, id);
     return deleteDoc(animalDoc);
+  }
+
+  eliminarEvento(id: string) {
+    const eventoDoc = doc(this._rutaEventos, id);
+    return deleteDoc(eventoDoc);
   }
 
 
