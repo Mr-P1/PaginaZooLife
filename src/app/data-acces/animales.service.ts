@@ -1,7 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query, where, deleteDoc, getDocs } from '@angular/fire/firestore';
-import {  Storage, ref, uploadBytes, getDownloadURL, deleteObject} from '@angular/fire/storage';
+import {
+  Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query,
+  where, deleteDoc, getDocs, orderBy, limit, startAfter, DocumentData,
+  startAt,
+} from '@angular/fire/firestore';
+
+import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angular/fire/storage';
 import { catchError, Observable, tap, throwError, from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
@@ -33,14 +38,14 @@ export interface Animal {
   video?: string;
   audio?: string;
 }
-export interface evento{
+export interface evento {
 
-  id:string,
+  id: string,
   nombre_evento: string,
   imagen: string,
-  descripcion:string,
-  fecha_inicio:string,
-  fecha_termino:string
+  descripcion: string,
+  fecha_inicio: string,
+  fecha_termino: string
 }
 
 export interface AnimalConValoraciones extends Animal {
@@ -90,18 +95,41 @@ export class AnimalesService {
   private _storage = inject(Storage); // Agrega Storage
 
 
+  // Obtener la primera página o la página siguiente
+  async getAnimalesPaginados(pageSize: number, lastVisibleDoc: any = null): Promise<{ animales: Animal[], lastVisible: any, firstVisible: any }> {
+    let q;
+    if (lastVisibleDoc) {
+      q = query(this._rutaAnimal, orderBy('nombre_comun'), startAfter(lastVisibleDoc), limit(pageSize));
+    } else {
+      q = query(this._rutaAnimal, orderBy('nombre_comun'), limit(pageSize));
+    }
 
-  create(animal: CrearAnimal) {
-    return addDoc(this._rutaAnimal, animal);
+    const snapshot = await getDocs(q);
+    const animales = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Animal[];
+    const lastVisible = snapshot.docs[snapshot.docs.length - 1]; // Cambia el nombre aquí
+    const firstVisible = snapshot.docs[0]; // Cambia el nombre aquí
+
+    return { animales, lastVisible, firstVisible };
   }
+
+  // Obtener la página anterior
+  async getAnimalesPaginadosAnterior(pageSize: number, firstVisibleDoc: any): Promise<{ animales: Animal[], lastVisible: any, firstVisible: any }> {
+    const q = query(this._rutaAnimal, orderBy('nombre_comun'), startAt(firstVisibleDoc), limit(pageSize));
+
+    const snapshot = await getDocs(q);
+    const animales = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Animal[];
+    const lastVisible = snapshot.docs[snapshot.docs.length - 1]; // Cambia el nombre aquí
+    const firstVisible = snapshot.docs[0]; // Cambia el nombre aquí
+
+    return { animales, lastVisible, firstVisible };
+  }
+
 
   createEvento(Evento: CrearEvento) {
     return addDoc(this._rutaEventos, Evento);
   }
 
-  getAnimales(): Observable<Animal[]> {
-    return collectionData(this._rutaAnimal, { idField: 'id' }) as Observable<Animal[]>;
-  }
+
 
   getEventos(): Observable<evento[]> {
     return collectionData(this._rutaEventos, { idField: 'id' }) as Observable<evento[]>;
@@ -116,7 +144,7 @@ export class AnimalesService {
     );
   }
 
-  getEvento(id: string): Observable<evento| null> {
+  getEvento(id: string): Observable<evento | null> {
     const docRef = doc(this._rutaEventos, id);
     return from(getDoc(docRef)).pipe(
       map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as evento : null)
@@ -202,8 +230,8 @@ export class AnimalesService {
   }
 
 
-   // Subir imagen a Cloud Storage
-   async uploadImage(file: File): Promise<string> {
+  // Subir imagen a Cloud Storage
+  async uploadImage(file: File): Promise<string> {
     const filePath = `animales/${file.name}`; // Ruta donde se almacenará la imagen en Cloud Storage
     const storageRef = ref(this._storage, filePath);
     const snapshot = await uploadBytes(storageRef, file); // Sube el archivo
@@ -298,6 +326,36 @@ export class AnimalesService {
       throw new Error('Animal no encontrado');
     }
   }
+
+
+  async buscarAnimales(term: string): Promise<Animal[]> {
+
+    const q1 = query(
+      this._rutaAnimal,
+      where('nombre_comun', '>=', term),
+      where('nombre_comun', '<=', term + '\uf8ff')
+    );
+
+    const q2 = query(
+      this._rutaAnimal,
+      where('nombre_cientifico', '>=', term),
+      where('nombre_cientifico', '<=', term + '\uf8ff')
+    );
+
+    const [snapshot1, snapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+
+    // Unir los resultados de ambas consultas
+    const animales1 = snapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() } as Animal));
+    const animales2 = snapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() } as Animal));
+
+    // Eliminar duplicados combinando ambas listas y filtrando por ID único
+    const allAnimales = [...animales1, ...animales2];
+    const uniqueAnimales = Array.from(new Set(allAnimales.map(a => a.id)))
+      .map(id => allAnimales.find(a => a.id === id)!);
+
+    return uniqueAnimales;
+  }
+
 
 
 
