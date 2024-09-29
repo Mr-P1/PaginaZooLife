@@ -1,0 +1,176 @@
+
+<div
+  id="updateEventModal"
+  tabindex="-1"
+  aria-hidden="true"
+  class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
+>
+  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+
+    <div
+      class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5"
+    >
+
+      <div
+        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-gray-600"
+      >
+        <h3 class="text-lg font-semibold text-white">
+          Crear Evento
+        </h3>
+      </div>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="grid gap-4 mb-4 sm:grid-cols-2">
+          <div *ngIf="errorMessage" class="text-sm text-red-600">
+            {{ errorMessage }}
+          </div>
+
+          <div>
+            <label
+              for="nombre_evento"
+              class="block mb-2 text-sm font-medium text-white"
+              >Nombre del Evento</label
+            >
+            <input
+              type="text"
+              name="nombre_evento"
+              id="nombre_evento"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              placeholder="Nombre del evento"
+              formControlName="nombre_evento"
+            />
+            <div
+              *ngIf="form.get('nombre_evento')?.touched && form.get('nombre_evento')?.invalid"
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('nombre_evento')?.errors?.['required']"
+                >Ingrese el nombre del evento</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="fecha_inicio"
+              class="block mb-2 text-sm font-medium text-white"
+              >Fecha de inicio del vento</label
+            >
+            <input
+              type="date"
+              name="fecha_inicio"
+              id="fecha_inicio"
+              formControlName="fecha_inicio"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+            />
+            <div
+              *ngIf="form.get('fecha_inicio')?.touched && form.get('fecha_inicio')?.invalid"
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('fecha_inicio')?.errors?.['required']"
+                >Ingrese la fecha de inicio del evento</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="fecha_termino"
+              class="block mb-2 text-sm font-medium text-white"
+              >Fecha de termino del evento</label
+            >
+            <input
+              type="date"
+              name="fecha_termino"
+              id="fecha_termino"
+              formControlName="fecha_termino"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+            />
+            <div
+              *ngIf="form.get('fecha_termino')?.touched && form.get('fecha_termino')?.invalid"
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('fecha_termino')?.errors?.['required']"
+                >Ingrese la fecha de término del evento</span
+              >
+            </div>
+          </div>
+
+
+          <div>
+            <label
+              for="descripcion"
+              class="block mb-2 text-sm font-medium text-white"
+              >Descripción</label
+            >
+            <textarea
+              id="descripcion"
+              formControlName="descripcion"
+              name="descripcion"
+              rows="5"
+              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              placeholder="Escriba una descripción del evento"
+            ></textarea>
+            <div
+              *ngIf="form.get('descripcion')?.touched && form.get('descripcion')?.invalid"
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('descripcion')?.errors?.['required']"
+                >Ingrese una descripción del evento</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="imagen"
+              class="block mb-2 text-sm font-medium text-white"
+              >Imagen</label
+            >
+            <input
+              type="file"
+              id="imagen"
+              accept=".png, .jpg"
+              formControlName="imagen"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
+              (change)="cargarFoto($event)"
+            />
+            <div
+              *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid"
+              class="text-sm text-red-600"
+            >
+              <span *ngIf="form.get('imagen')?.errors?.['required']"
+                >Seleccione una imagen</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <button
+            [disabled]="loading()"
+            type="submit"
+            class="w-full text-white bg-blue-600 hover:bg-blue-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            <svg
+              class="w-6 h-6 text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+            {{ loading() ? "Guardando ..." : "Guardar Evento" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

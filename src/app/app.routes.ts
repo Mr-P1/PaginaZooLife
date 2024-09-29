@@ -7,7 +7,8 @@ import {CrearAnimalComponent} from './Paginas/animal/crear-animal/crear-animal.c
 import {ModificarAnimalComponent} from './Paginas/animal/modificar-animal/modificar-animal.component';
 import {EstadisticasComponent} from './Paginas/estadisticas/estadisticas.component';
 import { MapaComponent } from './Paginas/mapa/mapa.component';
-
+import { CrearEventoComponent } from './Paginas/evento/crear-evento/crear-evento.component';
+import { ModificarEventoComponent } from './Paginas/evento/modificar-evento/modificar-evento.component';
 
 export const routes: Routes = [
 
@@ -24,7 +25,9 @@ export const routes: Routes = [
       { path: 'animales', component: ListarAnimalesComponent },
       { path: 'eventos', component: EventosComponent },
       { path:'crear_animal',component:CrearAnimalComponent},
+      { path:'crear_evento',component:CrearEventoComponent},
       { path:'modificar_animal/:idAnimal',component:ModificarAnimalComponent},
+      { path:'modificar_evento',component:ModificarEventoComponent},
       { path:'estadisticas',component:EstadisticasComponent},
       { path:'mapa',component:MapaComponent},
 
