@@ -9,6 +9,9 @@ import {EstadisticasComponent} from './Paginas/estadisticas/estadisticas.compone
 import { MapaComponent } from './Paginas/mapa/mapa.component';
 import { CrearEventoComponent } from './Paginas/evento/crear-evento/crear-evento.component';
 import { ModificarEventoComponent } from './Paginas/evento/modificar-evento/modificar-evento.component';
+import { CrearPreguntasComponent } from './Paginas/Preguntas/crear-preguntas/crear-preguntas.component';
+import { ListarPreguntasComponent } from './Paginas/Preguntas/listar-preguntas/listar-preguntas.component';
+import { ModificarPreguntasComponent } from './Paginas/Preguntas/modificar-preguntas/modificar-preguntas.component';
 
 export const routes: Routes = [
 
@@ -30,6 +33,9 @@ export const routes: Routes = [
       { path:'modificar_evento',component:ModificarEventoComponent},
       { path:'estadisticas',component:EstadisticasComponent},
       { path:'mapa',component:MapaComponent},
+      { path:'preguntas',component:ListarPreguntasComponent},
+      { path:'crear_pregunta',component:CrearPreguntasComponent},
+      { path:'modificar_pregunta/:idPregunta',component:ModificarPreguntasComponent}
 
 
     ],

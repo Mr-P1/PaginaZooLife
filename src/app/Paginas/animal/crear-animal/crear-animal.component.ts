@@ -162,6 +162,12 @@ export class CrearAnimalComponent {
 
       // await this._animalService.create(animal);
       await this._animalService.createAnimal(animal, this.imagenFile!, this.videoFile! , this.audioFile! );
+      Swal.fire({
+        title: "Listo !",
+        text: "Animal agregado correctamente",
+        icon: "success",
+        backdrop: 'rgba(0, 0, 0, 0.8)',
+      });
 
       this._router.navigate(['/app/animales']);
 
@@ -171,12 +177,7 @@ export class CrearAnimalComponent {
 
     } finally {
       this.loading.set(false);
-      Swal.fire({
-        title: "Listo !",
-        text: "Animal agregado correctamente",
-        icon: "success",
-        backdrop: 'rgba(0, 0, 0, 0.8)',
-      });
+
     }
 
 
