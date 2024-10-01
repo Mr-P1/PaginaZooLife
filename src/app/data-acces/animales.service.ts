@@ -3,13 +3,17 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {
   Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query,
   where, deleteDoc, getDocs, orderBy, limit, startAfter, DocumentData,
-  startAt, setDoc
+  startAt, setDoc,
+  onSnapshot
 } from '@angular/fire/firestore';
 
 import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angular/fire/storage';
 import { catchError, Observable, tap, throwError, from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
+
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 
 export interface Animal {
@@ -111,6 +115,9 @@ export class AnimalesService {
   private _rutaMapa = collection(this._firestore, PATH_Mapa);
   private _rutaReacciones = collection(this._firestore, PATH_Reacciones);
   private _rutaPreguntas = collection(this._firestore, PATH_Pregunta);
+  private boletasUsadasRef = collection(this._firestore, 'Boletas_usadas');
+
+
   private _authState = inject(AuthStateService);
   private _storage = inject(Storage); // Agrega Storage
 
@@ -420,6 +427,27 @@ export class AnimalesService {
     return addDoc(this._rutaPreguntas, pregunta);
   }
 
+
+
+
+  obtenerVisitantesHoy(): Observable<number> {
+    const hoy = format(new Date(), 'yyyy-MM-dd', { locale: es });
+    const visitantesQuery = query(this.boletasUsadasRef,
+                                  where('fecha', '>=', hoy + 'T00:00:00.000Z'),
+                                  where('fecha', '<=', hoy + 'T23:59:59.999Z'));
+
+    // Usamos onSnapshot para escuchar los cambios en tiempo real
+    return new Observable<number>((observer) => {
+      const unsubscribe = onSnapshot(visitantesQuery, (snapshot) => {
+        observer.next(snapshot.size);  // Emitimos el número de visitantes
+      }, (error) => {
+        observer.error(error);  // Manejo de errores
+      });
+
+      // Cleanup al dejar de escuchar
+      return () => unsubscribe();
+    });
+  }
 
 
 }
