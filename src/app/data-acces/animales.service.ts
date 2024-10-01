@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {
   Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query,
   where, deleteDoc, getDocs, orderBy, limit, startAfter, DocumentData,
-  startAt,
+  startAt, setDoc
 } from '@angular/fire/firestore';
 
 import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angular/fire/storage';
@@ -67,17 +67,36 @@ export interface Reaccion {
   reaccion: boolean;   // true para like, false para dislike
 }
 
+export interface PreguntaTrivia {
+  id: string;              // ID único de la pregunta
+  pregunta: string;        // Texto de la pregunta
+  respuestas: Respuestas;  // Las 4 posibles respuestas
+  respuesta_correcta:string;   // Clave de la respuesta correcta (a, b, c, d)
+  tipo: string;  // Tipo de pregunta: para niño o adulto
+  animal_id: string;  // ID del animal asociado
+}
+
+export interface Respuestas {
+  [key: string]: string;
+  a: string;  // Respuesta opción A
+  b: string;  // Respuesta opción B
+  c: string;  // Respuesta opción C
+  d: string;  // Respuesta opción D
+}
+
 
 
 //Lo siguiente tiene para omitir el id porque recien lo vamos a crear
 export type CrearAnimal = Omit<Animal, 'id'>
 export type CambiarMapa = Omit<Mapa, 'id'>
 export type CrearEvento = Omit<evento, 'id'>
+export type CrearPregunta = Omit<PreguntaTrivia, 'id'>
 
 const PATH_Animal = 'Animales';
 const PATH_Mapa = 'Mapa';
 const PATH_Reacciones = 'Reacciones';
 const PATH_Eventos = 'Eventos';
+const PATH_Pregunta = 'Preguntas'
 
 @Injectable({
   providedIn: 'root'
@@ -91,8 +110,17 @@ export class AnimalesService {
   private _rutaEventos = collection(this._firestore, PATH_Eventos);
   private _rutaMapa = collection(this._firestore, PATH_Mapa);
   private _rutaReacciones = collection(this._firestore, PATH_Reacciones);
+  private _rutaPreguntas = collection(this._firestore, PATH_Pregunta);
   private _authState = inject(AuthStateService);
   private _storage = inject(Storage); // Agrega Storage
+
+  getAnimales(): Observable<Animal[]> {
+    return collectionData(this._rutaAnimal, { idField: 'id' }) as Observable<Animal[]>;
+  }
+
+  getPreguntas(): Observable<PreguntaTrivia[]> {
+    return collectionData(this._rutaPreguntas, { idField: 'id' }) as Observable<PreguntaTrivia[]>;
+  }
 
 
   // Obtener la primera página o la página siguiente
@@ -141,6 +169,14 @@ export class AnimalesService {
     const docRef = doc(this._rutaAnimal, id);
     return from(getDoc(docRef)).pipe(
       map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as Animal : null)
+    );
+  }
+
+
+  getPregunta(id: string): Observable<PreguntaTrivia | null> {
+    const docRef = doc(this._rutaPreguntas, id);
+    return from(getDoc(docRef)).pipe(
+      map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as PreguntaTrivia : null)
     );
   }
 
@@ -287,6 +323,17 @@ export class AnimalesService {
     return updateDoc(document, animalData);
   }
 
+  async editarPregunta(id: string, pregunta: CrearPregunta) {
+
+    const preguntaData = {
+      ...pregunta,
+
+    };
+
+    const document = doc(this._rutaPreguntas, id);
+    return updateDoc(document, preguntaData);
+  }
+
 
   async eliminarAnimal(id: string): Promise<void> {
     // Obtener el documento del animal
@@ -327,6 +374,19 @@ export class AnimalesService {
     }
   }
 
+  async eliminarPregunta(id: string): Promise<void> {
+    const pregunta = doc(this._rutaPreguntas, id);
+    const preguntaSnapshot = await getDoc(pregunta);
+
+    if (preguntaSnapshot.exists()) {
+      const animalData = preguntaSnapshot.data() as PreguntaTrivia;
+
+      await deleteDoc(pregunta);
+    } else {
+      throw new Error('Pregunta no encontrada');
+    }
+  }
+
 
   async buscarAnimales(term: string): Promise<Animal[]> {
 
@@ -356,7 +416,9 @@ export class AnimalesService {
     return uniqueAnimales;
   }
 
-
+  createPreguntaTrivia(pregunta: CrearPregunta) {
+    return addDoc(this._rutaPreguntas, pregunta);
+  }
 
 
 
