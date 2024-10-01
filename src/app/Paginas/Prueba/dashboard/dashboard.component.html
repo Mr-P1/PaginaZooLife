@@ -1,24 +1,24 @@
+
 <div class="p-6">
   <!--  cuadros arriba -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+    <div
+      class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5"
+    >
 
-     <!-- Primer cuadro -->
-    <div class="bg-white rounded-lg p-6 shadow-lg border border-gray-200">
-      <div class="flex flex-col space-y-4">
-        <!-- Título y fecha -->
+    <!-- Primer  cuadro -->
+    <div class="flex justify-between mb-6">
         <div>
-          <h3 class="text-xl font-bold text-gray-800">Visitantes hoy</h3>
-          <p class="text-sm font-medium text-gray-500">Fecha hoy: {{ today  }}</p>
+          <div class="text-2xl font-semibold mb-1">Estoy lol</div>
+          <div class="text-sm font-medium text-gray-400">Active orders</div>
         </div>
 
-        <!-- Número de visitantes -->
-        <div class="flex items-center justify-between">
-          <div class="text-4xl font-extrabold text-gray-900">{{ visitantesHoy }}</div>
-        </div>
+      </div>
+      <div class="flex items-center">
+
+        <span class="text-sm font-medium text-gray-600 ml-4">80%</span>
       </div>
     </div>
-    <!-- Fin Primer cuadro -->
-
 
     <!-- Segundo  cuadro -->
     <div
@@ -43,10 +43,12 @@
           >
             <i class="ri-more-fill"></i>
           </button>
+
         </div>
       </div>
     </div>
-     <!--Fin Segundo  cuadro -->
+
+
 
     <!-- Tercer  cuadro -->
     <div
@@ -66,8 +68,10 @@
         >View details</a
       >
     </div>
+
   </div>
   <!-- Fin cuadros arriba -->
+
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <div
@@ -75,6 +79,7 @@
     >
       <div class="flex justify-between mb-4 items-start">
         <div class="font-medium">Popularidad animales</div>
+
       </div>
       <form action="" class="flex items-center mb-4">
         <div class="relative w-full mr-2">
@@ -87,11 +92,17 @@
             class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
           ></i>
         </div>
+
       </form>
 
-      <!-- Popularidad animal -->
+    <!-- Popularidad animal -->
       <div class="overflow-x-auto">
-        <table class="w-full" data-tab-for="order" data-page="active">
+        <table
+          class="w-full min-w-[540px]"
+          data-tab-for="order"
+          data-page="active"
+        >
+
           <thead>
             <tr>
               <th
@@ -109,51 +120,42 @@
               >
                 Dislikes
               </th>
+
             </tr>
           </thead>
-
-          <!-- <td class="px-6 py-4">
-
-            <img alt="Imagen de "  [src]="animal.imagen" class="h-16 w-16 object-cover rounded-lg" />
-          </td>
-          <td
-            class="px-6 py-4 font-medium whitespace-nowrap text-white"
-          >
-            {{ animal.nombre_comun }}
-          </td> -->
-
           <tbody>
-            <tr *ngFor="let animal of animales">
+            <tr>
               <td class="py-2 px-4 border-b border-b-gray-50">
                 <div class="flex items-center">
                   <img
-                    [src]="animal.imagen"
+                    src="https://placehold.co/32x32"
                     alt=""
                     class="w-8 h-8 rounded object-cover block"
                   />
-                  <span
-                    class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate"
-                  >
-                    {{ animal.nombre_comun }}
+                  <span  class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">
+                    nombre animal
                   </span>
+
+
                 </div>
               </td>
               <td class="py-2 px-4 border-b border-b-gray-50">
-                <span class="text-[13px] font-medium text-black">
-                  {{ animal.likes }} likes</span
+                <span class="text-[13px] font-medium text-gray-400">3 likes</span
                 >
               </td>
               <td class="py-2 px-4 border-b border-b-gray-50">
-                <span class="text-[13px] font-medium text-black"
-                  >{{ animal.dislikes }} dislikes</span
-                >
+                <span class="text-[13px] font-medium text-gray-400">5 dislikes</span>
               </td>
+
             </tr>
+
           </tbody>
         </table>
+
       </div>
     </div>
     <!-- Fin Popularidad animal -->
+
 
     <!-- segunda tabla -->
 
@@ -162,6 +164,7 @@
     >
       <div class="flex justify-between mb-4 items-start">
         <div class="font-medium">Otro servicio</div>
+
       </div>
 
       <form action="" class="flex items-center mb-4">
@@ -175,6 +178,7 @@
             class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
           ></i>
         </div>
+
       </form>
 
       <div class="overflow-x-auto">
@@ -196,6 +200,7 @@
               >
                 Clicks
               </th>
+
             </tr>
           </thead>
           <tbody>
@@ -220,11 +225,137 @@
               <td class="py-2 px-4 border-b border-b-gray-50">
                 <span class="text-[13px] font-medium text-gray-400">1K</span>
               </td>
+
             </tr>
+
+
           </tbody>
         </table>
       </div>
     </div>
     <!-- Fin segunda tabla -->
   </div>
+
+
+  <!-- Grafico / tabla derecha  -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <div
+      class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md lg:col-span-2"
+    >
+      <div class="flex justify-between mb-4 items-start">
+        <div class="font-medium">Order Statistics</div>
+        <div class="dropdown">
+          <button
+            type="button"
+            class="dropdown-toggle text-gray-400 hover:text-gray-600"
+          >
+            <i class="ri-more-fill"></i>
+          </button>
+          <ul
+            class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]"
+          >
+            <li>
+              <a
+                href="#"
+                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                >Profile</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                >Settings</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+        <div class="rounded-md border border-dashed border-gray-200 p-4">
+          <div class="flex items-center mb-0.5">
+            <div class="text-xl font-semibold">10</div>
+            <span
+              class="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1"
+              >$80</span
+            >
+          </div>
+          <span class="text-gray-400 text-sm">Active</span>
+        </div>
+        <div class="rounded-md border border-dashed border-gray-200 p-4">
+          <div class="flex items-center mb-0.5">
+            <div class="text-xl font-semibold">50</div>
+            <span
+              class="p-1 rounded text-[12px] font-semibold bg-emerald-500/10 text-emerald-500 leading-none ml-1"
+              >+$469</span
+            >
+          </div>
+          <span class="text-gray-400 text-sm">Completed</span>
+        </div>
+        <div class="rounded-md border border-dashed border-gray-200 p-4">
+          <div class="flex items-center mb-0.5">
+            <div class="text-xl font-semibold">4</div>
+            <span
+              class="p-1 rounded text-[12px] font-semibold bg-rose-500/10 text-rose-500 leading-none ml-1"
+              >-$130</span
+            >
+          </div>
+          <span class="text-gray-400 text-sm">Canceled</span>
+        </div>
+      </div>
+      <div>
+        <canvas id="order-chart"></canvas>
+      </div>
+    </div>
+    <div
+      class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md"
+    >
+      <div class="flex justify-between mb-4 items-start">
+        <div class="font-medium">Earnings</div>
+        <div class="dropdown">
+          <button
+            type="button"
+            class="dropdown-toggle text-gray-400 hover:text-gray-600"
+          >
+            <i class="ri-more-fill"></i>
+          </button>
+          <ul
+            class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]"
+          >
+            <li>
+              <a
+                href="#"
+                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                >Profile</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                >Settings</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
 </div>

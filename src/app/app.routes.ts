@@ -12,6 +12,7 @@ import { ModificarEventoComponent } from './Paginas/evento/modificar-evento/modi
 import { CrearPreguntasComponent } from './Paginas/Preguntas/crear-preguntas/crear-preguntas.component';
 import { ListarPreguntasComponent } from './Paginas/Preguntas/listar-preguntas/listar-preguntas.component';
 import { ModificarPreguntasComponent } from './Paginas/Preguntas/modificar-preguntas/modificar-preguntas.component';
+import {DashboardComponent} from './Paginas/Prueba/dashboard/dashboard.component';
 
 export const routes: Routes = [
 
@@ -35,7 +36,8 @@ export const routes: Routes = [
       { path:'mapa',component:MapaComponent},
       { path:'preguntas',component:ListarPreguntasComponent},
       { path:'crear_pregunta',component:CrearPreguntasComponent},
-      { path:'modificar_pregunta/:idPregunta',component:ModificarPreguntasComponent}
+      { path:'modificar_pregunta/:idPregunta',component:ModificarPreguntasComponent},
+      { path:'dashboard',component:DashboardComponent}
 
 
     ],
