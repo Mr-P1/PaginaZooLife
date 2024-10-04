@@ -1,0 +1,119 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 justify-center">
+  <div class="">
+    <a
+      routerLink="/app/crear_evento"
+      class="flex items-center justify-center p-2 bg-blue-500 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-blue-800 group"
+    >
+      <svg
+        class="w-6 h-6 text-gray-800 dark:text-white"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+        />
+      </svg>
+      <span class="ml-2">Añadir evento</span>
+    </a>
+  </div>
+</div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-400">
+    <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+      <tr>
+        <th scope="col" class="px-6 py-3">Imagen</th>
+        <th scope="col" class="px-6 py-3">Nombre del Evento</th>
+        <th scope="col" class="px-6 py-3">Fecha</th>
+        <th scope="col" class="px-6 py-3">Descripción</th>
+        <th scope="col" class="px-6 py-3">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Evento 1 -->
+      <tr class="odd:bg-gray-900 even:bg-gray-800 border-b border-gray-700">
+        <td class="px-6 py-4">
+          <img
+            src="https://via.placeholder.com/150"
+            alt="Imagen del Evento 1"
+            class="h-16 w-16 object-cover rounded-lg"
+          />
+        </td>
+        <td class="px-6 py-4 font-medium whitespace-nowrap text-white">
+          Evento de Cumpleaños
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-white">
+          01/10/2024
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-white">
+          ¡Celebra tu cumpleaños con nosotros!
+        </td>
+        <td class="px-6 py-4">
+          <a
+            routerLink="/app/modificar_evento/1"
+            class="font-medium text-blue-500 hover:underline"
+          >Editar</a>
+        </td>
+      </tr>
+
+      <!-- Evento 2 -->
+      <tr class="odd:bg-gray-900 even:bg-gray-800 border-b border-gray-700">
+        <td class="px-6 py-4">
+          <img
+            src="https://via.placeholder.com/150"
+            alt="Imagen del Evento 2"
+            class="h-16 w-16 object-cover rounded-lg"
+          />
+        </td>
+        <td class="px-6 py-4 font-medium whitespace-nowrap text-white">
+          Noches de Encanto
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-white">
+          15/10/2024
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-white">
+          Disfruta de una mágica noche en Buin Zoo.
+        </td>
+        <td class="px-6 py-4">
+          <a
+            routerLink="/app/modificar_evento/2"
+            class="font-medium text-blue-500 hover:underline"
+          >Editar</a>
+        </td>
+      </tr>
+
+      <!-- Evento 3 -->
+      <tr class="odd:bg-gray-900 even:bg-gray-800 border-b border-gray-700">
+        <td class="px-6 py-4">
+          <img
+            src="https://via.placeholder.com/150"
+            alt="Imagen del Evento 3"
+            class="h-16 w-16 object-cover rounded-lg"
+          />
+        </td>
+        <td class="px-6 py-4 font-medium whitespace-nowrap text-white">
+          Festival Animal
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-white">
+          30/10/2024
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-white">
+          Un día lleno de actividades y aprendizaje sobre la conservación.
+        </td>
+        <td class="px-6 py-4">
+          <a
+          [routerLink]="['/app/modificar_evento']"           class="font-medium text-blue-500 hover:underline"
+          >Editar</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

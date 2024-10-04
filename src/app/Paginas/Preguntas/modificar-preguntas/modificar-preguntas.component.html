@@ -4,12 +4,12 @@
   class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
 >
   <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-    <div class="relative p-4 rounded-lg shadow bg-gray-800 sm:p-5">
+    <div class="relative p-4 rounded-lg shadow bg-orange-600 sm:p-5">
       <div
-        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-gray-600"
+        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800"
       >
         <h3 class="text-lg font-semibold text-white">
-         Modificar Pregunta
+          Modificar Pregunta
         </h3>
         <div *ngIf="errorMessage" class="text-sm text-red-600">
           {{ errorMessage }}
@@ -19,9 +19,8 @@
         </div>
       </div>
 
-      <form [formGroup]="form" >
+      <form [formGroup]="form">
         <div class="grid gap-4 mb-4 sm:grid-cols-2">
-
 
           <!-- Pregunta -->
           <div>
@@ -35,14 +34,14 @@
               id="pregunta"
               formControlName="pregunta"
               placeholder="Pregunta"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
             />
 
             <div
               *ngIf="
                 form.get('pregunta')?.touched && form.get('pregunta')?.invalid
               "
-              class="text-sm text-red-600"
+              class="text-sm text-white"
             >
               <span *ngIf="form.get('pregunta')?.errors?.['required']"
                 >Ingrese una pregunta</span
@@ -58,7 +57,7 @@
             <select
               id="tipo"
               formControlName="tipo"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
             >
               <option selected disabled>Escoja una opción</option>
               <option value="Adulto">Adulto</option>
@@ -67,7 +66,7 @@
 
             <div
               *ngIf="form.get('tipo')?.touched && form.get('tipo')?.invalid"
-              class="text-sm text-red-600"
+              class="text-sm text-white"
             >
               <span *ngIf="form.get('tipo')?.errors?.['required']"
                 >Ingrese un tipo de usuario para la pregunta</span
@@ -87,7 +86,7 @@
               id="respuesta_1"
               formControlName="respuesta_1"
               placeholder="Respuesta 1"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
             />
 
             <div
@@ -95,7 +94,7 @@
                 form.get('respuesta_1')?.touched &&
                 form.get('respuesta_1')?.invalid
               "
-              class="text-sm text-red-600"
+              class="text-sm text-white"
             >
               <span *ngIf="form.get('respuesta_1')?.errors?.['required']"
                 >Ingrese la primera respuesta</span
@@ -114,20 +113,20 @@
               id="respuesta_2"
               formControlName="respuesta_2"
               placeholder="Respuesta 2"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
             />
 
             <div
-            *ngIf="
-              form.get('respuesta_2')?.touched &&
-              form.get('respuesta_2')?.invalid
-            "
-            class="text-sm text-red-600"
-          >
-            <span *ngIf="form.get('respuesta_2')?.errors?.['required']"
-              >Ingrese la segunda respuesta</span
+              *ngIf="
+                form.get('respuesta_2')?.touched &&
+                form.get('respuesta_2')?.invalid
+              "
+              class="text-sm text-white"
             >
-          </div>
+              <span *ngIf="form.get('respuesta_2')?.errors?.['required']"
+                >Ingrese la segunda respuesta</span
+              >
+            </div>
           </div>
 
           <div>
@@ -141,20 +140,20 @@
               id="respuesta_3"
               formControlName="respuesta_3"
               placeholder="Respuesta 3"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
             />
 
             <div
-            *ngIf="
-              form.get('respuesta_3')?.touched &&
-              form.get('respuesta_3')?.invalid
-            "
-            class="text-sm text-red-600"
-          >
-            <span *ngIf="form.get('respuesta_3')?.errors?.['required']"
-              >Ingrese la tercera respuesta</span
+              *ngIf="
+                form.get('respuesta_3')?.touched &&
+                form.get('respuesta_3')?.invalid
+              "
+              class="text-sm text-white"
             >
-          </div>
+              <span *ngIf="form.get('respuesta_3')?.errors?.['required']"
+                >Ingrese la tercera respuesta</span
+              >
+            </div>
           </div>
 
           <div>
@@ -168,19 +167,19 @@
               id="respuesta_4"
               formControlName="respuesta_4"
               placeholder="Respuesta 4"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
             />
             <div
-            *ngIf="
-              form.get('respuesta_4')?.touched &&
-              form.get('respuesta_4')?.invalid
-            "
-            class="text-sm text-red-600"
-          >
-            <span *ngIf="form.get('respuesta_4')?.errors?.['required']"
-              >Ingrese la cuarta respuesta</span
+              *ngIf="
+                form.get('respuesta_4')?.touched &&
+                form.get('respuesta_4')?.invalid
+              "
+              class="text-sm text-white"
             >
-          </div>
+              <span *ngIf="form.get('respuesta_4')?.errors?.['required']"
+                >Ingrese la cuarta respuesta</span
+              >
+            </div>
           </div>
 
           <!-- Respuesta Correcta -->
@@ -193,7 +192,7 @@
             <select
               id="respuesta_correcta"
               formControlName="respuesta_correcta"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
             >
               <option selected disabled>Seleccione la correcta</option>
               <option value="a">Respuesta 1</option>
@@ -202,18 +201,17 @@
               <option value="d">Respuesta 4</option>
             </select>
 
-
             <div
-            *ngIf="
-              form.get('respuesta_correcta')?.touched &&
-              form.get('respuesta_correcta')?.invalid
-            "
-            class="text-sm text-red-600"
-          >
-            <span *ngIf="form.get('respuesta_correcta')?.errors?.['required']"
-              >Seleccione la respuesta correcta</span
+              *ngIf="
+                form.get('respuesta_correcta')?.touched &&
+                form.get('respuesta_correcta')?.invalid
+              "
+              class="text-sm text-white"
             >
-          </div>
+              <span *ngIf="form.get('respuesta_correcta')?.errors?.['required']"
+                >Seleccione la respuesta correcta</span
+              >
+            </div>
           </div>
 
           <!-- Selección de Animal Asociado -->
@@ -226,7 +224,7 @@
             <select
               id="animal_id"
               formControlName="animal_id"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
+              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
             >
               <option selected disabled>Seleccione un animal</option>
               <option
@@ -237,16 +235,16 @@
               </option>
             </select>
             <div
-            *ngIf="
-              form.get('animal_id')?.touched &&
-              form.get('animal_id')?.invalid
-            "
-            class="text-sm text-red-600"
-          >
-            <span *ngIf="form.get('animal_id')?.errors?.['required']"
-              >Seleccione al animal asociado</span
+              *ngIf="
+                form.get('animal_id')?.touched &&
+                form.get('animal_id')?.invalid
+              "
+              class="text-sm text-white"
             >
-          </div>
+              <span *ngIf="form.get('animal_id')?.errors?.['required']"
+                >Seleccione al animal asociado</span
+              >
+            </div>
           </div>
         </div>
         <div class="flex items-center space-x-4">
@@ -254,7 +252,7 @@
             [disabled]="loading()"
             (click)="actualizar()"
             type="button submit"
-            class="w-full text-white bg-blue-600 hover:bg-blue-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading() ? "Actualizando ..." : "Actualizar pregunta" }}
           </button>
@@ -263,7 +261,7 @@
             type="button"
             [disabled]="loading2()"
             (click)="borrarPregunta()"
-            class="w-full text-white bg-blue-600 hover:bg-blue-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading2() ? "Eliminando ..." : "Eliminar pregunta" }}
           </button>
