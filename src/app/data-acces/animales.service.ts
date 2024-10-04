@@ -66,9 +66,9 @@ export interface Mapa {
 
 export interface Reaccion {
   id: string;
-  ID_animal: string;  // ID del animal al que le dieron like/dislike
-  ID_usuario: string;  // ID del usuario que reaccionó
-  reaccion: boolean;   // true para like, false para dislike
+  animalId: string;  // ID del animal al que le dieron like/dislike
+  userId: string;  // ID del usuario que reaccionó
+  reaction: boolean;   // true para like, false para dislike
 }
 
 export interface PreguntaTrivia {
@@ -251,12 +251,12 @@ export class AnimalesService {
 
     reaccionesSnapshot.docs.forEach(doc => {
       const reaccion = doc.data() as Reaccion;
-      const id = reaccion.ID_animal;
+      const id = reaccion.animalId;
 
       if (!conteo[id]) {
         conteo[id] = { likes: 0, dislikes: 0 };
       }
-      if (reaccion.reaccion) {
+      if (reaccion.reaction) {
         conteo[id].likes++;
       } else {
         conteo[id].dislikes++;
@@ -314,21 +314,57 @@ export class AnimalesService {
   }
 
   async editarAnimal(id: string, animal: CrearAnimal, imagenFile?: File, videoFile?: File, audioFile?: File) {
-    // Subir los nuevos archivos solo si se proporcionan
-    const imageUrl = imagenFile ? await this.uploadImage(imagenFile) : animal.imagen;
-    const videoUrl = videoFile ? await this.uploadVideo(videoFile) : animal.video || '';
-    const audioUrl = audioFile ? await this.uploadAudio(audioFile) : animal.audio || '';
-
-    const animalData = {
-      ...animal,
-      imagen: imageUrl,
-      video: videoUrl,
-      audio: audioUrl
-    };
-
+    // Obtener la referencia del documento para acceder a los archivos antiguos
     const document = doc(this._rutaAnimal, id);
-    return updateDoc(document, animalData);
+    const docSnapshot = await getDoc(document);
+
+    if (docSnapshot.exists()) {
+      const animalActual = docSnapshot.data() as CrearAnimal;
+
+      // Eliminar la imagen antigua si existe y si se proporciona una nueva imagen
+      if (imagenFile && animalActual.imagen) {
+        const oldImageRef = ref(this._storage, animalActual.imagen);
+        await deleteObject(oldImageRef).catch((error) => {
+          console.warn('No se pudo eliminar la imagen anterior:', error);
+        });
+      }
+
+      // Eliminar el video antiguo si existe y si se proporciona un nuevo video
+      if (videoFile && animalActual.video) {
+        const oldVideoRef = ref(this._storage, animalActual.video);
+        await deleteObject(oldVideoRef).catch((error) => {
+          console.warn('No se pudo eliminar el video anterior:', error);
+        });
+      }
+
+      // Eliminar el audio antiguo si existe y si se proporciona un nuevo audio
+      if (audioFile && animalActual.audio) {
+        const oldAudioRef = ref(this._storage, animalActual.audio);
+        await deleteObject(oldAudioRef).catch((error) => {
+          console.warn('No se pudo eliminar el audio anterior:', error);
+        });
+      }
+
+      // Subir los nuevos archivos solo si se proporcionan
+      const imageUrl = imagenFile ? await this.uploadImage(imagenFile) : animalActual.imagen;
+      const videoUrl = videoFile ? await this.uploadVideo(videoFile) : animalActual.video || '';
+      const audioUrl = audioFile ? await this.uploadAudio(audioFile) : animalActual.audio || '';
+
+      // Actualizar los datos del animal con los nuevos archivos (o mantener los actuales)
+      const animalData = {
+        ...animal,
+        imagen: imageUrl,
+        video: videoUrl,
+        audio: audioUrl
+      };
+
+      // Actualizar el documento en Firestore
+      return updateDoc(document, animalData);
+    } else {
+      throw new Error('Animal no encontrado');
+    }
   }
+
 
   async editarPregunta(id: string, pregunta: CrearPregunta) {
 

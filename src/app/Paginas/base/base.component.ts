@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './base.component.html',
-  styles: ``,
+  styleUrls: ['./base.component.scss']
 })
 export class BaseComponent {
   private _authState = inject(AuthStateService);

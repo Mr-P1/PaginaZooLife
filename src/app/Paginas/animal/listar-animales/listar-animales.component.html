@@ -1,0 +1,136 @@
+<div class="container mx-auto p-4">
+  <!-- Buscador -->
+  <div class="mb-4">
+    <label for="buscador-animales" class="sr-only">Buscar Animal</label>
+    <div class="relative">
+      <input
+        type="text"
+        id="buscador-animales"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange($event)"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5 "
+        placeholder="Buscar animal..."
+      />
+      <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <svg
+          class="w-5 h-5 text-gray-400"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+          ></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón para añadir animal -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 justify-center">
+    <div class="">
+      <a
+        routerLink="/app/crear_animal"
+        class="flex items-center justify-center p-2 bg-orange-500 text-base font-medium text-white rounded-lg dark:text-white hover:bg-orange-700 group"
+      >
+        <svg
+          class="w-6 h-6 text-white dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+          />
+        </svg>
+        <span class="ml-2">Añadir Animal</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Tabla de animales -->
+  <!-- Colores bg-orange-400
+      bg-orange-700
+  -->
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <ng-container *ngIf="animales.length > 0; else noAnimals">
+      <table class="w-full text-sm text-left text-gray-400">
+        <thead class="text-xs uppercase bg-orange-700 text-white">
+          <tr>
+            <th scope="col" class="px-6 py-3">Imagen</th>
+            <th scope="col" class="px-6 py-3">Nombre Común</th>
+            <th scope="col" class="px-6 py-3">Nombre Científico</th>
+            <th scope="col" class="px-6 py-3">Disponibilidad</th>
+            <th scope="col" class="px-6 py-3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let animal of animales"
+            class="bg-orange-800 odd:bg-orange-900 even:bg-orange-800 border-b border-orange-700"
+          >
+            <td class="px-6 py-4">
+              <img
+                [src]="animal.imagen"
+                alt="Imagen de {{ animal.nombre_comun }}"
+                class="h-16 w-16 object-cover rounded-lg"
+              />
+            </td>
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              {{ animal.nombre_comun }}
+            </td>
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              {{ animal.nombre_cientifico }}
+            </td>
+            <td class="px-6 py-4 text-white whitespace-nowrap">
+              {{ animal.disponibilidad }}
+            </td>
+            <td class="px-6 py-4">
+              <a
+                [routerLink]="['/app/modificar_animal', animal.id]"
+                class="font-medium text-orange-500 hover:underline"
+                >Editar</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+    <!-- Mensaje cuando no hay animales -->
+    <ng-template #noAnimals>
+      <div class="p-6 text-center text-gray-500 dark:text-gray-400">
+        <p class="text-lg font-semibold">Aún no hay animales</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Paginación -->
+  <div class="flex justify-between mt-4">
+    <button
+      class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition"
+      [disabled]="currentPage === 1 || loading"
+      (click)="loadPreviousPage()"
+    >
+      Anterior
+    </button>
+    <button
+      class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition"
+      [disabled]="!lastVisible || loading"
+      (click)="loadNextPage()"
+    >
+      Siguiente
+    </button>
+  </div>
+</div>
+
+
