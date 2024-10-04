@@ -48,34 +48,6 @@
         </div>
       </div>
 
-      <!-- Lugar -->
-      <div>
-        <label for="lugar" class="block mb-2 text-sm font-medium text-white">Lugar</label>
-        <input
-          type="text"
-          id="lugar"
-          formControlName="lugar"
-          class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
-          placeholder="Lugar del Evento"
-        />
-        <div *ngIf="form.get('lugar')?.touched && form.get('lugar')?.invalid" class="text-sm text-red-600">
-          <span *ngIf="form.get('lugar')?.errors?.['required']">Este campo es obligatorio</span>
-        </div>
-      </div>
-
-      <!-- Estado del Evento -->
-      <div>
-        <label for="estado" class="block mb-2 text-sm font-medium text-white">Estado</label>
-        <select
-          id="estado"
-          formControlName="estado"
-          class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
-        >
-          <option value="activo">Activo</option>
-          <option value="inactivo">Inactivo</option>
-        </select>
-      </div>
-
       <!-- Descripción -->
       <div class="col-span-2">
         <label for="descripcion" class="block mb-2 text-sm font-medium text-white">Descripción</label>
@@ -102,32 +74,29 @@
           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-blue-500 hover:file:text-white"
         />
         <div *ngIf="imagenCargando" class="text-sm text-gray-400">Cargando imagen...</div>
-        <div *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid" class="text-sm text-red-600">
-          <span *ngIf="form.get('imagen')?.errors?.['required']">Este campo es obligatorio</span>
-        </div>
       </div>
     </div>
 
     <!-- Botón para Guardar -->
-    <div class="flex justify-end">
+    <div class="flex items-center space-x-4">
       <button
         [disabled]="loading()"
-        type="submit"
-        class="bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5"
+        (click)="actualizar()"
+        type="button"
+        class="w-full text-white bg-blue-600 hover:bg-blue-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
       >
-        {{ loading() ? "Guardando..." : "Guardar Cambios" }}
+        {{ loading() ? "Actualizando ...." : "Actualizar evento" }}
       </button>
-    </div>
-  </form>
 
-  <!-- Botón para Eliminar -->
-  <div class="mt-6 flex justify-end">
-    <button
-      [disabled]="loading2()"
-      (click)="borrarEvento()"
-      class="bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg text-sm px-5 py-2.5"
-    >
-      {{ loading2() ? "Eliminando..." : "Eliminar Evento" }}
-    </button>
+      <button
+        type="button"
+        [disabled]="loading2()"
+        (click)="borrarEvento()"
+        class="w-full text-white bg-blue-600 hover:bg-blue-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+      >
+        {{ loading2() ? "Eliminando ..." : "Eliminar evento" }}
+      </button>
   </div>
-</div>
+
+
+

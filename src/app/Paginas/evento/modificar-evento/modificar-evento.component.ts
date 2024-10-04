@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CrearEvento, AnimalesService, evento } from '../../../data-acces/animales.service';
+import { CrearEvento, AnimalesService, evento} from '../../../data-acces/animales.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-
-// Sweetalert2
 import Swal from 'sweetalert2';
 
 @Component({
@@ -12,45 +10,46 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './modificar-evento.component.html',
-  styleUrl: './modificar-evento.component.scss'
+  styleUrls: ['./modificar-evento.component.scss']
 })
-export class ModificarEventoComponent {
+export class ModificarEventoComponent implements OnInit {
 
-  errorMessage: string | null = null;
   public idActivo = "";
+  public imagenCargando = false;
+  public imagenBase64 = '';
+  errorMessage: string | null = null;
 
   private _formBuilder = inject(FormBuilder);
   private _rutaActiva = inject(ActivatedRoute);
   private _eventoService = inject(AnimalesService);
   private _router = inject(Router);
 
+  // Confirmacion
   loading = signal(false);
   loading2 = signal(false);
 
+  // Form definition
   form = this._formBuilder.group({
-    id: this._formBuilder.control("", [Validators.required]),
-    nombre_evento: this._formBuilder.control("", [Validators.required]),
-    imagen: this._formBuilder.control("", [Validators.required]),
-    descripcion: this._formBuilder.control("", [Validators.required]),
-    fecha_inicio: this._formBuilder.control("", [Validators.required]),
-    fecha_termino: this._formBuilder.control("", [Validators.required]),
-
+    nombre_evento: ['', Validators.required],
+    imagen: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    fecha_inicio: ['', Validators.required],
+    fecha_termino: ['', Validators.required]
   });
 
   ngOnInit() {
+    // Capturing the active event ID from the route
     this._rutaActiva.paramMap.subscribe(parametros => {
       this.idActivo = parametros.get("idEvento")!;
 
+      // Fetching event data and patching the form with values
       this._eventoService.getEvento(this.idActivo).subscribe(evento => {
         if (evento) {
           this.form.patchValue({
-            id: evento.id,
             nombre_evento: evento.nombre_evento,
-            imagen: "",
             fecha_inicio: evento.fecha_inicio,
             fecha_termino: evento.fecha_termino,
             descripcion: evento.descripcion
-
           });
         } else {
           this.errorMessage = "Evento no encontrado.";
@@ -59,9 +58,7 @@ export class ModificarEventoComponent {
     });
   }
 
-  public imagenCargando = false;
-  public imagenBase64 = '';
-
+  // Method for handling file input
   public cargarFoto(e: Event) {
     this.imagenCargando = true;
     const elemento = e.target as HTMLInputElement;
@@ -77,6 +74,7 @@ export class ModificarEventoComponent {
     }
   }
 
+  // Method to update the event
   async actualizar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -96,31 +94,27 @@ export class ModificarEventoComponent {
     if (result.isConfirmed) {
       try {
         this.loading.set(true);
-        const {
-          nombre_evento,
-          fecha_inicio,
-          fecha_termino,
-          descripcion,
-          imagen
-        } = this.form.value;
 
-        const evento: CrearEvento = {
-          nombre_evento: nombre_evento!,
-          fecha_inicio: fecha_inicio!,
-          fecha_termino: fecha_termino!,
-          descripcion: descripcion!,
-          imagen: this.imagenBase64 || imagen!,
+        const eventoActualizado: CrearEvento = {
+          nombre_evento: this.form.value.nombre_evento!,
+          fecha_inicio: this.form.value.fecha_inicio!,
+          fecha_termino: this.form.value.fecha_termino!,
+          descripcion: this.form.value.descripcion!,
+          imagen: this.imagenBase64 || this.form.value.imagen!
         };
 
-        await this._eventoService.editarEvento(this.idActivo, evento);
+        // Updating event data in the service
+        await this._eventoService.editarEvento(this.idActivo, eventoActualizado);
 
+        // Success message and navigation
         Swal.fire({
           title: "¡Listo!",
           text: "El evento ha sido modificado correctamente",
           icon: "success",
           backdrop: 'rgba(0, 0, 0, 0.8)',
         });
-        this._router.navigate(['/app/eventos']);
+        this._router.navigate(['/app/eventos']);  // Navigate to event list after successful update
+
       } catch {
         this.errorMessage = 'Ha ocurrido un problema, revisa los datos ingresados';
       } finally {
@@ -129,6 +123,7 @@ export class ModificarEventoComponent {
     }
   }
 
+  // Borrar evento
   async borrarEvento() {
     const result = await Swal.fire({
       title: '¿Estás seguro?',
@@ -143,15 +138,19 @@ export class ModificarEventoComponent {
     if (result.isConfirmed) {
       try {
         this.loading2.set(true);
+
+        // Borrar la data
         await this._eventoService.eliminarEvento(this.idActivo);
 
+        // Confirmacion
         Swal.fire({
           title: "¡Listo!",
           text: "Evento eliminado correctamente",
           icon: "success",
           backdrop: 'rgba(0, 0, 0, 0.8)',
         });
-        this._router.navigate(['/app/eventos']);
+        this._router.navigate(['/app/eventos']);  // Vuelta a la pagina
+
       } catch {
         this.errorMessage = 'Ha ocurrido un problema inesperado, vuelva a intentarlo';
       } finally {

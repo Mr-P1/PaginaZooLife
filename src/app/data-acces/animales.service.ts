@@ -129,6 +129,10 @@ export class AnimalesService {
     return collectionData(this._rutaPreguntas, { idField: 'id' }) as Observable<PreguntaTrivia[]>;
   }
 
+  geteventos(): Observable<evento[]> {
+    return collectionData(this._rutaEventos, { idField: 'id' }) as Observable<evento[]>;
+  }
+
 
   // Obtener la primera página o la página siguiente
   async getAnimalesPaginados(pageSize: number, lastVisibleDoc: any = null): Promise<{ animales: Animal[], lastVisible: any, firstVisible: any }> {
@@ -157,6 +161,36 @@ export class AnimalesService {
     const firstVisible = snapshot.docs[0]; // Cambia el nombre aquí
 
     return { animales, lastVisible, firstVisible };
+  }
+
+  getEventosPaginados(pageSize: number, lastVisibleDoc: any = null): Promise<{ eventos: evento[], lastVisible: any, firstVisible: any }> {
+    let q;
+    if (lastVisibleDoc) {
+      q = query(this._rutaEventos, orderBy('nombre_evento'), startAfter(lastVisibleDoc), limit(pageSize));
+    } else {
+      q = query(this._rutaEventos, orderBy('nombre_evento'), limit(pageSize));
+    }
+
+    return getDocs(q).then(snapshot => {
+      const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as evento[];
+      const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+      const firstVisible = snapshot.docs[0];
+
+      return { eventos, lastVisible, firstVisible };
+    });
+  }
+
+   // Obtener la página anterior Eventos
+   getEventosPaginadosAnterior(pageSize: number, firstVisibleDoc: any): Promise<{ eventos: evento[], lastVisible: any, firstVisible: any }> {
+    const q = query(this._rutaEventos, orderBy('nombre_evento'), startAt(firstVisibleDoc), limit(pageSize));
+
+    return getDocs(q).then(snapshot => {
+      const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as evento[];
+      const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+      const firstVisible = snapshot.docs[0];
+
+      return { eventos, lastVisible, firstVisible };
+    });
   }
 
 
@@ -459,12 +493,18 @@ export class AnimalesService {
     return uniqueAnimales;
   }
 
-  createPreguntaTrivia(pregunta: CrearPregunta) {
-    return addDoc(this._rutaPreguntas, pregunta);
+  buscarEventos(term: string): Promise<evento[]> {
+    const q = query(this._rutaEventos, where('nombre_evento', '>=', term), where('nombre_evento', '<=', term + '\uf8ff'));
+
+    return getDocs(q).then(snapshot => {
+      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as evento[];
+    });
   }
 
 
-
+  createPreguntaTrivia(pregunta: CrearPregunta) {
+    return addDoc(this._rutaPreguntas, pregunta);
+  }
 
   obtenerVisitantesHoy(): Observable<number> {
     const hoy = format(new Date(), 'yyyy-MM-dd', { locale: es });

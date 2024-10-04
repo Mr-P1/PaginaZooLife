@@ -39,7 +39,7 @@ export class CrearEventoComponent {
     this.imagenCargando = true;
     const elemento = e.target as HTMLInputElement;
     const archivo = elemento.files ? elemento.files[0] : null;
-    console.log(archivo)
+    console.log(this.imagenBase64)
 
     if (archivo) {
       const reader = new FileReader();
@@ -56,6 +56,11 @@ export class CrearEventoComponent {
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      return;
+    }
+
+    if (!this.imagenBase64) {
+      this.errorMessage = 'Por favor, selecciona una imagen';
       return;
     }
 
@@ -76,8 +81,9 @@ export class CrearEventoComponent {
         fecha_inicio: fecha_inicio!,
         fecha_termino: fecha_termino!,
         descripcion: descripcion!,
-        imagen: this.imagenBase64 || imagen!,
+        imagen: this.imagenBase64  // Usa solo this.imagenBase64
       };
+
 
       await this._animalService.createEvento(evento);
       console.log(evento)
