@@ -42,15 +42,7 @@ export interface Animal {
   video?: string;
   audio?: string;
 }
-export interface evento {
 
-  id: string,
-  nombre_evento: string,
-  imagen: string,
-  descripcion: string,
-  fecha_inicio: string,
-  fecha_termino: string
-}
 
 export interface AnimalConValoraciones extends Animal {
   likes: number;
@@ -71,36 +63,18 @@ export interface Reaccion {
   reaction: boolean;   // true para like, false para dislike
 }
 
-export interface PreguntaTrivia {
-  id: string;              // ID único de la pregunta
-  pregunta: string;        // Texto de la pregunta
-  respuestas: Respuestas;  // Las 4 posibles respuestas
-  respuesta_correcta:string;   // Clave de la respuesta correcta (a, b, c, d)
-  tipo: string;  // Tipo de pregunta: para niño o adulto
-  animal_id: string;  // ID del animal asociado
-}
-
-export interface Respuestas {
-  [key: string]: string;
-  a: string;  // Respuesta opción A
-  b: string;  // Respuesta opción B
-  c: string;  // Respuesta opción C
-  d: string;  // Respuesta opción D
-}
-
-
 
 //Lo siguiente tiene para omitir el id porque recien lo vamos a crear
 export type CrearAnimal = Omit<Animal, 'id'>
 export type CambiarMapa = Omit<Mapa, 'id'>
-export type CrearEvento = Omit<evento, 'id'>
-export type CrearPregunta = Omit<PreguntaTrivia, 'id'>
+
+
 
 const PATH_Animal = 'Animales';
 const PATH_Mapa = 'Mapa';
 const PATH_Reacciones = 'Reacciones';
-const PATH_Eventos = 'Eventos';
-const PATH_Pregunta = 'Preguntas'
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -111,10 +85,10 @@ export class AnimalesService {
 
   private _firestore = inject(Firestore);
   private _rutaAnimal = collection(this._firestore, PATH_Animal);
-  private _rutaEventos = collection(this._firestore, PATH_Eventos);
+
   private _rutaMapa = collection(this._firestore, PATH_Mapa);
   private _rutaReacciones = collection(this._firestore, PATH_Reacciones);
-  private _rutaPreguntas = collection(this._firestore, PATH_Pregunta);
+
   private boletasUsadasRef = collection(this._firestore, 'Boletas_usadas');
 
 
@@ -123,14 +97,6 @@ export class AnimalesService {
 
   getAnimales(): Observable<Animal[]> {
     return collectionData(this._rutaAnimal, { idField: 'id' }) as Observable<Animal[]>;
-  }
-
-  getPreguntas(): Observable<PreguntaTrivia[]> {
-    return collectionData(this._rutaPreguntas, { idField: 'id' }) as Observable<PreguntaTrivia[]>;
-  }
-
-  geteventos(): Observable<evento[]> {
-    return collectionData(this._rutaEventos, { idField: 'id' }) as Observable<evento[]>;
   }
 
 
@@ -163,46 +129,6 @@ export class AnimalesService {
     return { animales, lastVisible, firstVisible };
   }
 
-  getEventosPaginados(pageSize: number, lastVisibleDoc: any = null): Promise<{ eventos: evento[], lastVisible: any, firstVisible: any }> {
-    let q;
-    if (lastVisibleDoc) {
-      q = query(this._rutaEventos, orderBy('nombre_evento'), startAfter(lastVisibleDoc), limit(pageSize));
-    } else {
-      q = query(this._rutaEventos, orderBy('nombre_evento'), limit(pageSize));
-    }
-
-    return getDocs(q).then(snapshot => {
-      const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as evento[];
-      const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-      const firstVisible = snapshot.docs[0];
-
-      return { eventos, lastVisible, firstVisible };
-    });
-  }
-
-   // Obtener la página anterior Eventos
-   getEventosPaginadosAnterior(pageSize: number, firstVisibleDoc: any): Promise<{ eventos: evento[], lastVisible: any, firstVisible: any }> {
-    const q = query(this._rutaEventos, orderBy('nombre_evento'), startAt(firstVisibleDoc), limit(pageSize));
-
-    return getDocs(q).then(snapshot => {
-      const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as evento[];
-      const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-      const firstVisible = snapshot.docs[0];
-
-      return { eventos, lastVisible, firstVisible };
-    });
-  }
-
-
-  createEvento(Evento: CrearEvento) {
-    return addDoc(this._rutaEventos, Evento);
-  }
-
-
-
-  getEventos(): Observable<evento[]> {
-    return collectionData(this._rutaEventos, { idField: 'id' }) as Observable<evento[]>;
-  }
 
 
 
@@ -214,26 +140,11 @@ export class AnimalesService {
   }
 
 
-  getPregunta(id: string): Observable<PreguntaTrivia | null> {
-    const docRef = doc(this._rutaPreguntas, id);
-    return from(getDoc(docRef)).pipe(
-      map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as PreguntaTrivia : null)
-    );
-  }
-
-  getEvento(id: string): Observable<evento | null> {
-    const docRef = doc(this._rutaEventos, id);
-    return from(getDoc(docRef)).pipe(
-      map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as evento : null)
-    );
-  }
 
 
 
-  editarEvento(id: string, evento: CrearEvento) {
-    const document = doc(this._rutaEventos, id)
-    return updateDoc(document, { ...evento })
-  }
+
+
 
   getMapa(): Observable<Mapa[]> {
     return collectionData(this._rutaMapa, { idField: 'id' }) as Observable<Mapa[]>;
@@ -269,10 +180,6 @@ export class AnimalesService {
     }
   }
 
-  eliminarEvento(id: string) {
-    const eventoDoc = doc(this._rutaEventos, id);
-    return deleteDoc(eventoDoc);
-  }
 
 
   async getAnimalesConValoraciones(): Promise<AnimalConValoraciones[]> {
@@ -400,16 +307,6 @@ export class AnimalesService {
   }
 
 
-  async editarPregunta(id: string, pregunta: CrearPregunta) {
-
-    const preguntaData = {
-      ...pregunta,
-
-    };
-
-    const document = doc(this._rutaPreguntas, id);
-    return updateDoc(document, preguntaData);
-  }
 
 
   async eliminarAnimal(id: string): Promise<void> {
@@ -451,19 +348,6 @@ export class AnimalesService {
     }
   }
 
-  async eliminarPregunta(id: string): Promise<void> {
-    const pregunta = doc(this._rutaPreguntas, id);
-    const preguntaSnapshot = await getDoc(pregunta);
-
-    if (preguntaSnapshot.exists()) {
-      const animalData = preguntaSnapshot.data() as PreguntaTrivia;
-
-      await deleteDoc(pregunta);
-    } else {
-      throw new Error('Pregunta no encontrada');
-    }
-  }
-
 
   async buscarAnimales(term: string): Promise<Animal[]> {
 
@@ -493,18 +377,10 @@ export class AnimalesService {
     return uniqueAnimales;
   }
 
-  buscarEventos(term: string): Promise<evento[]> {
-    const q = query(this._rutaEventos, where('nombre_evento', '>=', term), where('nombre_evento', '<=', term + '\uf8ff'));
-
-    return getDocs(q).then(snapshot => {
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as evento[];
-    });
-  }
 
 
-  createPreguntaTrivia(pregunta: CrearPregunta) {
-    return addDoc(this._rutaPreguntas, pregunta);
-  }
+
+
 
   obtenerVisitantesHoy(): Observable<number> {
     const hoy = format(new Date(), 'yyyy-MM-dd', { locale: es });

@@ -123,6 +123,7 @@ export class  PremiosService {
     };
     return addDoc(this._rutaPremiosTrivia, premioData);
   }
+
   async editarPremio(id: string, premio: CrearPremioTrivia, imagenFile?: File) {
     // Obtener la referencia del documento para acceder a la imagen anterior
     const document = doc(this._rutaPremiosTrivia, id);

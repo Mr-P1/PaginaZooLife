@@ -1,0 +1,91 @@
+<!-- Main modal -->
+<div
+  id="updateProductModal"
+  tabindex="-1"
+  aria-hidden="true"
+  class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
+>
+  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+    <!-- Modal content -->
+    <div class="relative p-4 rounded-lg shadow bg-orange-600 sm:p-5">
+      <!-- Modal header -->
+      <div class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800">
+        <h3 class="text-lg font-semibold text-white">Modificar Noticia</h3>
+      </div>
+      <!-- Modal body -->
+      <form [formGroup]="form">
+        <!-- comienzo -->
+        <div class="grid gap-4 mb-4 sm:grid-cols-2">
+
+          <!-- Nombre -->
+          <div class="sm:col-span-2">
+            <label for="nombre" class="block mb-2 text-sm font-medium text-white">Nombre</label>
+            <input
+              type="text"
+              id="nombre"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Nombre de la noticia"
+              formControlName="nombre"
+            />
+            <div *ngIf="form.get('nombre')?.touched && form.get('nombre')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('nombre')?.errors?.['required']">Ingrese un nombre para la noticia</span>
+            </div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="sm:col-span-2">
+            <label for="descripcion" class="block mb-2 text-sm font-medium text-white">Descripción</label>
+            <textarea
+              id="descripcion"
+              formControlName="descripcion"
+              rows="4"
+              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Describa la noticia"
+            ></textarea>
+            <div *ngIf="form.get('descripcion')?.touched && form.get('descripcion')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('descripcion')?.errors?.['required']">Ingrese la descripción de la noticia</span>
+            </div>
+          </div>
+
+          <!-- Imagen -->
+          <div>
+            <label for="imagen" class="block mb-2 text-sm font-medium text-white">Imagen</label>
+            <input
+              type="file"
+              id="imagen"
+              accept="image/*"
+              formControlName="imagen"
+              (change)="cargarFoto($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            />
+            <div *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('imagen')?.errors?.['required']">Seleccione una imagen</span>
+            </div>
+          </div>
+
+        </div>
+        <!-- fin -->
+
+        <div class="flex items-center space-x-4">
+          <button
+            [disabled]="loading()"
+            (click)="actualizar()"
+            type="button submit"
+            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            {{ loading() ? "Actualizando ..." : "Actualizar noticia" }}
+          </button>
+
+          <button
+            type="button"
+            [disabled]="loading2()"
+            (click)="borrarNoticia()"
+            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            {{ loading2() ? "Eliminando ..." : "Eliminar noticia" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -19,6 +19,10 @@ import { ModificarPremiosTriviaComponent } from './Paginas/premios-trivia/modifi
 import { ListarBioparqueComponent } from './Paginas/bioparque/listar-bioparque/listar-bioparque.component';
 import { CrearBioparqueComponent } from './Paginas/bioparque/crear-bioparque/crear-bioparque.component';
 import { ModificarBioparqueComponent } from './Paginas/bioparque/modificar-bioparque/modificar-bioparque.component';
+import { ListarNoticiaComponent } from './Paginas/Noticias/listar-noticia/listar-noticia.component';
+import { CrearNoticiaComponent } from './Paginas/Noticias/crear-noticia/crear-noticia.component';
+import { ModificarNoticiaComponent } from './Paginas/Noticias/modificar-noticia/modificar-noticia.component';
+import { ListarUsuariosComponent } from './Paginas/Usuarios/listar-usuarios/listar-usuarios.component';
 
 export const routes: Routes = [
 
@@ -50,6 +54,10 @@ export const routes: Routes = [
       { path:'bioparque',component:ListarBioparqueComponent},
       { path:'crear_bioparque',component:CrearBioparqueComponent},
       { path:'modificar_bioparque/:idBioparque',component:ModificarBioparqueComponent},
+      { path:'noticias',component:ListarNoticiaComponent},
+      { path:'crear_noticia',component:CrearNoticiaComponent},
+      { path:'modificar_noticia/:idNoticia',component:ModificarNoticiaComponent},
+      { path:'usuarios',component:ListarUsuariosComponent},
 
 
 

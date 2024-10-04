@@ -1,25 +1,26 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import {EventoService, evento} from '../../../data-acces/eventos.service'
+import { Noticia, Noticiaservice } from '../../../data-acces/noticias.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Importa FormsModule
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-eventos',
+  selector: 'app-listar-noticia',
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './eventos.component.html',
-  styleUrls: ['./eventos.component.scss']
+  templateUrl: './listar-noticia.component.html',
+  styleUrl: './listar-noticia.component.scss'
 })
-export class ListarEventosComponent implements OnInit {
-  private _eventoService = inject(EventoService);
-  eventos: evento[] = [];   // Variable para almacenar los eventos
+export class ListarNoticiaComponent implements OnInit {
+
+  private noticiaService = inject(Noticiaservice);
+  noticias: Noticia[] = [];
   lastVisible: any = null;
   firstVisible: any = null;
   pageSize = 5;
   currentPage = 1;
   loading = false;
-  searchTerm: string = '';  // Variable para almacenar el término de búsqueda
+  searchTerm: string = ''; // Variable para almacenar el término de búsqueda
 
   // Pila para almacenar las referencias a los documentos de las páginas anteriores
   pageStack: { firstVisible: any, lastVisible: any }[] = [];
@@ -28,11 +29,11 @@ export class ListarEventosComponent implements OnInit {
     this.loadInitialPage();
   }
 
-  // Cargar la primera página de eventos
+  // Cargar la primera página de noticias
   loadInitialPage() {
     this.loading = true;
-    this._eventoService.getEventosPaginados(this.pageSize).then(data => {
-      this.eventos = data.eventos;
+    this.noticiaService.getNoticiasPaginadas(this.pageSize).then(data => {
+      this.noticias = data.noticias;
       this.lastVisible = data.lastVisible;
       this.firstVisible = data.firstVisible;
       this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
@@ -40,12 +41,12 @@ export class ListarEventosComponent implements OnInit {
     });
   }
 
-  // Cargar la siguiente página de eventos
+  // Cargar la siguiente página de noticias
   loadNextPage() {
     if (this.lastVisible) {
       this.loading = true;
-      this._eventoService.getEventosPaginados(this.pageSize, this.lastVisible).then(data => {
-        this.eventos = data.eventos;
+      this.noticiaService.getNoticiasPaginadas(this.pageSize, this.lastVisible).then(data => {
+        this.noticias = data.noticias;
         this.lastVisible = data.lastVisible;
         this.firstVisible = data.firstVisible;
         this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
@@ -55,7 +56,7 @@ export class ListarEventosComponent implements OnInit {
     }
   }
 
-  // Cargar la página anterior de eventos
+  // Cargar la página anterior de noticias
   loadPreviousPage() {
     if (this.currentPage > 1) {
       this.pageStack.pop();
@@ -63,8 +64,8 @@ export class ListarEventosComponent implements OnInit {
 
       if (previousPage) {
         this.loading = true;
-        this._eventoService.getEventosPaginadosAnterior(this.pageSize, previousPage.firstVisible).then(data => {
-          this.eventos = data.eventos;
+        this.noticiaService.getNoticiasPaginadasAnterior(this.pageSize, previousPage.firstVisible).then(data => {
+          this.noticias = data.noticias;
           this.lastVisible = data.lastVisible;
           this.firstVisible = previousPage.firstVisible;
           this.currentPage -= 1;
@@ -80,8 +81,8 @@ export class ListarEventosComponent implements OnInit {
 
     if (searchTerm) {
       this.loading = true;
-      this._eventoService.buscarEventos(searchTerm).then(evento => {
-        this.eventos = evento; // Mostrar resultados de búsqueda
+      this.noticiaService.buscarNoticias(searchTerm).then(noticias => {
+        this.noticias = noticias; // Mostrar resultados de búsqueda
         this.loading = false;
       });
     } else {
