@@ -1,29 +1,28 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import {Router, RouterLink, ActivatedRoute} from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CrearBioparque, BioparqueService } from '../../../data-acces/bioparque.service';
-
+import { CrearNoticia, Noticiaservice } from '../../../data-acces/noticias.service';
 
 // Sweetalert2
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-modificar-bioparque',
+  selector: 'app-modificar-noticia',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
-  templateUrl: './modificar-bioparque.component.html',
-  styleUrl: './modificar-bioparque.component.scss'
+  templateUrl: './modificar-noticia.component.html',
+  styleUrl: './modificar-noticia.component.scss'
 })
-export class ModificarBioparqueComponent {
+export class ModificarNoticiaComponent {
 
   errorMessage: string | null = null;
   public idActiva = "";
 
   private _formBuilder = inject(FormBuilder);
   private _rutaActiva = inject(ActivatedRoute);
-  private _bioparqueService = inject(BioparqueService);
-  private _router = inject(Router)
+  private _noticiaService = inject(Noticiaservice);
+  private _router = inject(Router);
 
   loading = signal(false);
   loading2 = signal(false);
@@ -31,18 +30,12 @@ export class ModificarBioparqueComponent {
 
   form = this._formBuilder.group({
     nombre: this._formBuilder.control("", [Validators.required]),
-    familia: this._formBuilder.control("", [Validators.required]),
-    altura: this._formBuilder.control(0, [Validators.required]),
-    altura_formato: this._formBuilder.control("", [Validators.required]),
-    distribucion: this._formBuilder.control("", [Validators.required]),
-    zonas: this._formBuilder.control("", [Validators.required]),
-    relacion_entorno: this._formBuilder.control("", [Validators.required]),
+    descripcion: this._formBuilder.control("", [Validators.required]),
     imagen: this._formBuilder.control("", [Validators.required]),
-  })
+  });
 
-
-   // Método para cargar la imagen seleccionada
-   public cargarFoto(event: Event) {
+  // Método para cargar la imagen seleccionada
+  public cargarFoto(event: Event) {
     const elemento = event.target as HTMLInputElement;
     const archivo = elemento.files ? elemento.files[0] : null;
     if (archivo) {
@@ -50,30 +43,23 @@ export class ModificarBioparqueComponent {
     }
   }
 
-
   ngOnInit() {
     this._rutaActiva.paramMap.subscribe(parametros => {
-      this.idActiva = parametros.get("idBioparque")!;
+      this.idActiva = parametros.get("idNoticia")!;
 
-      this._bioparqueService.getBioparque(this.idActiva).subscribe(bioparque => {
-        if (bioparque) {
+      this._noticiaService.getNoticia(this.idActiva).subscribe(noticia => {
+        if (noticia) {
           this.form.patchValue({
-            nombre : bioparque.nombre,
-            familia:bioparque.familia,
-            altura : 0,
-            altura_formato:"",
-            distribucion:bioparque.distribucion,
-            zonas:bioparque.zonas,
-            relacion_entorno:bioparque.relacion_entorno,
-            imagen: "",
+            nombre: noticia.nombre,
+            descripcion: noticia.descripcion,
+            imagen: "", // La imagen se gestiona por separado
           });
         } else {
-          this.errorMessage = "bioparque no encontrado.";
+          this.errorMessage = "Noticia no encontrada.";
         }
       });
     });
   }
-
 
   async actualizar() {
     if (this.form.invalid) {
@@ -83,7 +69,7 @@ export class ModificarBioparqueComponent {
 
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: '¿Deseas actualizar la información de la planta?',
+      text: '¿Deseas actualizar la información de la noticia?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, actualizar',
@@ -95,37 +81,24 @@ export class ModificarBioparqueComponent {
       try {
         this.loading.set(true);
 
-        const {
-          nombre,
-          familia,
-          altura,
-          altura_formato,
-          distribucion,
-          zonas,
-          relacion_entorno,
+        const { nombre, descripcion } = this.form.value;
 
-        } = this.form.value;
-
-        const bioparque: CrearBioparque = {
+        const noticia: CrearNoticia = {
           nombre: nombre!,
-          familia:familia!,
-          altura: `${altura} ${altura_formato}`,
-          distribucion:distribucion !,
-          zonas:zonas!,
-          relacion_entorno:relacion_entorno!,
-          imagen: ''
+          descripcion: descripcion!,
+          imagen: '', // Se actualiza al subir el archivo
         };
-        // Llamada al servicio pasando los archivos de imagen, video y audio, si fueron seleccionados
-        await this._bioparqueService.editarBioparque(this.idActiva, bioparque, this.imagenFile!);
+
+        await this._noticiaService.editarNoticia(this.idActiva, noticia, this.imagenFile!);
 
         Swal.fire({
           title: "Listo!",
-          text: "El bioparque ha sido modificado correctamente",
+          text: "La noticia ha sido modificada correctamente",
           icon: "success",
           backdrop: 'rgba(0, 0, 0, 0.8)',
         });
 
-        this._router.navigate(['/app/bioparque']);
+        this._router.navigate(['/app/noticias']);
       } catch (error) {
         this.errorMessage = 'Ha ocurrido un problema, revisa los datos ingresados';
       } finally {
@@ -134,10 +107,10 @@ export class ModificarBioparqueComponent {
     }
   }
 
-  async borrarPremio() {
+  async borrarNoticia() {
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Esta acción eliminará el bioparque de forma permanente',
+      text: 'Esta acción eliminará la noticia de forma permanente',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
@@ -148,16 +121,16 @@ export class ModificarBioparqueComponent {
     if (result.isConfirmed) {
       try {
         this.loading2.set(true);
-        await this._bioparqueService.eliminarBioparque(this.idActiva);
+        await this._noticiaService.eliminarNoticia(this.idActiva);
 
         Swal.fire({
           title: "Listo!",
-          text: "Bioparque eliminado correctamente, junto con sus archivos asociados.",
+          text: "Noticia eliminada correctamente, junto con su imagen asociada.",
           icon: "success",
           backdrop: 'rgba(0, 0, 0, 0.8)',
         });
 
-        this._router.navigate(['/app/bioparque']);
+        this._router.navigate(['/app/noticias']);
       } catch (error) {
         this.errorMessage = 'Ha ocurrido un problema inesperado, vuelva a intentarlo';
       } finally {
@@ -165,7 +138,5 @@ export class ModificarBioparqueComponent {
       }
     }
   }
-
-
 
 }

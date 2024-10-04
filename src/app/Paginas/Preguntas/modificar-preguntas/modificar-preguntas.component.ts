@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CrearAnimal, AnimalesService, Animal, Respuestas, CrearPregunta } from '../../../data-acces/animales.service';
+import { AnimalesService, Animal } from '../../../data-acces/animales.service';
+import {  Respuestas, CrearPregunta, PreguntaService } from '../../../data-acces/preguntas.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -28,6 +29,7 @@ export class ModificarPreguntasComponent implements OnInit {
   private _formBuilder = inject(FormBuilder);
   private _rutaActiva = inject(ActivatedRoute);
   private _animalService = inject(AnimalesService);
+  private _preguntaService = inject(PreguntaService);
   private _router = inject(Router)
   animales$: Observable<Animal[]> | null = null;  // Observable para obtener los animales
 
@@ -55,7 +57,7 @@ export class ModificarPreguntasComponent implements OnInit {
     this._rutaActiva.paramMap.subscribe(parametros => {
       this.idActiva = parametros.get("idPregunta")!;
 
-      this._animalService.getPregunta(this.idActiva).subscribe(pregunta => {
+      this._preguntaService.getPregunta(this.idActiva).subscribe(pregunta => {
         if (pregunta) {
           this.form.patchValue({
             pregunta: pregunta.pregunta ,
@@ -111,7 +113,7 @@ export class ModificarPreguntasComponent implements OnInit {
         };
 
 
-        await this._animalService.editarPregunta(this.idActiva, preguntaTrivia);
+        await this._preguntaService.editarPregunta(this.idActiva, preguntaTrivia);
 
         Swal.fire({
           title: "Listo!",
@@ -145,7 +147,7 @@ export class ModificarPreguntasComponent implements OnInit {
     if (result.isConfirmed) {
       try {
         this.loading2.set(true);
-        await this._animalService.eliminarPregunta(this.idActiva);
+        await this._preguntaService.eliminarPregunta(this.idActiva);
 
         Swal.fire({
           title: "Listo!",

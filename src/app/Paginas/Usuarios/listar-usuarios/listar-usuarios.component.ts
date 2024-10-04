@@ -1,38 +1,39 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import {EventoService, evento} from '../../../data-acces/eventos.service'
+import { Component, OnInit } from '@angular/core';
+import { UsuarioService, Usuario } from '../../../data-acces/usuarios.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Importa FormsModule
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-eventos',
+  selector: 'app-listar-usuarios',
+  templateUrl: './listar-usuarios.component.html',
+  styleUrls: ['./listar-usuarios.component.scss'],
   standalone: true,
   imports: [RouterModule, CommonModule, FormsModule],
-  templateUrl: './eventos.component.html',
-  styleUrls: ['./eventos.component.scss']
 })
-export class ListarEventosComponent implements OnInit {
-  private _eventoService = inject(EventoService);
-  eventos: evento[] = [];   // Variable para almacenar los eventos
+export class ListarUsuariosComponent implements OnInit {
+  usuarios: Usuario[] = [];
   lastVisible: any = null;
   firstVisible: any = null;
   pageSize = 5;
   currentPage = 1;
   loading = false;
-  searchTerm: string = '';  // Variable para almacenar el término de búsqueda
+  searchTerm: string = ''; // Variable para almacenar el término de búsqueda
 
   // Pila para almacenar las referencias a los documentos de las páginas anteriores
   pageStack: { firstVisible: any, lastVisible: any }[] = [];
+
+  constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit() {
     this.loadInitialPage();
   }
 
-  // Cargar la primera página de eventos
+  // Cargar la primera página de usuarios
   loadInitialPage() {
     this.loading = true;
-    this._eventoService.getEventosPaginados(this.pageSize).then(data => {
-      this.eventos = data.eventos;
+    this.usuarioService.getUsuariosPaginados(this.pageSize).then(data => {
+      this.usuarios = data.usuarios;
       this.lastVisible = data.lastVisible;
       this.firstVisible = data.firstVisible;
       this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
@@ -40,12 +41,12 @@ export class ListarEventosComponent implements OnInit {
     });
   }
 
-  // Cargar la siguiente página de eventos
+  // Cargar la siguiente página de usuarios
   loadNextPage() {
     if (this.lastVisible) {
       this.loading = true;
-      this._eventoService.getEventosPaginados(this.pageSize, this.lastVisible).then(data => {
-        this.eventos = data.eventos;
+      this.usuarioService.getUsuariosPaginados(this.pageSize, this.lastVisible).then(data => {
+        this.usuarios = data.usuarios;
         this.lastVisible = data.lastVisible;
         this.firstVisible = data.firstVisible;
         this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
@@ -55,7 +56,7 @@ export class ListarEventosComponent implements OnInit {
     }
   }
 
-  // Cargar la página anterior de eventos
+  // Cargar la página anterior de usuarios
   loadPreviousPage() {
     if (this.currentPage > 1) {
       this.pageStack.pop();
@@ -63,8 +64,8 @@ export class ListarEventosComponent implements OnInit {
 
       if (previousPage) {
         this.loading = true;
-        this._eventoService.getEventosPaginadosAnterior(this.pageSize, previousPage.firstVisible).then(data => {
-          this.eventos = data.eventos;
+        this.usuarioService.getUsuariosPaginadosAnterior(this.pageSize, previousPage.firstVisible).then(data => {
+          this.usuarios = data.usuarios;
           this.lastVisible = data.lastVisible;
           this.firstVisible = previousPage.firstVisible;
           this.currentPage -= 1;
@@ -80,8 +81,8 @@ export class ListarEventosComponent implements OnInit {
 
     if (searchTerm) {
       this.loading = true;
-      this._eventoService.buscarEventos(searchTerm).then(evento => {
-        this.eventos = evento; // Mostrar resultados de búsqueda
+      this.usuarioService.buscarUsuarios(searchTerm).then(usuarios => {
+        this.usuarios = usuarios; // Mostrar resultados de búsqueda
         this.loading = false;
       });
     } else {

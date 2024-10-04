@@ -1,14 +1,14 @@
 <div class="container mx-auto p-4">
   <!-- Buscador -->
   <div class="mb-4">
-    <label for="buscador-eventos" class="sr-only">Buscar Evento</label>
+    <label for="buscador-evento" class="sr-only">Buscar evento</label>
     <div class="relative">
       <input
         type="text"
-        id="buscador-eventos"
+        id="buscador-evento"
         [(ngModel)]="searchTerm"
         (input)="onSearchChange($event)"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-orange-500 focus:border-orange-500 block w-full p-2.5"
         placeholder="Buscar evento..."
       />
       <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
@@ -33,10 +33,10 @@
     <div class="">
       <a
         routerLink="/app/crear_evento"
-        class="flex items-center justify-center p-2 bg-blue-500 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-blue-800 group"
+        class="flex items-center justify-center p-2 bg-orange-500 text-base font-medium text-white rounded-lg hover:bg-orange-700 group"
       >
         <svg
-          class="w-6 h-6 text-gray-800 dark:text-white"
+          class="w-6 h-6 text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -59,21 +59,23 @@
 
   <!-- Tabla de eventos -->
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <ng-container *ngIf="eventos.length > 0; else noEvents">
+    <ng-container *ngIf="eventos.length > 0; else noEvento">
       <table class="w-full text-sm text-left text-gray-400">
-        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+        <thead class="text-xs uppercase bg-orange-700 text-white">
           <tr>
             <th scope="col" class="px-6 py-3">Imagen</th>
-            <th scope="col" class="px-6 py-3">Nombre del Evento</th>
-            <th scope="col" class="px-6 py-3">Fecha</th>
-            <th scope="col" class="px-6 py-3">Descripción</th>
+            <th scope="col" class="px-6 py-3">Nombre</th>
+            <th scope="col" class="px-6 py-3">Fecha inicio</th>
+            <th scope="col" class="px-6 py-3">Hora inicio</th>
+            <th scope="col" class="px-6 py-3">Fecha termino</th>
+            <th scope="col" class="px-6 py-3">Hora termino</th>
             <th scope="col" class="px-6 py-3">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="let evento of eventos"
-            class="bg-gray-800 odd:bg-gray-900 even:bg-gray-800 border-b border-gray-700"
+            class="bg-orange-800 odd:bg-orange-900 even:bg-orange-800 border-b border-orange-700"
           >
             <td class="px-6 py-4">
               <img
@@ -86,16 +88,23 @@
               {{ evento.nombre_evento }}
             </td>
             <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
-              {{ evento.fecha_inicio | date }}
+              {{ evento.fecha_inicio }}
             </td>
-            <td class="px-6 py-4 text-white whitespace-nowrap">
-              {{ evento.descripcion }}
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              {{ evento.hora_inicio }}
+            </td>
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              {{ evento.fecha_termino}}
+            </td>
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              {{ evento.hora_termino }}
             </td>
             <td class="px-6 py-4">
               <a
-              [routerLink]="['/app/modificar_evento', evento.id]"
-              class="font-medium text-blue-500 hover:underline"
-              >Editar</a>
+                [routerLink]="['/app/modificar_evento', evento.id]"
+                class="font-medium text-orange-500 hover:underline"
+                >Editar</a
+              >
             </td>
           </tr>
         </tbody>
@@ -103,8 +112,8 @@
     </ng-container>
 
     <!-- Mensaje cuando no hay eventos -->
-    <ng-template #noEvents>
-      <div class="p-6 text-center text-gray-500 dark:text-gray-400">
+    <ng-template #noEvento>
+      <div class="p-6 text-center text-gray-500">
         <p class="text-lg font-semibold">Aún no hay eventos</p>
       </div>
     </ng-template>
@@ -113,14 +122,14 @@
   <!-- Paginación -->
   <div class="flex justify-between mt-4">
     <button
-      class="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-700 transition"
+      class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition"
       [disabled]="currentPage === 1 || loading"
       (click)="loadPreviousPage()"
     >
       Anterior
     </button>
     <button
-      class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition"
+      class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition"
       [disabled]="!lastVisible || loading"
       (click)="loadNextPage()"
     >

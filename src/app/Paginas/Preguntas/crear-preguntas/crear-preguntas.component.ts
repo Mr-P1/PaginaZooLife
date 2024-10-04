@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AnimalesService, Animal, CrearPregunta, Respuestas } from '../../../data-acces/animales.service';
+import { AnimalesService, Animal } from '../../../data-acces/animales.service';
+import {  Respuestas, CrearPregunta, PreguntaService } from '../../../data-acces/preguntas.service';
 import { Observable } from 'rxjs';
 
 
@@ -19,6 +20,7 @@ import Swal from 'sweetalert2';
 export class CrearPreguntasComponent implements OnInit {
   private _formBuilder = inject(FormBuilder);
   private _animalService = inject(AnimalesService);
+  private _preguntaService = inject(PreguntaService);
   private _router = inject(Router);
 
   loading = signal(false);
@@ -70,7 +72,7 @@ export class CrearPreguntasComponent implements OnInit {
         animal_id: this.form.get('animal_id')?.value!,  // Seleccionamos el id del animal
       };
 
-      await this._animalService.createPreguntaTrivia(preguntaTrivia);
+      await this._preguntaService.createPreguntaTrivia(preguntaTrivia);
 
       Swal.fire({
         title: "Listo !",

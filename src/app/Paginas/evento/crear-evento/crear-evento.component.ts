@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CrearEvento } from '../../../data-acces/animales.service';
+import { CrearEvento, EventoService } from '../../../data-acces/eventos.service';
 import { Router, RouterLink } from '@angular/router';
-import {  AnimalesService } from '../../../data-acces/animales.service';
 
 // Sweetalert2
 import Swal from 'sweetalert2';
@@ -18,36 +17,29 @@ import Swal from 'sweetalert2';
 export class CrearEventoComponent {
   private _formBuilder = inject(FormBuilder)
   private _router = inject(Router);
-  private _animalService = inject(AnimalesService)
+  private _animalService = inject(EventoService)
 
   loading = signal(false);
 
   form = this._formBuilder.group({
-    nombre_evento: this._formBuilder.control("", [Validators.required]),
-    fecha_inicio: this._formBuilder.control("", [Validators.required]),
-    fecha_termino: this._formBuilder.control("", [Validators.required]),
-    descripcion: this._formBuilder. control("", [Validators.required]),
-    imagen: this._formBuilder.control("", [Validators.required]),
-  })
+    nombre_evento: ['', Validators.required],
+    imagen: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    fecha_inicio: ['', Validators.required],
+    hora_inicio: ['', Validators.required],
+    fecha_termino: ['', Validators.required],
+    hora_termino: ['', Validators.required],
+  });
 
   errorMessage: string | null = null;
 
-  public imagenCargando = false;
-  public imagenBase64 = '';
+  imagenFile: File | null = null;
 
-  public cargarFoto(e: Event) {
-    this.imagenCargando = true;
-    const elemento = e.target as HTMLInputElement;
+  public cargarFoto(event: Event) {
+    const elemento = event.target as HTMLInputElement;
     const archivo = elemento.files ? elemento.files[0] : null;
-    console.log(this.imagenBase64)
-
     if (archivo) {
-      const reader = new FileReader();
-      reader.readAsDataURL(archivo);
-      reader.onload = () => {
-        this.imagenCargando = false;
-        this.imagenBase64 = reader.result as string
-      }
+      this.imagenFile = archivo; // Almacena el archivo de imagen seleccionado
     }
   }
 
@@ -59,19 +51,15 @@ export class CrearEventoComponent {
       return;
     }
 
-    if (!this.imagenBase64) {
-      this.errorMessage = 'Por favor, selecciona una imagen';
-      return;
-    }
-
     try {
       this.loading.set(true);
       const {
         nombre_evento,
         fecha_inicio,
+        hora_inicio,
         fecha_termino,
-        descripcion,
-        imagen
+        hora_termino,
+        descripcion
       } = this.form.value;
 
 
@@ -79,13 +67,15 @@ export class CrearEventoComponent {
       const evento: CrearEvento = {
         nombre_evento: nombre_evento!,
         fecha_inicio: fecha_inicio!,
+        hora_inicio:hora_inicio!,
         fecha_termino: fecha_termino!,
+        hora_termino:hora_termino!,
         descripcion: descripcion!,
-        imagen: this.imagenBase64  // Usa solo this.imagenBase64
+        imagen: ""
       };
 
 
-      await this._animalService.createEvento(evento);
+      await this._animalService.createEvento(evento,this.imagenFile!);
       console.log(evento)
       this._router.navigate(['/app/eventos']);
     }

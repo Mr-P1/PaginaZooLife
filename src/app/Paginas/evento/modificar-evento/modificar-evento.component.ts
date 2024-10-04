@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CrearEvento, AnimalesService, evento} from '../../../data-acces/animales.service';
+import { CrearEvento, EventoService, evento} from '../../../data-acces/eventos.service';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 
@@ -15,13 +15,11 @@ import Swal from 'sweetalert2';
 export class ModificarEventoComponent implements OnInit {
 
   public idActivo = "";
-  public imagenCargando = false;
-  public imagenBase64 = '';
   errorMessage: string | null = null;
 
   private _formBuilder = inject(FormBuilder);
   private _rutaActiva = inject(ActivatedRoute);
-  private _eventoService = inject(AnimalesService);
+  private _eventoService = inject(EventoService);
   private _router = inject(Router);
 
   // Confirmacion
@@ -34,7 +32,9 @@ export class ModificarEventoComponent implements OnInit {
     imagen: ['', Validators.required],
     descripcion: ['', Validators.required],
     fecha_inicio: ['', Validators.required],
-    fecha_termino: ['', Validators.required]
+    hora_inicio: ['', Validators.required],
+    fecha_termino: ['', Validators.required],
+    hora_termino: ['', Validators.required],
   });
 
   ngOnInit() {
@@ -48,7 +48,9 @@ export class ModificarEventoComponent implements OnInit {
           this.form.patchValue({
             nombre_evento: evento.nombre_evento,
             fecha_inicio: evento.fecha_inicio,
+            hora_inicio:evento.hora_inicio,
             fecha_termino: evento.fecha_termino,
+            hora_termino:evento.hora_termino,
             descripcion: evento.descripcion
           });
         } else {
@@ -58,19 +60,13 @@ export class ModificarEventoComponent implements OnInit {
     });
   }
 
-  // Method for handling file input
-  public cargarFoto(e: Event) {
-    this.imagenCargando = true;
-    const elemento = e.target as HTMLInputElement;
-    const archivo = elemento.files ? elemento.files[0] : null;
+  imagenFile: File | null = null;
 
+  public cargarFoto(event: Event) {
+    const elemento = event.target as HTMLInputElement;
+    const archivo = elemento.files ? elemento.files[0] : null;
     if (archivo) {
-      const reader = new FileReader();
-      reader.readAsDataURL(archivo);
-      reader.onload = () => {
-        this.imagenCargando = false;
-        this.imagenBase64 = reader.result as string;
-      };
+      this.imagenFile = archivo; // Almacena el archivo de imagen seleccionado
     }
   }
 
@@ -98,13 +94,15 @@ export class ModificarEventoComponent implements OnInit {
         const eventoActualizado: CrearEvento = {
           nombre_evento: this.form.value.nombre_evento!,
           fecha_inicio: this.form.value.fecha_inicio!,
+          hora_inicio:this.form.value.hora_inicio!,
           fecha_termino: this.form.value.fecha_termino!,
           descripcion: this.form.value.descripcion!,
-          imagen: this.imagenBase64 || this.form.value.imagen!
+          hora_termino:this.form.value.hora_termino!,
+          imagen:""
         };
 
         // Updating event data in the service
-        await this._eventoService.editarEvento(this.idActivo, eventoActualizado);
+        await this._eventoService.editarEvento(this.idActivo, eventoActualizado, this.imagenFile!);
 
         // Success message and navigation
         Swal.fire({
