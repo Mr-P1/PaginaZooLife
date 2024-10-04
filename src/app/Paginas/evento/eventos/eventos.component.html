@@ -1,119 +1,130 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 justify-center">
-  <div class="">
-    <a
-      routerLink="/app/crear_evento"
-      class="flex items-center justify-center p-2 bg-blue-500 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-blue-800 group"
-    >
-      <svg
-        class="w-6 h-6 text-gray-800 dark:text-white"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-        />
-      </svg>
-      <span class="ml-2">Añadir evento</span>
-    </a>
+<div class="container mx-auto p-4">
+  <!-- Buscador -->
+  <div class="mb-4">
+    <label for="buscador-eventos" class="sr-only">Buscar Evento</label>
+    <div class="relative">
+      <input
+        type="text"
+        id="buscador-eventos"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange($event)"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+        placeholder="Buscar evento..."
+      />
+      <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <svg
+          class="w-5 h-5 text-gray-400"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+          ></path>
+        </svg>
+      </div>
+    </div>
   </div>
-</div>
 
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-400">
-    <thead class="text-xs uppercase bg-gray-700 text-gray-400">
-      <tr>
-        <th scope="col" class="px-6 py-3">Imagen</th>
-        <th scope="col" class="px-6 py-3">Nombre del Evento</th>
-        <th scope="col" class="px-6 py-3">Fecha</th>
-        <th scope="col" class="px-6 py-3">Descripción</th>
-        <th scope="col" class="px-6 py-3">Acción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Evento 1 -->
-      <tr class="odd:bg-gray-900 even:bg-gray-800 border-b border-gray-700">
-        <td class="px-6 py-4">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="Imagen del Evento 1"
-            class="h-16 w-16 object-cover rounded-lg"
+  <!-- Botón para añadir evento -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 justify-center">
+    <div class="">
+      <a
+        routerLink="/app/crear_evento"
+        class="flex items-center justify-center p-2 bg-blue-500 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-blue-800 group"
+      >
+        <svg
+          class="w-6 h-6 text-gray-800 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
           />
-        </td>
-        <td class="px-6 py-4 font-medium whitespace-nowrap text-white">
-          Evento de Cumpleaños
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-white">
-          01/10/2024
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-white">
-          ¡Celebra tu cumpleaños con nosotros!
-        </td>
-        <td class="px-6 py-4">
-          <a
-            routerLink="/app/modificar_evento/1"
-            class="font-medium text-blue-500 hover:underline"
-          >Editar</a>
-        </td>
-      </tr>
+        </svg>
+        <span class="ml-2">Añadir Evento</span>
+      </a>
+    </div>
+  </div>
 
-      <!-- Evento 2 -->
-      <tr class="odd:bg-gray-900 even:bg-gray-800 border-b border-gray-700">
-        <td class="px-6 py-4">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="Imagen del Evento 2"
-            class="h-16 w-16 object-cover rounded-lg"
-          />
-        </td>
-        <td class="px-6 py-4 font-medium whitespace-nowrap text-white">
-          Noches de Encanto
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-white">
-          15/10/2024
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-white">
-          Disfruta de una mágica noche en Buin Zoo.
-        </td>
-        <td class="px-6 py-4">
-          <a
-            routerLink="/app/modificar_evento/2"
-            class="font-medium text-blue-500 hover:underline"
-          >Editar</a>
-        </td>
-      </tr>
+  <!-- Tabla de eventos -->
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <ng-container *ngIf="eventos.length > 0; else noEvents">
+      <table class="w-full text-sm text-left text-gray-400">
+        <thead class="text-xs uppercase bg-gray-700 text-gray-400">
+          <tr>
+            <th scope="col" class="px-6 py-3">Imagen</th>
+            <th scope="col" class="px-6 py-3">Nombre del Evento</th>
+            <th scope="col" class="px-6 py-3">Fecha</th>
+            <th scope="col" class="px-6 py-3">Descripción</th>
+            <th scope="col" class="px-6 py-3">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let evento of eventos"
+            class="bg-gray-800 odd:bg-gray-900 even:bg-gray-800 border-b border-gray-700"
+          >
+            <td class="px-6 py-4">
+              <img
+                [src]="evento.imagen"
+                alt="Imagen de {{ evento.nombre_evento }}"
+                class="h-16 w-16 object-cover rounded-lg"
+              />
+            </td>
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              {{ evento.nombre_evento }}
+            </td>
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              {{ evento.fecha_inicio | date }}
+            </td>
+            <td class="px-6 py-4 text-white whitespace-nowrap">
+              {{ evento.descripcion }}
+            </td>
+            <td class="px-6 py-4">
+              <a
+              [routerLink]="['/app/modificar_evento', evento.id]"
+              class="font-medium text-blue-500 hover:underline"
+              >Editar</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
 
-      <!-- Evento 3 -->
-      <tr class="odd:bg-gray-900 even:bg-gray-800 border-b border-gray-700">
-        <td class="px-6 py-4">
-          <img
-            src="https://via.placeholder.com/150"
-            alt="Imagen del Evento 3"
-            class="h-16 w-16 object-cover rounded-lg"
-          />
-        </td>
-        <td class="px-6 py-4 font-medium whitespace-nowrap text-white">
-          Festival Animal
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-white">
-          30/10/2024
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-white">
-          Un día lleno de actividades y aprendizaje sobre la conservación.
-        </td>
-        <td class="px-6 py-4">
-          <a
-          [routerLink]="['/app/modificar_evento']"           class="font-medium text-blue-500 hover:underline"
-          >Editar</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <!-- Mensaje cuando no hay eventos -->
+    <ng-template #noEvents>
+      <div class="p-6 text-center text-gray-500 dark:text-gray-400">
+        <p class="text-lg font-semibold">Aún no hay eventos</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Paginación -->
+  <div class="flex justify-between mt-4">
+    <button
+      class="bg-gray-500 text-white font-bold py-2 px-4 rounded hover:bg-gray-700 transition"
+      [disabled]="currentPage === 1 || loading"
+      (click)="loadPreviousPage()"
+    >
+      Anterior
+    </button>
+    <button
+      class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition"
+      [disabled]="!lastVisible || loading"
+      (click)="loadNextPage()"
+    >
+      Siguiente
+    </button>
+  </div>
 </div>

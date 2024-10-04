@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import {privateGuard,publicGuard} from './core/auth.guard';
 import {BaseComponent} from './Paginas/base/base.component';
-import {EventosComponent} from './Paginas/evento/eventos/eventos.component';
+import {ListarEventosComponent} from './Paginas/evento/eventos/eventos.component';
 import {ListarAnimalesComponent} from './Paginas/animal/listar-animales/listar-animales.component';
 import {CrearAnimalComponent} from './Paginas/animal/crear-animal/crear-animal.component';
 import {ModificarAnimalComponent} from './Paginas/animal/modificar-animal/modificar-animal.component';
@@ -33,11 +33,11 @@ export const routes: Routes = [
     component: BaseComponent,
     children: [
       { path: 'animales', component: ListarAnimalesComponent },
-      { path: 'eventos', component: EventosComponent },
+      { path: 'eventos', component: ListarEventosComponent },
       { path:'crear_animal',component:CrearAnimalComponent},
       { path:'crear_evento',component:CrearEventoComponent},
       { path:'modificar_animal/:idAnimal',component:ModificarAnimalComponent},
-      { path:'modificar_evento',component:ModificarEventoComponent},
+      { path:'modificar_evento/:idEvento',component:ModificarEventoComponent},
       { path:'estadisticas',component:EstadisticasComponent},
       { path:'mapa',component:MapaComponent},
       { path:'preguntas',component:ListarPreguntasComponent},
