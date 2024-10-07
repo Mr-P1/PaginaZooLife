@@ -1,24 +1,30 @@
 <div class="p-6">
   <!--  cuadros arriba -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-
-     <!-- Primer cuadro -->
-    <div class="bg-white rounded-lg p-6 shadow-lg border border-gray-200">
+    <!-- Primer cuadro -->
+    <div class="bg-white rounded-lg p-6 shadow-lg border border-gray-200 hover:bg-orange-400 group cursor-pointer"   [routerLink]="['/app/uso_aplicacion'] ">
       <div class="flex flex-col space-y-4">
         <!-- Título y fecha -->
         <div>
-          <h3 class="text-xl font-bold text-gray-800">Visitantes hoy</h3>
-          <p class="text-sm font-medium text-gray-500">Fecha hoy: {{ today  }}</p>
+          <h3 class="text-xl font-bold text-gray-800">
+            Uso de la aplicacion hoy
+          </h3>
+          <p class="text-sm font-medium text-gray-500">
+            Fecha hoy: {{ today }}
+          </p>
         </div>
 
         <!-- Número de visitantes -->
         <div class="flex items-center justify-between">
-          <div class="text-4xl font-extrabold text-gray-900">{{ visitantesHoy }}</div>
+          <div class="text-4xl font-extrabold text-gray-900">
+            {{ visitantesHoy }}
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Fin Primer cuadro -->
 
+    </div>
+
+    <!-- Fin Primer cuadro -->
 
     <!-- Segundo  cuadro -->
     <div
@@ -46,33 +52,45 @@
         </div>
       </div>
     </div>
-     <!--Fin Segundo  cuadro -->
+    <!--Fin Segundo  cuadro -->
 
     <!-- Tercer  cuadro -->
-     <!-- Respuestas -->
-     <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
-      <div class="flex justify-between mb-6">
-        <div>
-          <div class="text-2xl font-semibold mb-1">
-            <span class="text-base font-normal text-gray-400">Respuestas Totales</span>
-            <span class="block text-4xl font-bold">{{ respuestasTotales }}</span>
-          </div>
-          <div class="text-sm font-medium text-gray-400">
-            Respuestas Correctas: <span class="text-green-500 font-bold">{{ respuestasCorrectas }}</span>
-          </div>
-          <div class="text-sm font-medium text-gray-400">
-            Respuestas Incorrectas: <span class="text-red-500 font-bold">{{ respuestasIncorrectas }}</span>
-          </div>
-          <div class="text-sm font-medium text-gray-400">
-            Promedio de Respuestas Correctas: <span class="text-blue-600 font-bold">{{ promedioCorrectas | number:'1.0-2' }}%</span>
-          </div>
+    <!-- Respuestas -->
+    <div
+  class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 hover:bg-orange-400 group cursor-pointer"
 
-        </div>
+>
+  <div class="flex justify-between mb-6">
+    <div>
+      <h3 class="text-xl font-bold text-gray-800">
+        Respuestas preguntas trivia
+        <span class="block text-4xl font-bold group-hover:text-white">{{
+          respuestasTotales
+        }}</span>
+      </h3>
+
+      <div class="text-sm font-medium text-gray-400 group-hover:text-white">
+        Respuestas Correctas:
+        <span class="text-green-500 font-bold">{{
+          respuestasCorrectas
+        }}</span>
       </div>
-      <a  class="text-blue-500 font-medium text-sm hover:text-blue-600">Ver más</a>
+      <div class="text-sm font-medium text-gray-400 group-hover:text-white">
+        Respuestas Incorrectas:
+        <span class="text-red-500 font-bold">{{
+          respuestasIncorrectas
+        }}</span>
+      </div>
+      <div class="text-sm font-medium text-gray-400 group-hover:text-white">
+        Promedio respuestas correctas:
+        <span class="text-blue-600 font-bold"
+          >{{ promedioCorrectas | number : "1.0-2" }}%</span
+        >
+      </div>
     </div>
+  </div>
 
-
+</div>
 
   </div>
   <!-- Fin cuadros arriba -->

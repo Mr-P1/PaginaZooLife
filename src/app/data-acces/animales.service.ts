@@ -382,24 +382,5 @@ export class AnimalesService {
 
 
 
-  obtenerVisitantesHoy(): Observable<number> {
-    const hoy = format(new Date(), 'yyyy-MM-dd', { locale: es });
-    const visitantesQuery = query(this.boletasUsadasRef,
-                                  where('fecha', '>=', hoy + 'T00:00:00.000Z'),
-                                  where('fecha', '<=', hoy + 'T23:59:59.999Z'));
-
-    // Usamos onSnapshot para escuchar los cambios en tiempo real
-    return new Observable<number>((observer) => {
-      const unsubscribe = onSnapshot(visitantesQuery, (snapshot) => {
-        observer.next(snapshot.size);  // Emitimos el número de visitantes
-      }, (error) => {
-        observer.error(error);  // Manejo de errores
-      });
-
-      // Cleanup al dejar de escuchar
-      return () => unsubscribe();
-    });
-  }
-
 
 }

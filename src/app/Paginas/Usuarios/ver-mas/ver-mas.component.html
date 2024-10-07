@@ -1,25 +1,38 @@
 <div class="container mx-auto p-4">
   <!-- Información del usuario -->
   <div *ngIf="usuario" class="bg-white shadow rounded-lg p-6 mb-4">
-    <h2 class="text-2xl font-semibold mb-2">Usuario: {{ usuario.nombre }}</h2>
-    <p class="text-gray-600"><strong>Correo:</strong> {{ usuario.correo }}</p>
-    <p class="text-gray-600"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
-    <p class="text-gray-600"><strong>Nivel:</strong> {{ usuario.nivel }}</p>
-    <p class="text-gray-600"><strong>Puntos:</strong> {{ usuario.puntos }}</p>
-    <p class="text-gray-600"><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente'}}</p>
+    <!-- <h2 class="text-2xl font-semibold mb-4 text-center">Datos del usuario y resultados de la trivia</h2> -->
 
-    <!-- Mostrar respuestas correctas e incorrectas -->
-    <div class="mt-4">
-      <p class="text-green-600"><strong>Respuestas Correctas:</strong> {{ respuestasCorrectas }}</p>
-      <p class="text-red-600"><strong>Respuestas Incorrectas:</strong> {{ respuestasIncorrectas }}</p>
-      <p class="text-black"><strong>Total Respuestas:</strong> {{ respuestasTotales }}</p>
-      <p class="text-blue-600"><strong>Promedio de Respuestas Correctas:</strong> {{ promedioCorrectas | number:'1.0-2' }}%</p>
+    <!-- Contenedor principal en formato grid con dos columnas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Columna izquierda: Datos del usuario -->
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Datos del usuario</h3>
+        <p class="text-gray-600"><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+        <p class="text-gray-600"><strong>Correo:</strong> {{ usuario.correo }}</p>
+        <p class="text-gray-600"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+        <p class="text-gray-600"><strong>Nivel:</strong> {{ usuario.nivel }}</p>
+        <p class="text-gray-600"><strong>Puntos:</strong> {{ usuario.puntos }}</p>
+        <p class="text-gray-600"><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente' }}</p>
+      </div>
+
+      <!-- Columna derecha: Resultados de la trivia -->
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Resultados de la trivia</h3>
+        <p class="text-green-600"><strong>Respuestas Correctas:</strong> {{ respuestasCorrectas }}</p>
+        <p class="text-red-600"><strong>Respuestas Incorrectas:</strong> {{ respuestasIncorrectas }}</p>
+        <p class="text-black"><strong>Total Respuestas:</strong> {{ respuestasTotales }}</p>
+        <p class="text-blue-600"><strong>Promedio de Respuestas Correctas:</strong> {{ promedioCorrectas | number:'1.0-2' }}%</p>
+      </div>
     </div>
   </div>
 
+
   <!-- Listado de premios del usuario -->
   <div *ngIf="premiosDetallados.length > 0" class="bg-white shadow rounded-lg p-6 mb-4">
-    <h3 class="text-xl font-semibold mb-4">Premios</h3>
+    <h2 class="text-2xl font-semibold mb-4 text-center">Premios del usuario</h2>
+
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div *ngFor="let detalle of premiosDetallados" class="border rounded-lg p-4 bg-gray-50">

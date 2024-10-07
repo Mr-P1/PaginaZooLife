@@ -5,7 +5,7 @@ import {ListarEventosComponent} from './Paginas/evento/eventos/eventos.component
 import {ListarAnimalesComponent} from './Paginas/animal/listar-animales/listar-animales.component';
 import {CrearAnimalComponent} from './Paginas/animal/crear-animal/crear-animal.component';
 import {ModificarAnimalComponent} from './Paginas/animal/modificar-animal/modificar-animal.component';
-import {EstadisticasComponent} from './Paginas/estadisticas/estadisticas.component';
+import {EstadisticasComponent} from './Paginas/Estadistica/estadisticas/estadisticas.component';
 import { MapaComponent } from './Paginas/mapa/mapa.component';
 import { CrearEventoComponent } from './Paginas/evento/crear-evento/crear-evento.component';
 import { ModificarEventoComponent } from './Paginas/evento/modificar-evento/modificar-evento.component';
@@ -24,6 +24,7 @@ import { CrearNoticiaComponent } from './Paginas/Noticias/crear-noticia/crear-no
 import { ModificarNoticiaComponent } from './Paginas/Noticias/modificar-noticia/modificar-noticia.component';
 import { ListarUsuariosComponent } from './Paginas/Usuarios/listar-usuarios/listar-usuarios.component';
 import { VerMasComponent } from './Paginas/Usuarios/ver-mas/ver-mas.component';
+import {UsoAplicacionComponent} from './Paginas/Estadistica/uso-aplicacion/uso-aplicacion.component';
 
 export const routes: Routes = [
 
@@ -44,6 +45,7 @@ export const routes: Routes = [
       { path:'modificar_animal/:idAnimal',component:ModificarAnimalComponent},
       { path:'modificar_evento/:idEvento',component:ModificarEventoComponent},
       { path:'estadisticas',component:EstadisticasComponent},
+      { path:'uso_aplicacion',component:UsoAplicacionComponent},
       { path:'mapa',component:MapaComponent},
       { path:'preguntas',component:ListarPreguntasComponent},
       { path:'crear_pregunta',component:CrearPreguntasComponent},
