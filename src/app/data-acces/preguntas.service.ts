@@ -25,6 +25,7 @@ export interface Respuestas {
 export type CrearPregunta = Omit<PreguntaTrivia, 'id'>;
 
 const PATH_Preguntas = 'Preguntas';
+const PATH_RespuestasTrivia = 'RespuestasTrivia'
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,7 @@ const PATH_Preguntas = 'Preguntas';
 export class PreguntaService {
   private _firestore = inject(Firestore);
   private _rutaPreguntas = collection(this._firestore, PATH_Preguntas);
+  private _rutaRespuestasTrivia = collection(this._firestore, PATH_RespuestasTrivia);
   private animalesService = inject(AnimalesService);
 
   // Crear una nueva pregunta

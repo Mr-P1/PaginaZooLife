@@ -1,0 +1,58 @@
+<div class="container mx-auto p-4">
+  <!-- Información del usuario -->
+  <div *ngIf="usuario" class="bg-white shadow rounded-lg p-6 mb-4">
+    <h2 class="text-2xl font-semibold mb-2">Usuario: {{ usuario.nombre }}</h2>
+    <p class="text-gray-600"><strong>Correo:</strong> {{ usuario.correo }}</p>
+    <p class="text-gray-600"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+    <p class="text-gray-600"><strong>Nivel:</strong> {{ usuario.nivel }}</p>
+    <p class="text-gray-600"><strong>Puntos:</strong> {{ usuario.puntos }}</p>
+    <p class="text-gray-600"><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente'}}</p>
+
+    <!-- Mostrar respuestas correctas e incorrectas -->
+    <div class="mt-4">
+      <p class="text-green-600"><strong>Respuestas Correctas:</strong> {{ respuestasCorrectas }}</p>
+      <p class="text-red-600"><strong>Respuestas Incorrectas:</strong> {{ respuestasIncorrectas }}</p>
+      <p class="text-black"><strong>Total Respuestas:</strong> {{ respuestasTotales }}</p>
+      <p class="text-blue-600"><strong>Promedio de Respuestas Correctas:</strong> {{ promedioCorrectas | number:'1.0-2' }}%</p>
+    </div>
+  </div>
+
+  <!-- Listado de premios del usuario -->
+  <div *ngIf="premiosDetallados.length > 0" class="bg-white shadow rounded-lg p-6 mb-4">
+    <h3 class="text-xl font-semibold mb-4">Premios</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let detalle of premiosDetallados" class="border rounded-lg p-4 bg-gray-50">
+        <!-- Imagen del premio -->
+        <img
+          *ngIf="detalle.premioTrivia?.imagen"
+          [src]="detalle.premioTrivia?.imagen"
+          alt="{{ detalle.premioTrivia?.nombre }}"
+          class="w-full h-42 object-cover rounded-lg mb-4"
+        />
+        <div class="text-center">
+          <!-- Información del premio -->
+          <h4 class="text-lg font-bold">{{ detalle.premioTrivia?.nombre }}</h4>
+          <p class="text-gray-600 mb-2">{{ detalle.premioTrivia?.descripcion }}</p>
+          <p class="text-gray-500 text-sm"><strong>Código:</strong> {{ detalle.premioUsuario.codigo }}</p>
+          <p class="text-gray-500 text-sm"><strong>Estado:</strong> {{ detalle.premioUsuario.estado ? 'Disponible' : 'Canjeado' }}</p>
+
+          <!-- Botón dinámico según el estado del premio -->
+          <button
+          class="mt-4 px-4 py-2 w-full rounded-lg font-semibold text-white"
+          [ngClass]="detalle.premioUsuario.estado ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'"
+          [disabled]="!detalle.premioUsuario.estado"
+        >
+          {{ detalle.premioUsuario.estado ? 'Canjear' : 'Canjeado' }}
+        </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no tiene premios -->
+  <div *ngIf="premiosDetallados.length === 0" class="bg-white shadow rounded-lg p-6">
+    <p class="text-center text-gray-500">Este usuario no tiene premios.</p>
+  </div>
+</div>

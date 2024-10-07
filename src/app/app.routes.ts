@@ -23,6 +23,7 @@ import { ListarNoticiaComponent } from './Paginas/Noticias/listar-noticia/listar
 import { CrearNoticiaComponent } from './Paginas/Noticias/crear-noticia/crear-noticia.component';
 import { ModificarNoticiaComponent } from './Paginas/Noticias/modificar-noticia/modificar-noticia.component';
 import { ListarUsuariosComponent } from './Paginas/Usuarios/listar-usuarios/listar-usuarios.component';
+import { VerMasComponent } from './Paginas/Usuarios/ver-mas/ver-mas.component';
 
 export const routes: Routes = [
 
@@ -58,6 +59,7 @@ export const routes: Routes = [
       { path:'crear_noticia',component:CrearNoticiaComponent},
       { path:'modificar_noticia/:idNoticia',component:ModificarNoticiaComponent},
       { path:'usuarios',component:ListarUsuariosComponent},
+      { path:'ver_mas/:IdUsuario',component:VerMasComponent},
 
 
 
