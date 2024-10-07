@@ -10,7 +10,7 @@
     <div class="relative p-4 rounded-lg shadow bg-orange-600 sm:p-5">
       <!-- Modal header -->
       <div class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800">
-        <h3 class="text-lg font-semibold text-white">Modificar Bioparque</h3>
+        <h3 class="text-lg font-semibold text-white">Modificar Planta</h3>
       </div>
       <!-- Modal body -->
       <form [formGroup]="form" >
@@ -24,11 +24,11 @@
               type="text"
               id="nombre"
               class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Nombre del bioparque"
+              placeholder="Nombre de la planta"
               formControlName="nombre"
             />
             <div *ngIf="form.get('nombre')?.touched && form.get('nombre')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('nombre')?.errors?.['required']">Ingrese un nombre para el bioparque</span>
+              <span *ngIf="form.get('nombre')?.errors?.['required']">Ingrese un nombre para la planta</span>
             </div>
           </div>
 
@@ -117,7 +117,7 @@
               formControlName="zonas"
             />
             <div *ngIf="form.get('zonas')?.touched && form.get('zonas')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('zonas')?.errors?.['required']">Ingrese las zonas del bioparque</span>
+              <span *ngIf="form.get('zonas')?.errors?.['required']">Ingrese las zonas de la planta</span>
             </div>
           </div>
 
@@ -129,7 +129,7 @@
               formControlName="relacion_entorno"
               rows="4"
               class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Describa la relación del bioparque con su entorno"
+              placeholder="Describa la relación de la planta con su entorno"
             ></textarea>
             <div *ngIf="form.get('relacion_entorno')?.touched && form.get('relacion_entorno')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('relacion_entorno')?.errors?.['required']">Ingrese la relación con el entorno</span>
@@ -162,7 +162,7 @@
             type="button submit"
             class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
-            {{ loading() ? "Actualizando ..." : "Actualizar bioparque" }}
+            {{ loading() ? "Actualizando ..." : "Actualizar planta" }}
           </button>
 
           <button
@@ -171,7 +171,7 @@
             (click)="borrarPremio()"
             class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
-            {{ loading2() ? "Eliminando ..." : "Eliminar bioparque" }}
+            {{ loading2() ? "Eliminando ..." : "Eliminar planta" }}
           </button>
         </div>
       </form>

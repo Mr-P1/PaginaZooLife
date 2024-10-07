@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { format } from 'date-fns';
 import { Subscription } from 'rxjs';
 import { es } from 'date-fns/locale'; // Configuración regional en español
+import { RespuestasService } from '../../data-acces/respuestas.service';
 
 @Component({
   selector: 'app-estadisticas',
@@ -19,12 +20,23 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   today!: string; // Variable para almacenar la fecha de hoy
   private visitantesSubscription!: Subscription;
 
-  constructor(private _animalesService: AnimalesService) {
+  respuestasTotales: number = 0;
+  respuestasCorrectas: number = 0;
+  respuestasIncorrectas: number = 0;
+  promedioCorrectas: number = 0;
+
+  private respuestasSubscription!: Subscription;
+
+  constructor(
+    private _animalesService: AnimalesService,
+    private respuestasService: RespuestasService
+  ) {
     // Formato de la fecha cambiado a 'dd/MM/yyyy'
     this.today = format(new Date(), 'dd/MM/yyyy', { locale: es });
   }
 
   ngOnInit(): void {
+
     this.cargarAnimalesConValoraciones();
 
     // Suscribirse a los cambios en tiempo real de los visitantes
@@ -36,6 +48,21 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
         console.error('Error al obtener visitantes hoy:', error);
       }
     });
+
+    this.respuestasSubscription = this.respuestasService.getRespuestasTrivia().subscribe({
+      next: (respuestas) => {
+        this.respuestasTotales = respuestas.total;
+        this.respuestasCorrectas = respuestas.correctas;
+        this.respuestasIncorrectas = respuestas.incorrectas;
+
+        if (this.respuestasTotales > 0) {
+          this.promedioCorrectas = (this.respuestasCorrectas / this.respuestasTotales) * 100;
+        } else {
+          this.promedioCorrectas = 0;  // Evitar dividir por 0 si no hay respuestas
+        }
+      }}
+    )
+
   }
 
   ngOnDestroy(): void {

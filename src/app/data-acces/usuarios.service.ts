@@ -1,8 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc
-  , deleteDoc, getDocs, query, orderBy, limit, startAfter, startAt, where } from '@angular/fire/firestore';
+import {
+  Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc
+  , deleteDoc, getDocs, query, orderBy, limit, startAfter, startAt, where
+} from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PremioTrivia } from './premios.service'
 
 export interface Usuario {
   id: string;
@@ -11,13 +14,25 @@ export interface Usuario {
   telefono: string;
   nivel: number;
   puntos: number;
- patente: string ;
+  patente: string;
+  auth_id: string;
+}
+
+export interface PremioUsuario {
+  id: string;
+  codigo: string,
+  estado: string,
+  premioId: string,
+  usuarioId: string,
 }
 
 // Lo siguiente es para omitir el id porque se creará al añadir el usuario
 export type CrearUsuario = Omit<Usuario, 'id'>;
 
 const PATH_Usuarios = 'Usuarios';
+const PATH_PremiosUsuarios = 'PremiosUsuarios';
+const PATH_PremiosTrivia = 'Premios_trivia'
+const PATH_RespuestasTrivia = 'RespuestasTrivia'
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +40,9 @@ const PATH_Usuarios = 'Usuarios';
 export class UsuarioService {
   private _firestore = inject(Firestore);
   private _rutaUsuarios = collection(this._firestore, PATH_Usuarios);
+  private _rutaPremiosUsuarios = collection(this._firestore, PATH_PremiosUsuarios);
+  private _rutaPremiosTrivia = collection(this._firestore, PATH_PremiosTrivia);
+  private _rutaRespuestasTrivia = collection(this._firestore, PATH_RespuestasTrivia);
 
   // Crear un nuevo usuario
   async crearUsuario(usuario: CrearUsuario) {
@@ -110,11 +128,25 @@ export class UsuarioService {
   }
 
 
-  // Obtener un usuario específico por su ID
-  getUsuario(id: string): Observable<Usuario | null> {
-    const docRef = doc(this._rutaUsuarios, id);
+  getUsuario2(id: string): Observable<Usuario | null> {
+    const premiosQuery = query(this._rutaUsuarios, where('auth_id', '==', id));
+    return collectionData(premiosQuery, { idField: 'id' }).pipe(
+      map((usuarios: Usuario[]) => usuarios.length > 0 ? usuarios[0] : null)
+    );
+  }
+
+
+  // Método para obtener los premios de un usuario
+  getPremiosPorUsuario(usuarioId: string): Observable<PremioUsuario[]> {
+    const premiosQuery = query(this._rutaPremiosUsuarios, where('usuarioId', '==', usuarioId));
+    return collectionData(premiosQuery, { idField: 'id' }) as Observable<PremioUsuario[]>;
+  }
+
+  // Método para obtener la información del premio de la colección PremioTrivia
+  getPremioTriviaById(premioId: string): Observable<PremioTrivia | null> {
+    const docRef = doc(this._rutaPremiosTrivia, premioId);
     return from(getDoc(docRef)).pipe(
-      map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as Usuario : null)
+      map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as PremioTrivia : null)
     );
   }
 
@@ -140,4 +172,27 @@ export class UsuarioService {
   getUsuarios(): Observable<Usuario[]> {
     return collectionData(this._rutaUsuarios, { idField: 'id' }) as Observable<Usuario[]>;
   }
+
+
+  //Respuestas del usuario
+  getRespuestasPorUsuario(userId: string): Observable<{ correctas: number, incorrectas: number , total:number}> {
+    const respuestasQuery = query(this._rutaRespuestasTrivia, where('user_id', '==', userId));
+
+    return collectionData(respuestasQuery, { idField: 'id' }).pipe(
+      map((respuestas: any[]) => {
+        // Contar las respuestas correctas e incorrectas
+        const correctas = respuestas.filter(respuesta => respuesta.resultado === true).length;
+        const incorrectas = respuestas.filter(respuesta => respuesta.resultado === false).length;
+        const total = correctas + incorrectas ;
+        return { correctas, incorrectas,total };
+      })
+    );
+  }
+
+
+
+
+
+
+
 }

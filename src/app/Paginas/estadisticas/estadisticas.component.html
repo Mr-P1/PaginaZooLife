@@ -49,23 +49,31 @@
      <!--Fin Segundo  cuadro -->
 
     <!-- Tercer  cuadro -->
-    <div
-      class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5"
-    >
+     <!-- Respuestas -->
+     <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
       <div class="flex justify-between mb-6">
         <div>
           <div class="text-2xl font-semibold mb-1">
-            <span class="text-base font-normal text-gray-400 align-top"
-              >&dollar;</span
-            >2,345
+            <span class="text-base font-normal text-gray-400">Respuestas Totales</span>
+            <span class="block text-4xl font-bold">{{ respuestasTotales }}</span>
           </div>
-          <div class="text-sm font-medium text-gray-400">Active orders</div>
+          <div class="text-sm font-medium text-gray-400">
+            Respuestas Correctas: <span class="text-green-500 font-bold">{{ respuestasCorrectas }}</span>
+          </div>
+          <div class="text-sm font-medium text-gray-400">
+            Respuestas Incorrectas: <span class="text-red-500 font-bold">{{ respuestasIncorrectas }}</span>
+          </div>
+          <div class="text-sm font-medium text-gray-400">
+            Promedio de Respuestas Correctas: <span class="text-blue-600 font-bold">{{ promedioCorrectas | number:'1.0-2' }}%</span>
+          </div>
+
         </div>
       </div>
-      <a href="#" class="text-blue-500 font-medium text-sm hover:text-blue-600"
-        >View details</a
-      >
+      <a  class="text-blue-500 font-medium text-sm hover:text-blue-600">Ver más</a>
     </div>
+
+
+
   </div>
   <!-- Fin cuadros arriba -->
 
