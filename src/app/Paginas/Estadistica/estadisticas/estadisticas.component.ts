@@ -1,15 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AnimalesService, AnimalConValoraciones } from '../../data-acces/animales.service';
+import { AnimalesService, AnimalConValoraciones } from '../../../data-acces/animales.service';
 import { CommonModule } from '@angular/common';
 import { format } from 'date-fns';
 import { Subscription } from 'rxjs';
 import { es } from 'date-fns/locale'; // Configuración regional en español
-import { RespuestasService } from '../../data-acces/respuestas.service';
+import { RespuestasService } from '../../../data-acces/respuestas.service';
+import { BoletasService } from '../../../data-acces/boletas.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './estadisticas.component.html',
   styleUrls: ['./estadisticas.component.scss']
 })
@@ -29,6 +31,7 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
   constructor(
     private _animalesService: AnimalesService,
+    private _boletasService: BoletasService,
     private respuestasService: RespuestasService
   ) {
     // Formato de la fecha cambiado a 'dd/MM/yyyy'
@@ -39,9 +42,10 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
     this.cargarAnimalesConValoraciones();
 
-    // Suscribirse a los cambios en tiempo real de los visitantes
-    this.visitantesSubscription = this._animalesService.obtenerVisitantesHoy().subscribe({
+
+    this.visitantesSubscription = this._boletasService.obtenerVisitantesHoy().subscribe({
       next: (visitantes: number) => {
+        console.log("Número de visitantes obtenidos: ", visitantes); // Agrega esto
         this.visitantesHoy = visitantes;
       },
       error: (error) => {
@@ -62,6 +66,8 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
         }
       }}
     )
+
+
 
   }
 
