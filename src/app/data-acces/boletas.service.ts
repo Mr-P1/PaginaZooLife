@@ -33,20 +33,30 @@ export class BoletasService {
 
 
   obtenerVisitantesHoy(): Observable<number> {
-    const hoy = format(new Date(), 'yyyy-MM-dd', { locale: es });
-    const visitantesQuery = query(this.boletasUsadasRef,
-                                  where('fecha', '>=', hoy + 'T00:00:00.000Z'),
-                                  where('fecha', '<=', hoy + 'T23:59:59.999Z'));
+    const hoy = new Date().toISOString(); // Usar la fecha en formato ISO
+    const inicioDia = hoy.slice(0, 10) + 'T00:00:00.000Z'; // Inicio del día en formato ISO
+    const finDia = hoy.slice(0, 10) + 'T23:59:59.999Z'; // Fin del día en formato ISO
 
+    const visitantesQuery = query(
+      this.boletasUsadasRef,
+      where('fecha', '>=', inicioDia),
+      where('fecha', '<=', finDia)
+    );
+
+    // Usamos onSnapshot para escuchar los cambios en tiempo real
     return new Observable<number>((observer) => {
       const unsubscribe = onSnapshot(visitantesQuery, (snapshot) => {
-        observer.next(snapshot.size);
+        console.log(`Visitantes hoy: ${snapshot.size}`); // Verificar cuántos visitantes hay
+        observer.next(snapshot.size);  // Emitimos el número de visitantes
       }, (error) => {
-        observer.error(error);
+        observer.error(error);  // Manejo de errores
       });
+
+      // Cleanup al dejar de escuchar
       return () => unsubscribe();
     });
   }
+
 
   obtenerBoletasPorDia(): Observable<any> {
     const hoy = new Date();

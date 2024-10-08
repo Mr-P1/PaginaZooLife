@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { BoletasService } from '../../../data-acces/boletas.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-uso-aplicacion',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './uso-aplicacion.component.html',
   styleUrls: ['./uso-aplicacion.component.scss']
 })

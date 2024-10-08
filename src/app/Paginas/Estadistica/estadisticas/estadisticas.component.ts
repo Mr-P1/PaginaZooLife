@@ -42,9 +42,10 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
     this.cargarAnimalesConValoraciones();
 
-    // Suscribirse a los cambios en tiempo real de los visitantes
+
     this.visitantesSubscription = this._boletasService.obtenerVisitantesHoy().subscribe({
       next: (visitantes: number) => {
+        console.log("Número de visitantes obtenidos: ", visitantes); // Agrega esto
         this.visitantesHoy = visitantes;
       },
       error: (error) => {

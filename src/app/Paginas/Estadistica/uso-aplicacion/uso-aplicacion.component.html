@@ -42,7 +42,7 @@
         class="bg-white shadow-lg rounded-lg p-6"
       >
         <h2 class="text-xl font-semibold text-center mb-4">
-          {{ usuario.nombre }}
+          Nombre del usuario: {{ usuario.nombre }}
         </h2>
         <p><strong>Correo:</strong> {{ usuario.correo }}</p>
         <p><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
@@ -52,6 +52,13 @@
           {{ usuario.ultimaVisita | date : "medium" }}
         </p>
         <p><strong>Boletas usadas:</strong> {{ usuario.boletasUsadas }}</p>
+        <div class="flex justify-center mt-4">
+          <a
+            [routerLink]="['/app/ver_mas', usuario.auth_id]"
+            class="font-medium text-orange-500 hover:underline"
+            >Ver info usuario</a
+          >
+        </div>
       </div>
     </div>
   </ng-container>
