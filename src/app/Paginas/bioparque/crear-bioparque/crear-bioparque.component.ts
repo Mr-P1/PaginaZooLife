@@ -22,6 +22,8 @@ export class CrearBioparqueComponent {
 
   loading = signal(false);
   imagenFile: File | null = null; // Almacenar el archivo de imagen seleccionado
+  videoFile: File | null = null; // Almacenar el archivo de imagen seleccionado
+  audioFile: File | null = null; // Almacenar el archivo de imagen seleccionado
   errorMessage: string | null = null;
 
   form = this._formBuilder.group({
@@ -33,6 +35,8 @@ export class CrearBioparqueComponent {
     zonas: this._formBuilder.control("", [Validators.required]),
     relacion_entorno: this._formBuilder.control("", [Validators.required]),
     imagen: this._formBuilder.control("", [Validators.required]),
+    video: this._formBuilder.control("", [Validators.required]),
+    audio: this._formBuilder.control("", [Validators.required]),
   })
 
 
@@ -44,6 +48,22 @@ export class CrearBioparqueComponent {
     const archivo = elemento.files ? elemento.files[0] : null;
     if (archivo) {
       this.imagenFile = archivo; // Almacena el archivo de imagen seleccionado
+    }
+  }
+
+  public cargarVideo(e: Event) {
+    const elemento = e.target as HTMLInputElement;
+    const archivo = elemento.files ? elemento.files[0] : null;
+    if (archivo) {
+      this.videoFile = archivo;  // Almacena el archivo de video seleccionado
+    }
+  }
+
+  public cargarAudio(e: Event) {
+    const elemento = e.target as HTMLInputElement;
+    const archivo = elemento.files ? elemento.files[0] : null;
+    if (archivo) {
+      this.audioFile = archivo;  // Almacena el archivo de audio seleccionado
     }
   }
 
@@ -79,11 +99,13 @@ export class CrearBioparqueComponent {
         distribucion:distribucion !,
         zonas:zonas!,
         relacion_entorno:relacion_entorno!,
-        imagen: ''
+        imagen: '',
+        video:"",
+        audio:""
       };
 
       // await this._animalService.create(animal);
-      await this._bioparqueService.createBioparque(bioparque, this.imagenFile!);
+      await this._bioparqueService.createBioparque(bioparque, this.imagenFile!, this.videoFile! , this.audioFile!);
       Swal.fire({
         title: "Listo !",
         text: "Bioparque agregado correctamente",

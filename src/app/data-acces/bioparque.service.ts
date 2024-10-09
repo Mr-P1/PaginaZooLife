@@ -15,6 +15,8 @@ import { map } from 'rxjs/operators';
 export interface Bioparque {
   id:string
   imagen:string,
+  audio:string,
+  video:string,
   nombre:string,
   familia:string,
   altura:string,
@@ -24,6 +26,18 @@ export interface Bioparque {
 
 }
 
+export interface PlantaConValoraciones extends Bioparque {
+  likes: number;
+  dislikes: number;
+}
+
+export interface Reaccion {
+  id: string;
+  plantaId: string;  // ID del animal al que le dieron like/dislike
+  userId: string;  // ID del usuario que reaccionó
+  reaction: boolean;   // true para like, false para dislike
+}
+
 
 
 //Lo siguiente tiene para omitir el id porque recien lo vamos a crear
@@ -31,6 +45,7 @@ export type CrearBioparque = Omit<Bioparque, 'id'>
 
 
 const PATH_Bioparque = 'Bioparque'
+const PATH_Reacciones = 'ReaccionesPlantas'
 
 
 @Injectable({
@@ -42,6 +57,7 @@ export class  BioparqueService {
 
   private _firestore = inject(Firestore);
   private _rutaBioparque = collection(this._firestore, PATH_Bioparque);
+  private _rutaReaccionesPlantas = collection(this._firestore, PATH_Reacciones);
   private _storage = inject(Storage); // Agrega Storage
 
 
@@ -119,27 +135,52 @@ export class  BioparqueService {
     return getDownloadURL(snapshot.ref); // Obtiene la URL pública de la imagen
   }
 
+  async uploadVideo(file: File): Promise<string> {
+    const filePath = `animales/videos/${file.name}`;
+    const storageRef = ref(this._storage, filePath);
+    const snapshot = await uploadBytes(storageRef, file);
+    return getDownloadURL(snapshot.ref);
+  }
 
-  async createBioparque(bioparque: CrearBioparque, imagenFile: File) {
+  // Subir audio a Cloud Storage
+  async uploadAudio(file: File): Promise<string> {
+    const filePath = `animales/audios/${file.name}`;
+    const storageRef = ref(this._storage, filePath);
+    const snapshot = await uploadBytes(storageRef, file);
+    return getDownloadURL(snapshot.ref);
+  }
+
+
+
+  async createBioparque(bioparque: CrearBioparque, imagenFile: File, videoFile?: File, audioFile?: File) {
     // Sube la imagen, video y audio
     const imageUrl = await this.uploadImage(imagenFile);
+    const videoUrl = videoFile ? await this.uploadVideo(videoFile) : '';
+    const audioUrl = audioFile ? await this.uploadAudio(audioFile) : '';
 
     const bioparqueData = {
       ...bioparque,
       imagen: imageUrl,
+      video: videoUrl,
+      audio: audioUrl
 
     };
     return addDoc(this._rutaBioparque, bioparqueData);
   }
-  async editarBioparque(id: string, bioparque: CrearBioparque, imagenFile?: File) {
-    // Obtener la referencia del documento para acceder a la imagen anterior
+
+
+
+
+
+  async editarBioparque(id: string, bioparque: CrearBioparque, imagenFile?: File, videoFile?: File, audioFile?: File) {
+    // Obtener la referencia del documento para acceder a los archivos antiguos
     const document = doc(this._rutaBioparque, id);
     const docSnapshot = await getDoc(document);
 
     if (docSnapshot.exists()) {
       const bioparqueActual = docSnapshot.data() as CrearBioparque;
 
-      // Eliminar la imagen anterior si existe y si se proporciona una nueva imagen
+      // Eliminar la imagen antigua si existe y si se proporciona una nueva imagen
       if (imagenFile && bioparqueActual.imagen) {
         const oldImageRef = ref(this._storage, bioparqueActual.imagen);
         await deleteObject(oldImageRef).catch((error) => {
@@ -147,21 +188,45 @@ export class  BioparqueService {
         });
       }
 
-      // Subir la nueva imagen solo si se proporciona
-      const imageUrl = imagenFile ? await this.uploadImage(imagenFile) : bioparqueActual.imagen;
+      // Eliminar el video antiguo si existe y si se proporciona un nuevo video
+      if (videoFile && bioparqueActual.video) {
+        const oldVideoRef = ref(this._storage, bioparqueActual.video);
+        await deleteObject(oldVideoRef).catch((error) => {
+          console.warn('No se pudo eliminar el video anterior:', error);
+        });
+      }
 
-      // Actualizar los datos del premio con la nueva imagen (o mantener la actual)
+      // Eliminar el audio antiguo si existe y si se proporciona un nuevo audio
+      if (audioFile && bioparqueActual.audio) {
+        const oldAudioRef = ref(this._storage, bioparqueActual.audio);
+        await deleteObject(oldAudioRef).catch((error) => {
+          console.warn('No se pudo eliminar el audio anterior:', error);
+        });
+      }
+
+      // Subir los nuevos archivos solo si se proporcionan
+      const imageUrl = imagenFile ? await this.uploadImage(imagenFile) : bioparqueActual.imagen;
+      const videoUrl = videoFile ? await this.uploadVideo(videoFile) : bioparqueActual.video || '';
+      const audioUrl = audioFile ? await this.uploadAudio(audioFile) : bioparqueActual.audio || '';
+
+      // Actualizar los datos del bioparque con los nuevos archivos (o mantener los actuales)
       const bioparqueData = {
         ...bioparque,
         imagen: imageUrl,
+        video: videoUrl,
+        audio: audioUrl
       };
 
       // Actualizar el documento en Firestore
       return updateDoc(document, bioparqueData);
     } else {
-      throw new Error('Premio no encontrado');
+      throw new Error('Bioparque no encontrado');
     }
   }
+
+
+
+
 
 
   getBioparque(id: string): Observable<Bioparque | null> {
@@ -173,7 +238,7 @@ export class  BioparqueService {
 
 
   async eliminarBioparque(id: string): Promise<void> {
-    // Obtener el documento del animal
+    // Obtener el documento del bioparque
     const bioparqueDoc = doc(this._rutaBioparque, id);
     const bioparqueSnapshot = await getDoc(bioparqueDoc);
 
@@ -188,15 +253,72 @@ export class  BioparqueService {
         });
       }
 
+      // Eliminar video de Firebase Storage si existe
+      if (bioparqueData.video) {
+        const videoRef = ref(this._storage, bioparqueData.video);
+        await deleteObject(videoRef).catch(() => {
+          console.warn(`No se pudo eliminar el video: ${bioparqueData.video}`);
+        });
+      }
 
+      // Eliminar audio de Firebase Storage si existe
+      if (bioparqueData.audio) {
+        const audioRef = ref(this._storage, bioparqueData.audio);
+        await deleteObject(audioRef).catch(() => {
+          console.warn(`No se pudo eliminar el audio: ${bioparqueData.audio}`);
+        });
+      }
 
-
-      // Finalmente, eliminar el documento del animal en Firestore
+      // Finalmente, eliminar el documento del bioparque en Firestore
       await deleteDoc(bioparqueDoc);
     } else {
-      throw new Error('Animal no encontrado');
+      throw new Error('Bioparque no encontrado');
     }
   }
+
+
+  getPlantasConValoraciones(): Observable<PlantaConValoraciones[]> {
+    return new Observable((observer) => {
+      const unsubscribePlantas = onSnapshot(this._rutaBioparque, (plantasSnapshot) => {
+        const plantas = plantasSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as PlantaConValoraciones[];
+
+        const unsubscribeReacciones = onSnapshot(this._rutaReaccionesPlantas, (reaccionesSnapshot) => {
+          const conteo: { [key: string]: { likes: number; dislikes: number } } = {};
+
+          reaccionesSnapshot.docs.forEach((doc) => {
+            const reaccion = doc.data() as Reaccion;
+            const id = reaccion.plantaId;
+
+            if (!conteo[id]) {
+              conteo[id] = { likes: 0, dislikes: 0 };
+            }
+            if (reaccion.reaction) {
+              conteo[id].likes++;
+            } else {
+              conteo[id].dislikes++;
+            }
+          });
+
+          const resultado = plantas.map((planta) => ({
+            ...planta,
+            likes: conteo[planta.id]?.likes || 0,
+            dislikes: conteo[planta.id]?.dislikes || 0,
+          }));
+
+          observer.next(resultado);
+        });
+
+        return () => unsubscribeReacciones();
+      });
+
+      return () => unsubscribePlantas();
+    });
+  }
+
+
 
 
 

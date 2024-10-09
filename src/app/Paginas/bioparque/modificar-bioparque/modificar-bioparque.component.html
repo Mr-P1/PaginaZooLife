@@ -152,6 +152,39 @@
             </div>
           </div>
 
+          <div>
+            <label for="video" class="block mb-2 text-sm font-medium text-white">Video</label>
+            <input
+              type="file"
+              id="video"
+              accept="video/*"
+              formControlName="video"
+              (change)="cargarVideo($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            />
+
+
+            <div *ngIf="form.get('video')?.touched && form.get('video')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('video')?.errors?.['required']">Seleccione un video</span>
+            </div>
+          </div>
+
+          <div>
+            <label for="audio" class="block mb-2 text-sm font-medium text-white">Audio</label>
+            <input
+              type="file"
+              id="audio"
+              accept="audio/*"
+              formControlName="audio"
+              (change)="cargarAudio($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            />
+
+            <div *ngIf="form.get('audio')?.touched && form.get('audio')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('audio')?.errors?.['required']">Seleccione un audio</span>
+            </div>
+          </div>
+
         </div>
         <!-- fin -->
 

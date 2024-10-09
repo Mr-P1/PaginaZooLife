@@ -64,7 +64,7 @@
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <ng-container *ngIf="bioparques.length > 0; else noBioparque">
       <table class="w-full text-sm text-left text-gray-400">
-        <thead class="text-xs uppercase bg-orange-700 text-white">
+        <thead class="text-xs uppercase bg-orange-500 text-white">
           <tr>
             <th scope="col" class="px-6 py-3">Imagen</th>
             <th scope="col" class="px-6 py-3">Nombre</th>
@@ -77,7 +77,7 @@
         <tbody>
           <tr
             *ngFor="let bioparque of bioparques"
-            class="bg-orange-800 odd:bg-orange-900 even:bg-orange-800 border-b border-orange-700"
+            class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100"
           >
             <td class="px-6 py-4">
               <img
@@ -86,16 +86,16 @@
                 class="h-16 w-16 object-cover rounded-lg"
               />
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ bioparque.nombre }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ bioparque.familia }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ bioparque.zonas }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ bioparque.distribucion }}
             </td>
 
