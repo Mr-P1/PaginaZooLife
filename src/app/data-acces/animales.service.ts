@@ -182,35 +182,45 @@ export class AnimalesService {
 
 
 
-  async getAnimalesConValoraciones(): Promise<AnimalConValoraciones[]> {
-    const animalesSnapshot = await getDocs(this._rutaAnimal);
-    const reaccionesSnapshot = await getDocs(this._rutaReacciones);
+  getAnimalesConValoraciones(): Observable<AnimalConValoraciones[]> {
+    return new Observable((observer) => {
+      const unsubscribeAnimales = onSnapshot(this._rutaAnimal, (animalesSnapshot) => {
+        const animales = animalesSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as AnimalConValoraciones[];
 
-    const animales = animalesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Animal[];
+        const unsubscribeReacciones = onSnapshot(this._rutaReacciones, (reaccionesSnapshot) => {
+          const conteo: { [key: string]: { likes: number; dislikes: number } } = {};
 
-    const conteo: { [key: string]: { likes: number; dislikes: number } } = {};
+          reaccionesSnapshot.docs.forEach((doc) => {
+            const reaccion = doc.data() as Reaccion;
+            const id = reaccion.animalId;
 
-    reaccionesSnapshot.docs.forEach(doc => {
-      const reaccion = doc.data() as Reaccion;
-      const id = reaccion.animalId;
+            if (!conteo[id]) {
+              conteo[id] = { likes: 0, dislikes: 0 };
+            }
+            if (reaccion.reaction) {
+              conteo[id].likes++;
+            } else {
+              conteo[id].dislikes++;
+            }
+          });
 
-      if (!conteo[id]) {
-        conteo[id] = { likes: 0, dislikes: 0 };
-      }
-      if (reaccion.reaction) {
-        conteo[id].likes++;
-      } else {
-        conteo[id].dislikes++;
-      }
+          const resultado = animales.map((animal) => ({
+            ...animal,
+            likes: conteo[animal.id]?.likes || 0,
+            dislikes: conteo[animal.id]?.dislikes || 0,
+          }));
+
+          observer.next(resultado);
+        });
+
+        return () => unsubscribeReacciones();
+      });
+
+      return () => unsubscribeAnimales();
     });
-
-    const resultado = animales.map(animal => ({
-      ...animal,
-      likes: conteo[animal.id]?.likes || 0,
-      dislikes: conteo[animal.id]?.dislikes || 0
-    })) as AnimalConValoraciones[];
-
-    return resultado;
   }
 
 

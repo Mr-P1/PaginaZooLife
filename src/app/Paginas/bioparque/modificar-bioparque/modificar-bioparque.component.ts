@@ -28,6 +28,8 @@ export class ModificarBioparqueComponent {
   loading = signal(false);
   loading2 = signal(false);
   imagenFile: File | null = null; // Almacenar el archivo de imagen seleccionado
+  videoFile: File | null = null; // Almacenar el archivo de imagen seleccionado
+  audioFile: File | null = null; // Almacenar el archivo de imagen seleccionado
 
   form = this._formBuilder.group({
     nombre: this._formBuilder.control("", [Validators.required]),
@@ -38,6 +40,8 @@ export class ModificarBioparqueComponent {
     zonas: this._formBuilder.control("", [Validators.required]),
     relacion_entorno: this._formBuilder.control("", [Validators.required]),
     imagen: this._formBuilder.control("", [Validators.required]),
+    video: this._formBuilder.control("", [Validators.required]),
+    audio: this._formBuilder.control("", [Validators.required]),
   })
 
 
@@ -47,6 +51,21 @@ export class ModificarBioparqueComponent {
     const archivo = elemento.files ? elemento.files[0] : null;
     if (archivo) {
       this.imagenFile = archivo; // Almacena el archivo de imagen seleccionado
+    }
+  }
+  public cargarVideo(e: Event) {
+    const elemento = e.target as HTMLInputElement;
+    const archivo = elemento.files ? elemento.files[0] : null;
+    if (archivo) {
+      this.videoFile = archivo;  // Almacena el archivo de video seleccionado
+    }
+  }
+
+  public cargarAudio(e: Event) {
+    const elemento = e.target as HTMLInputElement;
+    const archivo = elemento.files ? elemento.files[0] : null;
+    if (archivo) {
+      this.audioFile = archivo;  // Almacena el archivo de audio seleccionado
     }
   }
 
@@ -66,6 +85,8 @@ export class ModificarBioparqueComponent {
             zonas:bioparque.zonas,
             relacion_entorno:bioparque.relacion_entorno,
             imagen: "",
+            video:"",
+            audio:""
           });
         } else {
           this.errorMessage = "bioparque no encontrado.";
@@ -113,10 +134,12 @@ export class ModificarBioparqueComponent {
           distribucion:distribucion !,
           zonas:zonas!,
           relacion_entorno:relacion_entorno!,
-          imagen: ''
+          imagen: '',
+          video:"",
+          audio:""
         };
         // Llamada al servicio pasando los archivos de imagen, video y audio, si fueron seleccionados
-        await this._bioparqueService.editarBioparque(this.idActiva, bioparque, this.imagenFile!);
+        await this._bioparqueService.editarBioparque(this.idActiva, bioparque, this.imagenFile!, this.videoFile! , this.audioFile!);
 
         Swal.fire({
           title: "Listo!",

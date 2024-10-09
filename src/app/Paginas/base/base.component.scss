@@ -1,6 +1,25 @@
 main {
-  background-image: url('../../../assets/Fondo.jpg');
+  background-image: url('../../../assets/plants-leaves-green-1841479-wallhere.com.jpg') ;
+  //background-image: url('../../../assets/Fondo.jpg');
   background-repeat: no-repeat; /* Evita que la imagen se repita */
-  background-size: cover; /* Asegura que la imagen cubra todo el área */
+  background-size: 100% 100%; /* Asegura que la imagen siempre cubra toda el área, ajustándose */
+  background-attachment: fixed; /* Fija la imagen para que no se mueva al hacer scroll */
   background-position: center; /* Centra la imagen */
+  min-height: 100vh; /* Asegura que el fondo cubra al menos el 100% de la altura de la pantalla */
+  //filter: blur(5px); /* Aplica un filtro de difuminado de 5px */
+
 }
+
+
+
+
+
+nav{
+  background-color: #154F38;
+  border: #113d2b;
+}
+
+.lado{
+  background-color: #266043;
+}
+

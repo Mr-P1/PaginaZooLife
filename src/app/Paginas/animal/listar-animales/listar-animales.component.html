@@ -64,7 +64,7 @@
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <ng-container *ngIf="animales.length > 0; else noAnimals">
       <table class="w-full text-sm text-left text-gray-400">
-        <thead class="text-xs uppercase bg-orange-700 text-white">
+        <thead class="text-xs uppercase bg-orange-500 text-white">
           <tr>
             <th scope="col" class="px-6 py-3">Imagen</th>
             <th scope="col" class="px-6 py-3">Nombre Común</th>
@@ -76,7 +76,7 @@
         <tbody>
           <tr
             *ngFor="let animal of animales"
-            class="bg-orange-800 odd:bg-orange-900 even:bg-orange-800 border-b border-orange-700"
+            class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100"
           >
             <td class="px-6 py-4">
               <img
@@ -85,19 +85,19 @@
                 class="h-16 w-16 object-cover rounded-lg"
               />
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ animal.nombre_comun }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ animal.nombre_cientifico }}
             </td>
-            <td class="px-6 py-4 text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ animal.disponibilidad }}
             </td>
             <td class="px-6 py-4">
               <a
                 [routerLink]="['/app/modificar_animal', animal.id]"
-                class="font-medium text-orange-500 hover:underline"
+                class="font-medium  odd:text-orange-700 even:text-orange-500 hover:underline"
                 >Editar</a
               >
             </td>

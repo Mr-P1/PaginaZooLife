@@ -2,7 +2,7 @@
   <!--  cuadros arriba -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
     <!-- Primer cuadro -->
-    <div class="bg-white rounded-lg p-6 shadow-lg border border-gray-200 hover:bg-orange-400 group cursor-pointer"   [routerLink]="['/app/uso_aplicacion'] ">
+    <div class=" bg-white rounded-lg p-6 shadow-lg border border-gray-200 hover:bg-orange-400 group cursor-pointer"   [routerLink]="['/app/uso_aplicacion'] ">
       <div class="flex flex-col space-y-4">
         <!-- Título y fecha -->
         <div>
@@ -42,15 +42,11 @@
           </div>
           <div class="text-sm font-medium text-gray-400">Visitors</div>
         </div>
-        <div class="dropdown">
-          <button
-            type="button"
-            class="dropdown-toggle text-gray-400 hover:text-gray-600"
-          >
-            <i class="ri-more-fill"></i>
-          </button>
-        </div>
+
+
+
       </div>
+
     </div>
     <!--Fin Segundo  cuadro -->
 
@@ -58,36 +54,34 @@
     <!-- Respuestas -->
     <div
   class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 hover:bg-orange-400 group cursor-pointer"
-
+    [routerLink]="['/app/respuestas_trivia']"
 >
   <div class="flex justify-between mb-6">
     <div>
       <h3 class="text-xl font-bold text-gray-800">
         Respuestas preguntas trivia
-        <span class="block text-4xl font-bold group-hover:text-white">{{
-          respuestasTotales
-        }}</span>
+        <span class="text-black font-bold">Total respuestas {{ respuestasTotales }}</span>
       </h3>
 
+      <!-- Gráfico de torta -->
+
+      <!-- <div style="width: 220px; height: 220px;">
+        <canvas id="pieChart"></canvas>
+      </div> -->
       <div class="text-sm font-medium text-gray-400 group-hover:text-white">
-        Respuestas Correctas:
-        <span class="text-green-500 font-bold">{{
-          respuestasCorrectas
-        }}</span>
+       Respuestas correctas:
+        <span class="text-green-600 font-bold">{{ respuestasCorrectas }}</span>
       </div>
       <div class="text-sm font-medium text-gray-400 group-hover:text-white">
-        Respuestas Incorrectas:
-        <span class="text-red-500 font-bold">{{
-          respuestasIncorrectas
-        }}</span>
+       Respuestas incorrectas:
+        <span class="text-red-600 font-bold">{{ respuestasIncorrectas  }}</span>
       </div>
       <div class="text-sm font-medium text-gray-400 group-hover:text-white">
         Promedio respuestas correctas:
-        <span class="text-blue-600 font-bold"
-          >{{ promedioCorrectas | number : "1.0-2" }}%</span
-        >
+        <span class="text-blue-600 font-bold">{{ promedioCorrectas | number: '1.0-2' }}%</span>
       </div>
     </div>
+
   </div>
 
 </div>
@@ -183,7 +177,7 @@
 
     <!-- segunda tabla -->
 
-    <div
+    <!-- <div
       class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md"
     >
       <div class="flex justify-between mb-4 items-start">
@@ -250,7 +244,88 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </div> -->
     <!-- Fin segunda tabla -->
+
+    <div
+      class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md"
+    >
+      <div class="flex justify-between mb-4 items-start">
+        <div class="font-medium">Popularidad plantas</div>
+      </div>
+      <form action="" class="flex items-center mb-4">
+        <div class="relative w-full mr-2">
+          <input
+            type="text"
+            class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-700 rounded-md text-sm focus:border-blue-500"
+            placeholder="Search..."
+          />
+          <i
+            class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
+          ></i>
+        </div>
+      </form>
+
+      <!-- Popularidad planta -->
+      <div class="overflow-x-auto">
+        <table class="w-full" data-tab-for="order" data-page="active">
+          <thead>
+            <tr>
+              <th
+                class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md"
+              >
+                Planta
+              </th>
+              <th
+                class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left"
+              >
+                Likes
+              </th>
+              <th
+                class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left"
+              >
+                Dislikes
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let planta of plantas">
+              <td class="py-2 px-4 border-b border-b-gray-50">
+                <div class="flex items-center">
+                  <img
+                    [src]="planta.imagen"
+                    alt=""
+                    class="w-8 h-8 rounded object-cover block"
+                  />
+                  <span
+                    class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate"
+                  >
+                    {{ planta.nombre }}
+                  </span>
+                </div>
+              </td>
+              <td class="py-2 px-4 border-b border-b-gray-50">
+                <span class="text-[13px] font-medium text-black">
+                  {{ planta.likes }} likes</span
+                >
+              </td>
+              <td class="py-2 px-4 border-b border-b-gray-50">
+                <span class="text-[13px] font-medium text-black"
+                  >{{ planta.dislikes }} dislikes</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+
   </div>
+
+
+
 </div>

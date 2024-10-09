@@ -25,6 +25,7 @@ import { ModificarNoticiaComponent } from './Paginas/Noticias/modificar-noticia/
 import { ListarUsuariosComponent } from './Paginas/Usuarios/listar-usuarios/listar-usuarios.component';
 import { VerMasComponent } from './Paginas/Usuarios/ver-mas/ver-mas.component';
 import {UsoAplicacionComponent} from './Paginas/Estadistica/uso-aplicacion/uso-aplicacion.component';
+import { RespuestasTriviaComponent } from './Paginas/Estadistica/respuestas-trivia/respuestas-trivia.component';
 
 export const routes: Routes = [
 
@@ -46,6 +47,7 @@ export const routes: Routes = [
       { path:'modificar_evento/:idEvento',component:ModificarEventoComponent},
       { path:'estadisticas',component:EstadisticasComponent},
       { path:'uso_aplicacion',component:UsoAplicacionComponent},
+      { path:'respuestas_trivia',component:RespuestasTriviaComponent},
       { path:'mapa',component:MapaComponent},
       { path:'preguntas',component:ListarPreguntasComponent},
       { path:'crear_pregunta',component:CrearPreguntasComponent},

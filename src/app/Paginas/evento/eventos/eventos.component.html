@@ -61,7 +61,7 @@
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <ng-container *ngIf="eventos.length > 0; else noEvento">
       <table class="w-full text-sm text-left text-gray-400">
-        <thead class="text-xs uppercase bg-orange-700 text-white">
+        <thead class="text-xs uppercase bg-orange-500 text-white">
           <tr>
             <th scope="col" class="px-6 py-3">Imagen</th>
             <th scope="col" class="px-6 py-3">Nombre</th>
@@ -75,7 +75,7 @@
         <tbody>
           <tr
             *ngFor="let evento of eventos"
-            class="bg-orange-800 odd:bg-orange-900 even:bg-orange-800 border-b border-orange-700"
+            class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100"
           >
             <td class="px-6 py-4">
               <img
@@ -84,25 +84,25 @@
                 class="h-16 w-16 object-cover rounded-lg"
               />
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ evento.nombre_evento }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ evento.fecha_inicio }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ evento.hora_inicio }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ evento.fecha_termino}}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ evento.hora_termino }}
             </td>
             <td class="px-6 py-4">
               <a
                 [routerLink]="['/app/modificar_evento', evento.id]"
-                class="font-medium text-orange-500 hover:underline"
+                class="font-medium text-orange-700 hover:underline"
                 >Editar</a
               >
             </td>

@@ -1,5 +1,5 @@
 <div class="antialiased  bg-lime-400">
-  <nav class=" border-b  px-4 py-2.5 bg-lime-700 border-lime-700 fixed left-0 right-0 top-0 z-50">
+  <nav class=" border-b  px-4 py-2.5  fixed left-0 right-0 top-0 z-50">
 
     <div class="flex flex-wrap justify-between items-center">
       <div class="flex justify-start items-center">
@@ -9,7 +9,7 @@
         <a class="flex items-center justify-between mr-4">
 
           <img
-            src="https://www.buinzoo.cl/wp-content/themes/buinzoo/img/logo_bz_2.svg"
+            src="https://www.buinzoo.cl/wp-content/themes/bioparque/img/bioparque/logo.png"
             class="mr-3 h-8"
             alt="Flowbite Logo"
           />
@@ -23,11 +23,11 @@
 
   </nav>
 
-  <aside  class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full  md:translate-x-0 bg-lime-900 border-lime-700"
+  <aside  class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full  md:translate-x-0  lado border-lime-700"
   aria-label="Sidenav"
   id="drawer-navigation">
 
-  <div class="overflow-y-auto py-5 px-3 h-full  bg-lime-900">
+  <div class="overflow-y-auto py-5 px-3 h-full ">
 
     <ul class="space-y-2">
 
@@ -215,7 +215,7 @@
 
 
 
-  <div class="hidden absolute bottom-0 left-0  p-4 space-x-4 w-full lg:flex bg-lime-900 z-20">
+  <div class="hidden absolute bottom-0 left-0  p-4 space-x-4 w-full lg:flex lado z-20">
 
     <button (click)="logOut()" class="w-full flex items-start p-2 text-base font-medium  rounded-lg text-white  hover:bg-red-500 group">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -232,10 +232,13 @@
 
   <main class="flex flex-col p-4 md:ml-64 pt-20 bg-yellow-100 min-h-screen">
 
-    <router-outlet></router-outlet>
+    <router-outlet class="difuminado"></router-outlet>
 
 
   </main>
+
+
+
 </div>
 
 

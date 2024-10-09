@@ -64,7 +64,7 @@
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <ng-container *ngIf="premios.length > 0; else noPremios">
       <table class="w-full text-sm text-left text-gray-400">
-        <thead class="text-xs uppercase bg-orange-700 text-white">
+        <thead class="text-xs uppercase bg-orange-500 text-white">
           <tr>
             <th scope="col" class="px-6 py-3">Imagen</th>
             <th scope="col" class="px-6 py-3">Nombre</th>
@@ -76,7 +76,7 @@
         <tbody>
           <tr
             *ngFor="let premio of premios"
-            class="bg-orange-800 odd:bg-orange-900 even:bg-orange-800 border-b border-orange-700"
+            class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100"
           >
             <td class="px-6 py-4">
               <img
@@ -85,20 +85,20 @@
                 class="h-16 w-16 object-cover rounded-lg"
               />
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ premio.nombre }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ premio.cantidad }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ premio.puntos_necesarios }}
             </td>
 
             <td class="px-6 py-4">
               <a
                 [routerLink]="['/app/modificar_premio',premio.id]"
-                class="font-medium text-orange-500 hover:underline"
+                class="font-medium text-orange-700 hover:underline"
                 >Editar</a
               >
             </td>
