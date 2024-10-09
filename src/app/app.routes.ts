@@ -56,7 +56,7 @@ export const routes: Routes = [
       { path:'premios',component:ListarPremiosTriviaComponent},
       { path:'crear_premio',component:CrearPremiosTriviaComponent},
       { path:'modificar_premio/:idPremio',component:ModificarPremiosTriviaComponent},
-      { path:'bioparque',component:ListarBioparqueComponent},
+      { path:'plantas',component:ListarBioparqueComponent},
       { path:'crear_bioparque',component:CrearBioparqueComponent},
       { path:'modificar_bioparque/:idBioparque',component:ModificarBioparqueComponent},
       { path:'noticias',component:ListarNoticiaComponent},
