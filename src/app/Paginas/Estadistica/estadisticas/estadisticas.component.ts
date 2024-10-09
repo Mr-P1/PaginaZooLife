@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { es } from 'date-fns/locale'; // Configuración regional en español
 import { RespuestasService } from '../../../data-acces/respuestas.service';
 import { BoletasService } from '../../../data-acces/boletas.service';
-import {BioparqueService, PlantaConValoraciones} from '../../../data-acces/bioparque.service'
+import {PlantaService, PlantaConValoraciones} from '../../../data-acces/bioparque.service'
 import { RouterModule } from '@angular/router';
 import { Chart,ChartType } from 'chart.js/auto';
 
@@ -38,7 +38,7 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
   constructor(
     private _animalesService: AnimalesService,
-    private _plantaService:BioparqueService,
+    private _plantaService:PlantaService,
     private _boletasService: BoletasService,
     private respuestasService: RespuestasService
   ) {

@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import {Router, RouterLink, ActivatedRoute} from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CrearBioparque, BioparqueService } from '../../../data-acces/bioparque.service';
+import { CrearPlanta, PlantaService } from '../../../data-acces/bioparque.service';
 
 
 // Sweetalert2
@@ -22,7 +22,7 @@ export class ModificarBioparqueComponent {
 
   private _formBuilder = inject(FormBuilder);
   private _rutaActiva = inject(ActivatedRoute);
-  private _bioparqueService = inject(BioparqueService);
+  private _bioparqueService = inject(PlantaService);
   private _router = inject(Router)
 
   loading = signal(false);
@@ -32,17 +32,27 @@ export class ModificarBioparqueComponent {
   audioFile: File | null = null; // Almacenar el archivo de imagen seleccionado
 
   form = this._formBuilder.group({
-    nombre: this._formBuilder.control("", [Validators.required]),
+    nombre_comun: this._formBuilder.control("", [Validators.required]),
+    nombre_cientifico: this._formBuilder.control("", [Validators.required]),
     familia: this._formBuilder.control("", [Validators.required]),
-    altura: this._formBuilder.control(0, [Validators.required]),
+    altura: this._formBuilder.control("", [Validators.required]),
     altura_formato: this._formBuilder.control("", [Validators.required]),
-    distribucion: this._formBuilder.control("", [Validators.required]),
+    descripcion_1: this._formBuilder.control("", [Validators.required]),
+    descripcion_2: this._formBuilder.control("", [Validators.required]),
+    descripcion_3: this._formBuilder.control("", [Validators.required]),
     zonas: this._formBuilder.control("", [Validators.required]),
-    relacion_entorno: this._formBuilder.control("", [Validators.required]),
+    cuidados: this._formBuilder.control("", [Validators.required]),
+    floracion: this._formBuilder.control("", [Validators.required]),
+    importancia: this._formBuilder.control("", [Validators.required]),
+    estado: this._formBuilder.control("", [Validators.required]),
+    curiosidad: this._formBuilder.control("", [Validators.required]),
+    precaucion: this._formBuilder.control("", [Validators.required]),
+    usos: this._formBuilder.control("", [Validators.required]),
+    posicion_mapa: this._formBuilder.control(0, [Validators.required]),
     imagen: this._formBuilder.control("", [Validators.required]),
     video: this._formBuilder.control("", [Validators.required]),
-    audio: this._formBuilder.control("", [Validators.required]),
-  })
+    audio: this._formBuilder.control("", [Validators.required])
+  });
 
 
    // Método para cargar la imagen seleccionada
@@ -74,22 +84,34 @@ export class ModificarBioparqueComponent {
     this._rutaActiva.paramMap.subscribe(parametros => {
       this.idActiva = parametros.get("idBioparque")!;
 
-      this._bioparqueService.getBioparque(this.idActiva).subscribe(bioparque => {
-        if (bioparque) {
+      this._bioparqueService.getPlanta(this.idActiva).subscribe(planta => {
+        if (planta) {
+          // Extraer la altura y el formato (asumiendo que la altura viene en formato "valor unidad")
+          const [altura, altura_formato] = planta.altura.split(" ");
+
           this.form.patchValue({
-            nombre : bioparque.nombre,
-            familia:bioparque.familia,
-            altura : 0,
-            altura_formato:"",
-            distribucion:bioparque.distribucion,
-            zonas:bioparque.zonas,
-            relacion_entorno:bioparque.relacion_entorno,
-            imagen: "",
-            video:"",
-            audio:""
+            nombre_comun: planta.nombre_comun,
+            nombre_cientifico: planta.nombre_cientifico,
+            familia: planta.familia,
+            altura: altura || "", // Si no hay valor de altura, asigna vacío
+            altura_formato: altura_formato || "", // Si no hay formato, asigna vacío
+            descripcion_1: planta.descripcion_1,
+            descripcion_2: planta.descripcion_2,
+            descripcion_3: planta.descripcion_3,
+            zonas: planta.zonas,
+            cuidados: planta.cuidados,
+            floracion: planta.floracion,
+            importancia: planta.importancia,
+            estado: planta.estado,
+            curiosidad: planta.curiosidad,
+            precaucion: planta.precaucion,
+            usos: planta.usos,
+            posicion_mapa: planta.posicion_mapa,
+            // Las siguientes propiedades las manejaremos por separado con los archivos subidos
+            imagen: "", // Aquí manejamos la imagen como un archivo separado
           });
         } else {
-          this.errorMessage = "bioparque no encontrado.";
+          this.errorMessage = "Planta no encontrada.";
         }
       });
     });
@@ -117,38 +139,58 @@ export class ModificarBioparqueComponent {
         this.loading.set(true);
 
         const {
-          nombre,
+          nombre_comun,
+          nombre_cientifico,
           familia,
           altura,
           altura_formato,
-          distribucion,
+          descripcion_1,
+          descripcion_2,
+          descripcion_3,
           zonas,
-          relacion_entorno,
-
+          cuidados,
+          floracion,
+          importancia,
+          estado,
+          curiosidad,
+          precaucion,
+          usos,
+          posicion_mapa
         } = this.form.value;
 
-        const bioparque: CrearBioparque = {
-          nombre: nombre!,
-          familia:familia!,
-          altura: `${altura} ${altura_formato}`,
-          distribucion:distribucion !,
-          zonas:zonas!,
-          relacion_entorno:relacion_entorno!,
-          imagen: '',
-          video:"",
-          audio:""
+        const planta: CrearPlanta = {
+          nombre_comun: nombre_comun!,
+          nombre_cientifico: nombre_cientifico!,
+          familia: familia!,
+          altura:  `${altura} ${altura_formato}`,
+          usos:usos!,
+          posicion_mapa:posicion_mapa!,
+          descripcion_1: descripcion_1!,
+          descripcion_2: descripcion_2 || '',
+          descripcion_3: descripcion_3 || '',
+          zonas: zonas!,
+          imagen: '',  // Se asigna más adelante tras la subida
+          video: '',   // Se asigna más adelante tras la subida
+          audio: '',   // Se asigna más adelante tras la subida
+          cuidados: cuidados!,
+          floracion: floracion!,
+          importancia: importancia!,
+          estado: estado!,
+          curiosidad: curiosidad || '',
+          precaucion: precaucion || ''
         };
+
         // Llamada al servicio pasando los archivos de imagen, video y audio, si fueron seleccionados
-        await this._bioparqueService.editarBioparque(this.idActiva, bioparque, this.imagenFile!, this.videoFile! , this.audioFile!);
+        await this._bioparqueService.editarPlanta(this.idActiva, planta, this.imagenFile!, this.videoFile! , this.audioFile!);
 
         Swal.fire({
           title: "Listo!",
-          text: "El bioparque ha sido modificado correctamente",
+          text: "La planta ha sido modificado correctamente",
           icon: "success",
           backdrop: 'rgba(0, 0, 0, 0.8)',
         });
 
-        this._router.navigate(['/app/bioparque']);
+        this._router.navigate(['/app/plantas']);
       } catch (error) {
         this.errorMessage = 'Ha ocurrido un problema, revisa los datos ingresados';
       } finally {
@@ -160,7 +202,7 @@ export class ModificarBioparqueComponent {
   async borrarPremio() {
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Esta acción eliminará el bioparque de forma permanente',
+      text: 'Esta acción eliminará la planta de forma permanente',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
@@ -171,16 +213,16 @@ export class ModificarBioparqueComponent {
     if (result.isConfirmed) {
       try {
         this.loading2.set(true);
-        await this._bioparqueService.eliminarBioparque(this.idActiva);
+        await this._bioparqueService.eliminarPlanta(this.idActiva);
 
         Swal.fire({
           title: "Listo!",
-          text: "Bioparque eliminado correctamente, junto con sus archivos asociados.",
+          text: "Planta eliminada correctamente, junto con sus archivos asociados.",
           icon: "success",
           backdrop: 'rgba(0, 0, 0, 0.8)',
         });
 
-        this._router.navigate(['/app/bioparque']);
+        this._router.navigate(['/app/plantas']);
       } catch (error) {
         this.errorMessage = 'Ha ocurrido un problema inesperado, vuelva a intentarlo';
       } finally {

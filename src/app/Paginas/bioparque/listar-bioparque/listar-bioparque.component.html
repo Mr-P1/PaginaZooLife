@@ -62,7 +62,7 @@
       bg-orange-700
   -->
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <ng-container *ngIf="bioparques.length > 0; else noBioparque">
+    <ng-container *ngIf="plantas.length > 0; else noBioparque">
       <table class="w-full text-sm text-left text-gray-400">
         <thead class="text-xs uppercase bg-orange-500 text-white">
           <tr>
@@ -76,32 +76,32 @@
         </thead>
         <tbody>
           <tr
-            *ngFor="let bioparque of bioparques"
+            *ngFor="let planta of plantas"
             class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100"
           >
             <td class="px-6 py-4">
               <img
-                [src]="bioparque.imagen"
-                alt="Imagen de {{ bioparque.nombre }}"
+                [src]="planta.imagen"
+                alt="Imagen de {{ planta.nombre_comun }}"
                 class="h-16 w-16 object-cover rounded-lg"
               />
             </td>
             <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ bioparque.nombre }}
+              {{ planta.nombre_comun }}
             </td>
             <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ bioparque.familia }}
+              {{ planta.familia }}
             </td>
             <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ bioparque.zonas }}
+              {{ planta.zonas }}
             </td>
             <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ bioparque.distribucion }}
+              {{ planta.nombre_cientifico }}
             </td>
 
             <td class="px-6 py-4">
               <a
-                [routerLink]="['/app/modificar_bioparque',bioparque.id]"
+                [routerLink]="['/app/modificar_bioparque',planta.id]"
                 class="font-medium text-orange-500 hover:underline"
                 >Editar</a
               >

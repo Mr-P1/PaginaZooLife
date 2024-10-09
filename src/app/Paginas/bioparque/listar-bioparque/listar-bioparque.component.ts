@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Bioparque, BioparqueService } from '../../../data-acces/bioparque.service';
+import { Planta, PlantaService } from '../../../data-acces/bioparque.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -13,8 +13,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class ListarBioparqueComponent  implements OnInit {
 
-  private bioparqueService = inject(BioparqueService);
-  bioparques: Bioparque[] = [];
+  private plantaService = inject(PlantaService);
+  plantas: Planta[] = [];
   lastVisible: any = null;
   firstVisible: any = null;
   pageSize = 5;
@@ -24,15 +24,16 @@ export class ListarBioparqueComponent  implements OnInit {
 
   // Pila para almacenar las referencias a los documentos de las páginas anteriores
   pageStack: { firstVisible: any, lastVisible: any }[] = [];
+
   ngOnInit() {
     this.loadInitialPage();
   }
 
-
+  // Cargar la página inicial
   loadInitialPage() {
     this.loading = true;
-    this.bioparqueService.getBioparquePaginados(this.pageSize).then(data => {
-      this.bioparques = data.bioparque;
+    this.plantaService.getPlantasPaginadas(this.pageSize).then(data => {
+      this.plantas = data.plantas;  // Cambié `bioparque` a `plantas`
       this.lastVisible = data.lastVisible;
       this.firstVisible = data.firstVisible;
       this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
@@ -44,8 +45,8 @@ export class ListarBioparqueComponent  implements OnInit {
   loadNextPage() {
     if (this.lastVisible) {
       this.loading = true;
-      this.bioparqueService.getBioparquePaginados(this.pageSize, this.lastVisible).then(data => {
-        this.bioparques = data.bioparque;
+      this.plantaService.getPlantasPaginadas(this.pageSize, this.lastVisible).then(data => {
+        this.plantas = data.plantas; // Cambié `bioparque` a `plantas`
         this.lastVisible = data.lastVisible;
         this.firstVisible = data.firstVisible;
         this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
@@ -63,8 +64,8 @@ export class ListarBioparqueComponent  implements OnInit {
 
       if (previousPage) {
         this.loading = true;
-        this.bioparqueService.getBioparquePaginadosAnterior(this.pageSize, previousPage.firstVisible).then(data => {
-          this.bioparques = data.bioparque;
+        this.plantaService.getPlantasPaginadasAnterior(this.pageSize, previousPage.firstVisible).then(data => {
+          this.plantas = data.plantas; // Cambié `bioparque` a `plantas`
           this.lastVisible = data.lastVisible;
           this.firstVisible = previousPage.firstVisible;
           this.currentPage -= 1;
@@ -80,8 +81,8 @@ export class ListarBioparqueComponent  implements OnInit {
 
     if (searchTerm) {
       this.loading = true;
-      this.bioparqueService.buscarBioparque(searchTerm).then(bioparque => {
-        this.bioparques = bioparque; // Mostrar resultados de búsqueda
+      this.plantaService.buscarPlantas(searchTerm).then(plantas => {
+        this.plantas = plantas; // Mostrar resultados de búsqueda
         this.loading = false;
       });
     } else {
@@ -91,5 +92,5 @@ export class ListarBioparqueComponent  implements OnInit {
 
 
 
-
 }
+

@@ -17,57 +17,82 @@
         <!-- comienzo -->
         <div class="grid gap-4 mb-4 sm:grid-cols-2">
 
-          <!-- Nombre -->
+          <!-- Nombre común -->
           <div>
-            <label for="nombre" class="block mb-2 text-sm font-medium text-white">Nombre</label>
+            <label for="nombre_comun" class="block mb-2 text-sm font-medium text-white">Nombre común</label>
             <input
               type="text"
-              id="nombre"
+              id="nombre_comun"
               class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Nombre del bioparque"
-              formControlName="nombre"
+              placeholder="Nombre común de la planta"
+              formControlName="nombre_comun"
             />
-            <div *ngIf="form.get('nombre')?.touched && form.get('nombre')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('nombre')?.errors?.['required']">Ingrese un nombre para el planta</span>
+            <div *ngIf="form.get('nombre_comun')?.touched && form.get('nombre_comun')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('nombre_comun')?.errors?.['required']">Ingrese un nombre común para la planta</span>
+            </div>
+          </div>
+
+          <!-- Nombre Científico -->
+          <div>
+            <label for="nombre_cientifico" class="block mb-2 text-sm font-medium text-white">Nombre científico</label>
+            <input
+              type="text"
+              id="nombre_cientifico"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Nombre científico de la planta"
+              formControlName="nombre_cientifico"
+            />
+            <div *ngIf="form.get('nombre_cientifico')?.touched && form.get('nombre_cientifico')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('nombre_cientifico')?.errors?.['required']">Ingrese un nombre científico para la planta</span>
             </div>
           </div>
 
           <div>
-            <label
-              for="familia"
-              class="block mb-2 text-sm font-medium  text-white"
-              >Familia</label
-            >
+            <label for="zonas" class="block mb-2 text-sm font-medium text-white">zonas</label>
+            <input
+              type="text"
+              id="zonas"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="zonas de la planta"
+              formControlName="zonas"
+            />
+            <div *ngIf="form.get('zonas')?.touched && form.get('zonas')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('zonas')?.errors?.['required']">Ingrese un zona para la planta</span>
+            </div>
+          </div>
+
+          <!-- Familia (Select) -->
+          <div>
+            <label for="familia" class="block mb-2 text-sm font-medium text-white">Familia</label>
             <select
               id="familia"
               formControlName="familia"
-              class=" border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
             >
-              <option selected disabled>Escoja una opción</option>
-              <option value="familia 1">familia 1</option>
-              <option value="familia 2">familia 2</option>
+              <option selected disabled>Seleccione una familia</option>
+              <option value="Familia 1">Familia 1</option>
+              <option value="Familia 2">Familia 2</option>
+              <option value="Familia 3">Familia 3</option>
             </select>
-
             <div *ngIf="form.get('familia')?.touched && form.get('familia')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('familia')?.errors?.['required']">Seleccione una familia</span>
             </div>
           </div>
 
-
+          <!-- Altura y Formato -->
           <div>
-            <label for="altura" class="block mb-2 text-sm font-medium text-white">altura</label>
+            <label for="altura" class="block mb-2 text-sm font-medium text-white">Altura</label>
             <div class="flex">
               <input
-                id="altura"
                 type="number"
+                id="altura"
+                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+                placeholder="Altura de la planta"
                 formControlName="altura"
-                min="1"
-                class="border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-                placeholder="Ingrese la altura"
               />
               <select
                 formControlName="altura_formato"
-                class="border ml-2 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-auto p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-auto p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black ml-2"
               >
                 <option selected disabled>Unidad</option>
                 <option value="Cm">Cm</option>
@@ -75,64 +100,175 @@
               </select>
             </div>
             <div *ngIf="form.get('altura')?.touched && form.get('altura')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('altura')?.errors?.['required']">Ingrese un valor para la altura</span>
+              <span *ngIf="form.get('altura')?.errors?.['required']">Ingrese una altura</span>
             </div>
             <div *ngIf="form.get('altura_formato')?.touched && form.get('altura_formato')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('altura_formato')?.errors?.['required']">Ingrese un formato de altura</span>
-            </div>
-
-          </div>
-
-          <!-- Distribución -->
-
-          <div>
-            <label
-              for="distribucion"
-              class="block mb-2 text-sm font-medium  text-white"
-              >Distribución</label
-            >
-            <select
-              id="distribucion"
-              formControlName="distribucion"
-              class=" border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            >
-              <option selected disabled>Escoja una opción</option>
-              <option value="Global">Global</option>
-              <option value="Endemica">Endemica</option>
-            </select>
-
-            <div *ngIf="form.get('distribucion')?.touched && form.get('distribucion')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('distribucion')?.errors?.['required']">Seleccione una distribución</span>
+              <span *ngIf="form.get('altura_formato')?.errors?.['required']">Seleccione un formato para la altura</span>
             </div>
           </div>
 
-          <!-- Zonas -->
+          <!-- Descripción 1 -->
           <div>
-            <label for="zonas" class="block mb-2 text-sm font-medium text-white">Zonas</label>
+            <label for="descripcion_1" class="block mb-2 text-sm font-medium text-white">Descripción 1</label>
+            <textarea
+              id="descripcion_1"
+              formControlName="descripcion_1"
+              rows="3"
+              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Primera descripción de la planta"
+            ></textarea>
+            <div *ngIf="form.get('descripcion_1')?.touched && form.get('descripcion_1')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('descripcion_1')?.errors?.['required']">Ingrese la primera descripción de la planta</span>
+            </div>
+          </div>
+
+          <!-- Descripción 2 -->
+          <div>
+            <label for="descripcion_2" class="block mb-2 text-sm font-medium text-white">Descripción 2</label>
+            <textarea
+              id="descripcion_2"
+              formControlName="descripcion_2"
+              rows="3"
+              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Segunda descripción de la planta"
+            ></textarea>
+            <div *ngIf="form.get('descripcion_2')?.touched && form.get('descripcion_2')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('descripcion_2')?.errors?.['required']">Ingrese la segunda descripción de la planta</span>
+            </div>
+          </div>
+
+          <!-- Descripción 3 -->
+          <div>
+            <label for="descripcion_3" class="block mb-2 text-sm font-medium text-white">Descripción 3</label>
+            <textarea
+              id="descripcion_3"
+              formControlName="descripcion_3"
+              rows="3"
+              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Tercera descripción de la planta"
+            ></textarea>
+            <div *ngIf="form.get('descripcion_3')?.touched && form.get('descripcion_3')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('descripcion_3')?.errors?.['required']">Ingrese la tercera descripción de la planta</span>
+            </div>
+          </div>
+
+          <!-- Cuidados -->
+          <div>
+            <label for="cuidados" class="block mb-2 text-sm font-medium text-white">Cuidados</label>
+            <textarea
+              id="cuidados"
+              formControlName="cuidados"
+              rows="3"
+              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Cuidados necesarios para la planta"
+            ></textarea>
+            <div *ngIf="form.get('cuidados')?.touched && form.get('cuidados')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('cuidados')?.errors?.['required']">Ingrese los cuidados de la planta</span>
+            </div>
+          </div>
+
+          <!-- Floración -->
+          <div>
+            <label for="floracion" class="block mb-2 text-sm font-medium text-white">Floración</label>
             <input
               type="text"
-              id="zonas"
+              id="floracion"
               class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Zonas de la planta"
-              formControlName="zonas"
+              placeholder="Periodo de floración"
+              formControlName="floracion"
             />
-            <div *ngIf="form.get('zonas')?.touched && form.get('zonas')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('zonas')?.errors?.['required']">Ingrese las zonas de la planta</span>
+            <div *ngIf="form.get('floracion')?.touched && form.get('floracion')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('floracion')?.errors?.['required']">Ingrese el periodo de floración</span>
             </div>
           </div>
 
-          <!-- Relación con el Entorno -->
-          <div class="sm:col-span-2">
-            <label for="relacion_entorno" class="block mb-2 text-sm font-medium text-white">Relación con el Entorno</label>
-            <textarea
-              id="relacion_entorno"
-              formControlName="relacion_entorno"
-              rows="4"
-              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Describa la relación de la planta con su entorno"
-            ></textarea>
-            <div *ngIf="form.get('relacion_entorno')?.touched && form.get('relacion_entorno')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('relacion_entorno')?.errors?.['required']">Ingrese la relación con el entorno</span>
+          <!-- Importancia -->
+          <div>
+            <label for="importancia" class="block mb-2 text-sm font-medium text-white">Importancia</label>
+            <input
+              type="text"
+              id="importancia"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Importancia de la planta"
+              formControlName="importancia"
+            />
+            <div *ngIf="form.get('importancia')?.touched && form.get('importancia')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('importancia')?.errors?.['required']">Ingrese la importancia de la planta</span>
+            </div>
+          </div>
+
+          <!-- Estado -->
+          <div>
+            <label for="estado" class="block mb-2 text-sm font-medium text-white">Estado</label>
+            <input
+              type="text"
+              id="estado"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Estado de la planta"
+              formControlName="estado"
+            />
+            <div *ngIf="form.get('estado')?.touched && form.get('estado')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('estado')?.errors?.['required']">Ingrese el estado de la planta</span>
+            </div>
+          </div>
+
+          <!-- Curiosidad -->
+          <div>
+            <label for="curiosidad" class="block mb-2 text-sm font-medium text-white">Curiosidad</label>
+            <input
+              type="text"
+              id="curiosidad"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Curiosidades de la planta"
+              formControlName="curiosidad"
+            />
+            <div *ngIf="form.get('curiosidad')?.touched && form.get('curiosidad')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('curiosidad')?.errors?.['required']">Ingrese curiosidades sobre la planta</span>
+            </div>
+          </div>
+
+          <!-- Precaución -->
+          <div>
+            <label for="precaucion" class="block mb-2 text-sm font-medium text-white">Precaución</label>
+            <input
+              type="text"
+              id="precaucion"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Precauciones de la planta"
+              formControlName="precaucion"
+            />
+            <div *ngIf="form.get('precaucion')?.touched && form.get('precaucion')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('precaucion')?.errors?.['required']">Ingrese precauciones de la planta</span>
+            </div>
+          </div>
+
+          <!-- Usos -->
+          <div>
+            <label for="usos" class="block mb-2 text-sm font-medium text-white">Usos</label>
+            <input
+              type="text"
+              id="usos"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Usos de la planta"
+              formControlName="usos"
+            />
+            <div *ngIf="form.get('usos')?.touched && form.get('usos')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('usos')?.errors?.['required']">Ingrese los usos de la planta</span>
+            </div>
+          </div>
+
+          <!-- Posición en el Mapa -->
+          <div>
+            <label for="posicion_mapa" class="block mb-2 text-sm font-medium text-white">Posición en el mapa</label>
+            <input
+              type="number"
+              id="posicion_mapa"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Posición en el mapa"
+              formControlName="posicion_mapa"
+            />
+            <div *ngIf="form.get('posicion_mapa')?.touched && form.get('posicion_mapa')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('posicion_mapa')?.errors?.['required']">Ingrese la posición en el mapa</span>
             </div>
           </div>
 
@@ -152,6 +288,7 @@
             </div>
           </div>
 
+          <!-- Video -->
           <div>
             <label for="video" class="block mb-2 text-sm font-medium text-white">Video</label>
             <input
@@ -162,13 +299,12 @@
               (change)="cargarVideo($event)"
               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
             />
-
-
             <div *ngIf="form.get('video')?.touched && form.get('video')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('video')?.errors?.['required']">Seleccione un video</span>
             </div>
           </div>
 
+          <!-- Audio -->
           <div>
             <label for="audio" class="block mb-2 text-sm font-medium text-white">Audio</label>
             <input
@@ -179,7 +315,6 @@
               (change)="cargarAudio($event)"
               class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
             />
-
             <div *ngIf="form.get('audio')?.touched && form.get('audio')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('audio')?.errors?.['required']">Seleccione un audio</span>
             </div>
