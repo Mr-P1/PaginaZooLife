@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
+import { BoletasService } from '../../../data-acces/boletas.service';
 
 @Component({
   selector: 'app-ver-mas',
@@ -22,15 +23,22 @@ export class VerMasComponent implements OnInit {
   respuestasTotales:number = 0;
   promedioCorrectas: number = 0;
   idActiva = "";
+  usuariosConBoletas: any[] = [];
+
+  ultimaVisita = "";
+  boletasUsadas = 0;
 
   constructor(
     private usuarioService: UsuarioService,
     private _rutaActiva: ActivatedRoute,
+    private boletasService: BoletasService,
   ) { }
 
   ngOnInit() {
     this._rutaActiva.paramMap.subscribe(data => {
       this.idActiva = data.get("IdUsuario")!;
+
+      this.cargarUsuariosConBoletas(this.idActiva);
 
       // Obtener la información del usuario
       this.usuarioService.getUsuario2(this.idActiva).subscribe(user => {
@@ -70,4 +78,17 @@ export class VerMasComponent implements OnInit {
       });
     });
   }
+
+
+
+  cargarUsuariosConBoletas(id:String) {
+    this.boletasService.obtenerBoletasPorUsuario(String(id)).subscribe(usuarios => {
+      this.boletasUsadas = usuarios.boletasUsadas
+      this.ultimaVisita = usuarios.ultimaVisita
+    });
+  }
+
+
+
+
 }

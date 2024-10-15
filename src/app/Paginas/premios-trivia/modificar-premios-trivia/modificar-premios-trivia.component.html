@@ -8,7 +8,7 @@
   <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
     <!-- Modal content -->
     <div
-      class="relative p-4 rounded-lg shadow bg-orange-600 sm:p-5"
+      class="relative p-4 rounded-lg shadow bg-orange-500 sm:p-5"
     >
       <!-- Modal header -->
       <div
@@ -182,7 +182,7 @@
             [disabled]="loading()"
             (click)="actualizar()"
             type="button submit"
-            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-orange-600 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading() ? "Actualizando ..." : "Actualizar premio" }}
           </button>
@@ -191,7 +191,7 @@
             type="button"
             [disabled]="loading2()"
             (click)="borrarPremio()"
-            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-orange-600 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading2() ? "Eliminando ..." : "Eliminar premio" }}
           </button>

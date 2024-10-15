@@ -28,6 +28,8 @@
     </div>
   </div>
 
+
+
   <!-- Tabla de usuarios -->
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <ng-container *ngIf="usuarios.length > 0; else noUsuarios">
@@ -40,41 +42,25 @@
             <th scope="col" class="px-6 py-3">Nivel</th>
             <th scope="col" class="px-6 py-3">Puntos</th>
             <th scope="col" class="px-6 py-3">Patente</th>
+            <th scope="col" class="px-6 py-3">Boletas Usadas</th>
             <th scope="col" class="px-6 py-3">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let usuario of usuarios"
-            class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100"
-          >
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ usuario.nombre }}
-            </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ usuario.correo }}
-            </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ usuario.telefono }}
-            </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ usuario.nivel }}
-            </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ usuario.puntos }}
-            </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ usuario.patente ? usuario.patente : 'Sin patente' }}
-            </td>
+          <tr *ngFor="let usuario of usuarios" class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100">
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">{{ usuario.nombre }}</td>
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">{{ usuario.correo }}</td>
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">{{ usuario.telefono }}</td>
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">{{ usuario.nivel }}</td>
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">{{ usuario.puntos }}</td>
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">{{ usuario.patente ? usuario.patente : 'Sin patente' }}</td>
+            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">{{ usuario.boletasUsadas }}</td>
             <td class="px-6 py-4">
-              <a
-              [routerLink]="['/app/ver_mas', usuario.auth_id]"
-                class="font-medium text-orange-700 hover:underline"
-                >Ver información</a
-              >
+              <a [routerLink]="['/app/ver_mas', usuario.auth_id]" class="font-medium text-orange-700 hover:underline">Ver información</a>
             </td>
           </tr>
         </tbody>
+
       </table>
     </ng-container>
 

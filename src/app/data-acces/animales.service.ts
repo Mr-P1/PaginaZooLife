@@ -12,10 +12,6 @@ import { catchError, Observable, tap, throwError, from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
 
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-
-
 export interface Animal {
   id: string;
   nombre_comun: string,
@@ -33,6 +29,7 @@ export interface Animal {
   zona: string,
   dieta: string,
   comportamiento: string,
+  area:string,
   estado_conservacion: string,
   clase: string,
   posicion_mapa: number,
@@ -73,6 +70,7 @@ export type CambiarMapa = Omit<Mapa, 'id'>
 const PATH_Animal = 'Animales';
 const PATH_Mapa = 'Mapa';
 const PATH_Reacciones = 'Reacciones';
+const PATH_Animalesvistos = "AnimalesVistos"
 
 
 
@@ -84,11 +82,11 @@ export class AnimalesService {
   constructor() { }
 
   private _firestore = inject(Firestore);
-  private _rutaAnimal = collection(this._firestore, PATH_Animal);
+  public _rutaAnimal = collection(this._firestore, PATH_Animal);
 
   private _rutaMapa = collection(this._firestore, PATH_Mapa);
   private _rutaReacciones = collection(this._firestore, PATH_Reacciones);
-
+  public _rutaAnimalesVistos = collection(this._firestore, PATH_Animalesvistos);
   private boletasUsadasRef = collection(this._firestore, 'Boletas_usadas');
 
 
@@ -389,7 +387,36 @@ export class AnimalesService {
 
 
 
+  async getAreasMasVisitadas(): Promise<{ area: string, count: number }[]> {
+    // Predefinir las áreas existentes
+    const areasDisponibles = ['Selva Tropical', 'Sabana Africana', 'Acuario', 'Montañas'];
+    const conteoPorArea: { [area: string]: number } = {};
 
+    // Inicializar todas las áreas en 0
+    areasDisponibles.forEach(area => (conteoPorArea[area] = 0));
+
+    // Obtener las visitas de animales y acumular por área
+    const animalesVistosSnapshot = await getDocs(this._rutaAnimalesVistos);
+
+    for (const vistoDoc of animalesVistosSnapshot.docs) {
+      const animalVisto = vistoDoc.data() as { animalId: string };
+      const animalRef = doc(this._firestore, `Animales/${animalVisto.animalId}`);
+      const animalSnapshot = await getDoc(animalRef);
+
+      if (animalSnapshot.exists()) {
+        const animalData = animalSnapshot.data() as { area: string };
+        const area = animalData.area;
+        if (conteoPorArea[area] !== undefined) {
+          conteoPorArea[area]++;
+        }
+      }
+    }
+
+    // Convertir el objeto en un array y ordenarlo por visitas
+    return Object.entries(conteoPorArea)
+      .map(([area, count]) => ({ area, count }))
+      .sort((a, b) => b.count - a.count);
+  }
 
 
 

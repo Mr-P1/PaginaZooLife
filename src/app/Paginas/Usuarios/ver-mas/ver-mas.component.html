@@ -9,12 +9,14 @@
       <!-- Columna izquierda: Datos del usuario -->
       <div>
         <h3 class="text-xl font-semibold mb-4">Datos del usuario</h3>
-        <p class="text-gray-600"><strong>Nombre:</strong> {{ usuario.nombre }}</p>
-        <p class="text-gray-600"><strong>Correo:</strong> {{ usuario.correo }}</p>
-        <p class="text-gray-600"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
-        <p class="text-gray-600"><strong>Nivel:</strong> {{ usuario.nivel }}</p>
-        <p class="text-gray-600"><strong>Puntos:</strong> {{ usuario.puntos }}</p>
-        <p class="text-gray-600"><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente' }}</p>
+        <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+        <p><strong>Correo:</strong> {{ usuario.correo }}</p>
+        <p><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+        <p><strong>Nivel:</strong> {{ usuario.nivel }}</p>
+        <p><strong>Puntos:</strong> {{ usuario.puntos }}</p>
+        <p><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente' }}</p>
+        <p><strong>Última visita:</strong>{{ ultimaVisita | date : "medium" }}</p>
+        <p><strong>Boletas usadas:</strong> {{ boletasUsadas }}</p>
       </div>
 
       <!-- Columna derecha: Resultados de la trivia -->

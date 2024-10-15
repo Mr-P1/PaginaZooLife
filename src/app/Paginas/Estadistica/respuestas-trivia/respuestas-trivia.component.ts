@@ -21,7 +21,20 @@ export class RespuestasTriviaComponent {
   respuestasIncorrectas: number = 0;
   promedioCorrectas: number = 0;
   pieChart!: Chart; // Variable para el gráfico de torta (pie chart)
+  pieChart2!: Chart; // Variable para el gráfico de torta (pie chart)
+  pieChartGenero!: Chart;
 
+
+  // respuestasAdulto: number = 0; // Cantidad de respuestas de adultos
+  // respuestasNino: number = 0; // Cantidad de respuestas de niños
+  respuestasAdultoCorrectas: number = 0;
+  respuestasAdultoIncorrectas: number = 0;
+  respuestasNinoCorrectas: number = 0;
+  respuestasNinoIncorrectas: number = 0;
+
+  respuestasMasculino: number = 0;
+  respuestasFemenino: number = 0;
+  respuestasSinDefinir: number = 0;
 
   constructor(private respuestasService: RespuestasService) {}
 
@@ -29,6 +42,10 @@ export class RespuestasTriviaComponent {
 
   ngOnInit() {
     this.cargarTodosLosGraficos();
+
+    this.cargarGraficoPorTipoYResultado();
+
+    this.cargarGraficoPorGenero();
 
     this.respuestasSubscription = this.respuestasService.getRespuestasTrivia().subscribe({
       next: (respuestas) => {
@@ -145,6 +162,102 @@ export class RespuestasTriviaComponent {
     };
     return colores[id] || '#000000'; // Negro por defecto
   }
+
+
+  cargarGraficoPorTipoYResultado() {
+    this.respuestasService.getRespuestasPorTipoYResultado().subscribe((data) => {
+      console.log('Datos recibidos:', data); // Verificar datos
+      this.respuestasAdultoCorrectas = data.adultoCorrectas;
+      this.respuestasAdultoIncorrectas = data.adultoIncorrectas;
+      this.respuestasNinoCorrectas = data.ninoCorrectas;
+      this.respuestasNinoIncorrectas = data.ninoIncorrectas;
+
+      this.generarGraficoTipo(
+        'graficoTipo',
+        'doughnut',
+        ['Adulto Correctas', 'Adulto Incorrectas', 'Niño Correctas', 'Niño Incorrectas'],
+        [data.adultoCorrectas, data.adultoIncorrectas, data.ninoCorrectas, data.ninoIncorrectas]
+      );
+    });
+  }
+
+  private generarGraficoTipo(id: string, tipo: ChartType, labels: string[], data: number[]) {
+    const ctx = document.getElementById(id) as HTMLCanvasElement;
+
+    if (this.pieChart2) {
+      this.pieChart2.destroy(); // Destruir gráfico anterior si existe
+    }
+
+    this.pieChart2 = new Chart(ctx, {
+      type: tipo,
+      data: {
+        labels,
+        datasets: [
+          {
+            data,
+            backgroundColor: ['#36A2EB', '#FF6384', '#4CAF50', '#F44336'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'right',
+          },
+        },
+      },
+    });
+  }
+
+
+  cargarGraficoPorGenero() {
+    this.respuestasService.getRespuestasPorGenero().subscribe(({ masculino, femenino, sinDefinir }) => {
+      // Asignar los valores recibidos a las variables
+      this.respuestasMasculino = masculino;
+      this.respuestasFemenino = femenino;
+      this.respuestasSinDefinir = sinDefinir;
+
+      // Llamar al método para generar el gráfico
+      this.generarGraficoGenero('graficoGenero', 'doughnut',
+        ['Masculino', 'Femenino', 'Sin definir'],
+        [masculino, femenino, sinDefinir]
+      );
+    });
+  }
+
+  private generarGraficoGenero(id: string, tipo: ChartType, labels: string[], data: number[]) {
+    const ctx = document.getElementById(id) as HTMLCanvasElement;
+
+    if (this.pieChartGenero) {
+      this.pieChartGenero.destroy(); // Destruir gráfico anterior si existe
+    }
+
+    this.pieChartGenero = new Chart(ctx, {
+      type: 'doughnut' as ChartType,
+      data: {
+        labels,
+        datasets: [
+          {
+            data,
+            backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'right',
+          },
+        },
+      },
+    });
+  }
+
+
 
 
 }

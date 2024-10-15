@@ -211,6 +211,52 @@ obtenerUsuariosConBoletas(): Observable<any[]> {
 }
 
 
+obtenerBoletasPorUsuario(usuarioId: string): Observable<any> {
+  const boletasQuery = query(this.boletasUsadasRef, where('id_usuario', '==', usuarioId));
+
+  return from(getDocs(boletasQuery)).pipe(
+    map(snapshot => {
+      const boletasPorUsuario: { count: number; lastDate: Timestamp | null } = {
+        count: 0,
+        lastDate: null,
+      };
+
+      snapshot.forEach(doc => {
+        const boleta = doc.data() as BoletaUsada;
+        const fechaBoleta = boleta.fecha as Timestamp;
+
+        boletasPorUsuario.count++;
+
+        if (!boletasPorUsuario.lastDate || fechaBoleta.toDate() > boletasPorUsuario.lastDate.toDate()) {
+          boletasPorUsuario.lastDate = fechaBoleta;
+        }
+      });
+
+      return boletasPorUsuario;
+    }),
+    switchMap(boletasInfo => {
+      const usuarioQuery = query(this._rutaUsuarios, where('auth_id', '==', usuarioId));
+
+      return from(getDocs(usuarioQuery)).pipe(
+        map(userSnapshot => {
+          if (userSnapshot.docs.length > 0) {
+            const usuario = userSnapshot.docs[0].data() as Usuario;
+            return {
+              ...usuario,
+              boletasUsadas: boletasInfo.count,
+              ultimaVisita: boletasInfo.lastDate ? boletasInfo.lastDate.toDate() : null,
+            };
+          } else {
+            console.warn(`Usuario con ID ${usuarioId} no encontrado.`);
+            return null;
+          }
+        })
+      );
+    })
+  );
+}
+
+
 
 
 

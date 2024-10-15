@@ -100,4 +100,62 @@ export class RespuestasService {
     });
     return { labels: meses, data };
   }
+
+
+  // getRespuestasPorTipo(): Observable<{ adulto: number, nino: number }> {
+  //   const respuestasQuery = query(this._rutaRespuestasTrivia);
+  //   return collectionData(respuestasQuery, { idField: 'id' }).pipe(
+  //     map((respuestas: any[]) => {
+  //       const adulto = respuestas.filter(respuesta => respuesta.tipo === 'adulto').length;
+  //       const nino = respuestas.filter(respuesta => respuesta.tipo === 'niño').length;
+  //       return { adulto, nino };
+  //     })
+  //   );
+  // }
+
+
+  getRespuestasPorTipoYResultado(): Observable<{
+    adultoCorrectas: number;
+    adultoIncorrectas: number;
+    ninoCorrectas: number;
+    ninoIncorrectas: number;
+  }> {
+    const respuestasQuery = query(this._rutaRespuestasTrivia);
+    return collectionData(respuestasQuery, { idField: 'id' }).pipe(
+      map((respuestas: any[]) => {
+        const adultoCorrectas = respuestas.filter(
+          (r) => r.tipo === 'adulto' && r.resultado === true
+        ).length;
+        const adultoIncorrectas = respuestas.filter(
+          (r) => r.tipo === 'adulto' && r.resultado === false
+        ).length;
+        const ninoCorrectas = respuestas.filter(
+          (r) => r.tipo === 'niño' && r.resultado === true
+        ).length;
+        const ninoIncorrectas = respuestas.filter(
+          (r) => r.tipo === 'niño' && r.resultado === false
+        ).length;
+
+        return { adultoCorrectas, adultoIncorrectas, ninoCorrectas, ninoIncorrectas };
+      })
+    );
+  }
+
+
+  getRespuestasPorGenero(): Observable<{ masculino: number; femenino: number; sinDefinir: number }> {
+    const respuestasQuery = query(this._rutaRespuestasTrivia);
+    return collectionData(respuestasQuery, { idField: 'id' }).pipe(
+      map((respuestas: any[]) => {
+        const masculino = respuestas.filter(r => r.genero_usuario === 'masculino').length;
+        const femenino = respuestas.filter(r => r.genero_usuario === 'femenino').length;
+        const sinDefinir = respuestas.filter(r => !r.genero_usuario || r.genero_usuario === 'Sin definir').length;
+
+        return { masculino, femenino, sinDefinir };
+      })
+    );
+  }
+
+
+
+
 }
