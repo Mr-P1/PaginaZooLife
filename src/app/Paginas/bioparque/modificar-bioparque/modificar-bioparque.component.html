@@ -7,7 +7,7 @@
 >
   <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
     <!-- Modal content -->
-    <div class="relative p-4 rounded-lg shadow bg-orange-600 sm:p-5">
+    <div class="relative p-4 rounded-lg shadow bg-orange-400 sm:p-5">
       <!-- Modal header -->
       <div class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800">
         <h3 class="text-lg font-semibold text-white">Modificar Planta</h3>
@@ -62,22 +62,25 @@
         </div>
 
         <!-- Familia (Select) -->
-        <div>
-          <label for="familia" class="block mb-2 text-sm font-medium text-white">Familia</label>
-          <select
-            id="familia"
-            formControlName="familia"
-            class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
-          >
-            <option selected disabled>Seleccione una familia</option>
-            <option value="Familia 1">Familia 1</option>
-            <option value="Familia 2">Familia 2</option>
-            <option value="Familia 3">Familia 3</option>
-          </select>
-          <div *ngIf="form.get('familia')?.touched && form.get('familia')?.invalid" class="text-sm text-white">
-            <span *ngIf="form.get('familia')?.errors?.['required']">Seleccione una familia</span>
+          <!-- Familia (Select) -->
+          <div>
+            <label for="familia" class="block mb-2 text-sm font-medium text-white">Familia</label>
+            <select
+              id="familia"
+              formControlName="familia"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+            >
+              <option selected disabled>Seleccione una familia</option>
+              <option value="Cupressaceae">Cupressaceae</option>
+              <option value="Fabaceae">Fabaceae</option>
+              <option value="Araucariaceae">Araucariaceae</option>
+              <option value="Proteaceae">Proteaceae</option>
+            </select>
+            <div *ngIf="form.get('familia')?.touched && form.get('familia')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('familia')?.errors?.['required']">Seleccione una familia</span>
+            </div>
           </div>
-        </div>
+
 
         <!-- Altura y Formato -->
         <div>
@@ -155,17 +158,18 @@
         <!-- Cuidados -->
         <div>
           <label for="cuidados" class="block mb-2 text-sm font-medium text-white">Cuidados</label>
-          <textarea
+          <input
+            type="text"
             id="cuidados"
+            class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+            placeholder="Periodo de floración"
             formControlName="cuidados"
-            rows="3"
-            class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
-            placeholder="Cuidados necesarios para la planta"
-          ></textarea>
+          />
           <div *ngIf="form.get('cuidados')?.touched && form.get('cuidados')?.invalid" class="text-sm text-white">
             <span *ngIf="form.get('cuidados')?.errors?.['required']">Ingrese los cuidados de la planta</span>
           </div>
         </div>
+
 
         <!-- Floración -->
         <div>
@@ -327,7 +331,7 @@
             [disabled]="loading()"
             (click)="actualizar()"
             type="button submit"
-            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-orange-500 hover:bg-orange-400 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading() ? "Actualizando ..." : "Actualizar planta" }}
           </button>
@@ -336,7 +340,7 @@
             type="button"
             [disabled]="loading2()"
             (click)="borrarPremio()"
-            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-orange-500 hover:bg-orange-400 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading2() ? "Eliminando ..." : "Eliminar planta" }}
           </button>

@@ -7,7 +7,7 @@
 >
   <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
     <!-- Modal content -->
-    <div class="relative p-4 rounded-lg shadow bg-orange-600 sm:p-5">
+    <div class="relative p-4 rounded-lg shadow bg-orange-400 sm:p-5">
       <!-- Modal header -->
       <div class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800">
         <h3 class="text-lg font-semibold text-white">Crear Planta</h3>
@@ -70,9 +70,10 @@
               class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
             >
               <option selected disabled>Seleccione una familia</option>
-              <option value="Familia 1">Familia 1</option>
-              <option value="Familia 2">Familia 2</option>
-              <option value="Familia 3">Familia 3</option>
+              <option value="Cupressaceae">Cupressaceae</option>
+              <option value="Fabaceae">Fabaceae</option>
+              <option value="Araucariaceae">Araucariaceae</option>
+              <option value="Proteaceae">Proteaceae</option>
             </select>
             <div *ngIf="form.get('familia')?.touched && form.get('familia')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('familia')?.errors?.['required']">Seleccione una familia</span>
@@ -104,6 +105,34 @@
             </div>
             <div *ngIf="form.get('altura_formato')?.touched && form.get('altura_formato')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('altura_formato')?.errors?.['required']">Seleccione un formato para la altura</span>
+            </div>
+          </div>
+
+          <!-- peso -->
+          <div>
+            <label for="Peso" class="block mb-2 text-sm font-medium text-white">Peso</label>
+            <div class="flex">
+              <input
+                type="number"
+                id="peso"
+                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+                placeholder="Peso de la planta"
+                formControlName="peso"
+              />
+              <select
+                formControlName="peso_formato"
+                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-auto p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black ml-2"
+              >
+                <option selected disabled>Unidad</option>
+                <option value="Gr">Gr</option>
+                <option value="Kg">Kg</option>
+              </select>
+            </div>
+            <div *ngIf="form.get('peso')?.touched && form.get('peso')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('peso')?.errors?.['required']">Ingrese una peso</span>
+            </div>
+            <div *ngIf="form.get('peso_formato')?.touched && form.get('peso_formato')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('peso_formato')?.errors?.['required']">Seleccione un formato para la peso</span>
             </div>
           </div>
 
@@ -155,13 +184,13 @@
           <!-- Cuidados -->
           <div>
             <label for="cuidados" class="block mb-2 text-sm font-medium text-white">Cuidados</label>
-            <textarea
+            <input
+              type="text"
               id="cuidados"
+              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              placeholder="Periodo de floración"
               formControlName="cuidados"
-              rows="3"
-              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Cuidados necesarios para la planta"
-            ></textarea>
+            />
             <div *ngIf="form.get('cuidados')?.touched && form.get('cuidados')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('cuidados')?.errors?.['required']">Ingrese los cuidados de la planta</span>
             </div>
@@ -327,7 +356,7 @@
           <button
             [disabled]="loading()"
             type="submit"
-            class="w-full text-white bg-orange-700 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-orange-500 hover:bg-orange-400 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             <svg
               class="w-6 h-6 text-white"

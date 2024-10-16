@@ -36,6 +36,8 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   private animalesSubscription!: Subscription;
   private plantasSubscription!: Subscription;
 
+  areasMasVisitadas: { area: string, count: number }[] = [];
+
   constructor(
     private _animalesService: AnimalesService,
     private _plantaService:PlantaService,
@@ -90,7 +92,7 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     });
 
 
-
+    this.cargarAreasMasVisitadas();
 
 
   }
@@ -143,6 +145,17 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     }
 
 
+  }
+
+  async cargarAreasMasVisitadas() {
+    try {
+      const start = performance.now(); // Para medir tiempo de carga
+      this.areasMasVisitadas = await this._animalesService.getAreasMasVisitadas();
+      const end = performance.now();
+      console.log(`Áreas cargadas en ${end - start} ms`);
+    } catch (error) {
+      console.error('Error al cargar las áreas más visitadas:', error);
+    }
   }
 
 

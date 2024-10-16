@@ -48,6 +48,7 @@ export class CrearAnimalComponent {
     dieta: this._formBuilder.control("", [Validators.required]),
     dieta_descripcion: this._formBuilder.control("", [Validators.required]),
     comportamiento: this._formBuilder.control("", [Validators.required]),
+    area: this._formBuilder.control("", [Validators.required]),
     clase: this._formBuilder.control("", [Validators.required]), //Especie
     posicion_mapa: this._formBuilder.control("", [Validators.required]),
     cuidados: this._formBuilder.control("", [Validators.required]),
@@ -126,6 +127,7 @@ export class CrearAnimalComponent {
         dieta,
         dieta_descripcion,
         comportamiento,
+        area,
         clase,
         posicion_mapa,
         cuidados,
@@ -152,6 +154,7 @@ export class CrearAnimalComponent {
         habitat: habitad!,
         zona: zona!,
         comportamiento: comportamiento!,
+        area:area!,
         estado_conservacion: estado_conservacion!,
         clase: clase!,  // Clase se refiere a la especie
         posicion_mapa: Number(posicion_mapa),

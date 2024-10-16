@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   imports: [RouterModule, CommonModule, FormsModule],
 })
 export class ListarUsuariosComponent implements OnInit {
-  usuarios: Usuario[] = [];
+  usuarios: (Usuario & { boletasUsadas: number })[] = [];
   lastVisible: any = null;
   firstVisible: any = null;
   pageSize = 5;
@@ -23,30 +23,48 @@ export class ListarUsuariosComponent implements OnInit {
   // Pila para almacenar las referencias a los documentos de las páginas anteriores
   pageStack: { firstVisible: any, lastVisible: any }[] = [];
 
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(private usuarioService: UsuarioService) { }
 
   ngOnInit() {
     this.loadInitialPage();
   }
 
   // Cargar la primera página de usuarios
-  loadInitialPage() {
+  async loadInitialPage() {
     this.loading = true;
-    this.usuarioService.getUsuariosPaginados(this.pageSize).then(data => {
-      this.usuarios = data.usuarios;
+    try {
+      const data = await this.usuarioService.getUsuariosPaginados(this.pageSize);
+      const boletasPorUsuario = await this.usuarioService.getBoletasUsadasPorUsuario();
+
+      // Unir la información de los usuarios con la cantidad de boletas usadas
+      this.usuarios = data.usuarios.map(usuario => ({
+        ...usuario,
+        boletasUsadas: boletasPorUsuario[usuario.auth_id] || 0, // Añadir boletas usadas
+      }));
+
       this.lastVisible = data.lastVisible;
       this.firstVisible = data.firstVisible;
-      this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
+    } catch (error) {
+      console.error('Error al cargar los usuarios:', error);
+    } finally {
       this.loading = false;
-    });
+    }
   }
 
+  // Cargar la siguiente página de usuarios
   // Cargar la siguiente página de usuarios
   loadNextPage() {
     if (this.lastVisible) {
       this.loading = true;
-      this.usuarioService.getUsuariosPaginados(this.pageSize, this.lastVisible).then(data => {
-        this.usuarios = data.usuarios;
+      this.usuarioService.getUsuariosPaginados(this.pageSize, this.lastVisible).then(async data => {
+        const boletasPorUsuario = await this.usuarioService.getBoletasUsadasPorUsuario();
+
+        // Combina usuarios con la cantidad de boletas usadas
+        this.usuarios = data.usuarios.map(usuario => ({
+          ...usuario,
+          boletasUsadas: boletasPorUsuario[usuario.auth_id] || 0
+        }));
+
         this.lastVisible = data.lastVisible;
         this.firstVisible = data.firstVisible;
         this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
@@ -56,37 +74,55 @@ export class ListarUsuariosComponent implements OnInit {
     }
   }
 
+
   // Cargar la página anterior de usuarios
-  loadPreviousPage() {
-    if (this.currentPage > 1) {
-      this.pageStack.pop();
-      const previousPage = this.pageStack[this.pageStack.length - 1];
+loadPreviousPage() {
+  if (this.currentPage > 1) {
+    this.pageStack.pop();
+    const previousPage = this.pageStack[this.pageStack.length - 1];
 
-      if (previousPage) {
-        this.loading = true;
-        this.usuarioService.getUsuariosPaginadosAnterior(this.pageSize, previousPage.firstVisible).then(data => {
-          this.usuarios = data.usuarios;
-          this.lastVisible = data.lastVisible;
-          this.firstVisible = previousPage.firstVisible;
-          this.currentPage -= 1;
-          this.loading = false;
-        });
-      }
-    }
-  }
-
-  // Manejar cambios en el campo de búsqueda
-  onSearchChange(event: any) {
-    const searchTerm = event.target.value.trim();
-
-    if (searchTerm) {
+    if (previousPage) {
       this.loading = true;
-      this.usuarioService.buscarUsuarios(searchTerm).then(usuarios => {
-        this.usuarios = usuarios; // Mostrar resultados de búsqueda
+      this.usuarioService.getUsuariosPaginadosAnterior(this.pageSize, previousPage.firstVisible).then(async data => {
+        const boletasPorUsuario = await this.usuarioService.getBoletasUsadasPorUsuario();
+
+        // Combina usuarios con la cantidad de boletas usadas
+        this.usuarios = data.usuarios.map(usuario => ({
+          ...usuario,
+          boletasUsadas: boletasPorUsuario[usuario.auth_id] || 0
+        }));
+
+        this.lastVisible = data.lastVisible;
+        this.firstVisible = previousPage.firstVisible;
+        this.currentPage -= 1;
         this.loading = false;
       });
-    } else {
-      this.loadInitialPage(); // Volver a la paginación cuando no haya búsqueda
     }
   }
+}
+
+ // Manejar cambios en el campo de búsqueda
+onSearchChange(event: any) {
+  const searchTerm = event.target.value.trim();
+
+  if (searchTerm) {
+    this.loading = true;
+    this.usuarioService.buscarUsuarios(searchTerm).then(async usuarios => {
+      const boletasPorUsuario = await this.usuarioService.getBoletasUsadasPorUsuario();
+
+      // Combina usuarios con la cantidad de boletas usadas
+      this.usuarios = usuarios.map(usuario => ({
+        ...usuario,
+        boletasUsadas: boletasPorUsuario[usuario.auth_id] || 0
+      }));
+
+      this.loading = false;
+    });
+  } else {
+    this.loadInitialPage(); // Volver a la paginación cuando no haya búsqueda
+  }
+}
+
+
+
 }

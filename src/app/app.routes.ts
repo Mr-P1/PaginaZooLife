@@ -26,6 +26,7 @@ import { ListarUsuariosComponent } from './Paginas/Usuarios/listar-usuarios/list
 import { VerMasComponent } from './Paginas/Usuarios/ver-mas/ver-mas.component';
 import {UsoAplicacionComponent} from './Paginas/Estadistica/uso-aplicacion/uso-aplicacion.component';
 import { RespuestasTriviaComponent } from './Paginas/Estadistica/respuestas-trivia/respuestas-trivia.component';
+import { AreasVisitadasComponent } from './Paginas/Estadistica/areas-visitadas/areas-visitadas.component';
 
 export const routes: Routes = [
 
@@ -48,6 +49,7 @@ export const routes: Routes = [
       { path:'estadisticas',component:EstadisticasComponent},
       { path:'uso_aplicacion',component:UsoAplicacionComponent},
       { path:'respuestas_trivia',component:RespuestasTriviaComponent},
+      { path:'areas-visitadas',component:AreasVisitadasComponent},
       { path:'mapa',component:MapaComponent},
       { path:'preguntas',component:ListarPreguntasComponent},
       { path:'crear_pregunta',component:CrearPreguntasComponent},

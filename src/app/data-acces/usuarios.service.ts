@@ -33,6 +33,7 @@ const PATH_Usuarios = 'Usuarios';
 const PATH_PremiosUsuarios = 'PremiosUsuarios';
 const PATH_PremiosTrivia = 'Premios_trivia'
 const PATH_RespuestasTrivia = 'RespuestasTrivia'
+const PATH_Boletas_usadas = 'Boletas_usadas';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +44,7 @@ export class UsuarioService {
   private _rutaPremiosUsuarios = collection(this._firestore, PATH_PremiosUsuarios);
   private _rutaPremiosTrivia = collection(this._firestore, PATH_PremiosTrivia);
   private _rutaRespuestasTrivia = collection(this._firestore, PATH_RespuestasTrivia);
+  private boletasUsadasRef = collection(this._firestore, PATH_Boletas_usadas);
 
   // Crear un nuevo usuario
   async crearUsuario(usuario: CrearUsuario) {
@@ -187,6 +189,22 @@ export class UsuarioService {
         return { correctas, incorrectas,total };
       })
     );
+  }
+
+
+  async getBoletasUsadasPorUsuario(): Promise<{ [key: string]: number }> {
+    const snapshot = await getDocs(this.boletasUsadasRef);
+    const boletasPorUsuario: { [key: string]: number } = {};
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const userId = data['id_usuario']; // Asegúrate de que el campo sea 'user_id' o ajústalo según corresponda.
+      if (userId) {
+        boletasPorUsuario[userId] = (boletasPorUsuario[userId] || 0) + 1;
+      }
+    });
+
+    return boletasPorUsuario;
   }
 
 

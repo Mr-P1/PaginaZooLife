@@ -20,6 +20,7 @@ export interface Planta {
   nombre_cientifico: string;
   familia: string;
   altura: string;
+  peso:string;
   descripcion_1: string;
   descripcion_2: string;
   descripcion_3: string;

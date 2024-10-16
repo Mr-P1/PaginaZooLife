@@ -37,6 +37,8 @@ export class ModificarBioparqueComponent {
     familia: this._formBuilder.control("", [Validators.required]),
     altura: this._formBuilder.control("", [Validators.required]),
     altura_formato: this._formBuilder.control("", [Validators.required]),
+    peso: this._formBuilder.control(0, [Validators.required]),
+    peso_formato: this._formBuilder.control("", [Validators.required]),
     descripcion_1: this._formBuilder.control("", [Validators.required]),
     descripcion_2: this._formBuilder.control("", [Validators.required]),
     descripcion_3: this._formBuilder.control("", [Validators.required]),
@@ -95,6 +97,9 @@ export class ModificarBioparqueComponent {
             familia: planta.familia,
             altura: altura || "", // Si no hay valor de altura, asigna vacío
             altura_formato: altura_formato || "", // Si no hay formato, asigna vacío
+            peso: 0 , // Si no hay valor de altura, asigna vacío
+            peso_formato: altura_formato || "", // Si no hay formato, asigna vacío
+
             descripcion_1: planta.descripcion_1,
             descripcion_2: planta.descripcion_2,
             descripcion_3: planta.descripcion_3,
@@ -144,6 +149,8 @@ export class ModificarBioparqueComponent {
           familia,
           altura,
           altura_formato,
+          peso,
+          peso_formato,
           descripcion_1,
           descripcion_2,
           descripcion_3,
@@ -163,6 +170,7 @@ export class ModificarBioparqueComponent {
           nombre_cientifico: nombre_cientifico!,
           familia: familia!,
           altura:  `${altura} ${altura_formato}`,
+          peso:  `${peso} ${peso_formato}`,
           usos:usos!,
           posicion_mapa:posicion_mapa!,
           descripcion_1: descripcion_1!,
