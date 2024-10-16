@@ -195,7 +195,7 @@ export class RespuestasTriviaComponent {
         datasets: [
           {
             data,
-            backgroundColor: ['#36A2EB', '#FF6384', '#4CAF50', '#F44336'],
+            backgroundColor: ['#36A2EB', '#ff911c', '#4CAF50', '#F44336'],
             hoverOffset: 4,
           },
         ],
