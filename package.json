@@ -23,6 +23,7 @@
     "date-fns": "^4.1.0",
     "firebase": "^10.13.2",
     "ng2-charts": "^6.0.1",
+    "ngxtension": "^4.0.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.14.1",
     "tslib": "^2.3.0",

@@ -44,6 +44,7 @@
             <th scope="col" class="px-6 py-3">Patente</th>
             <th scope="col" class="px-6 py-3">Boletas Usadas</th>
             <th scope="col" class="px-6 py-3">Acciones</th>
+            <th scope="col" class="px-6 py-3">Chat</th>
           </tr>
         </thead>
         <tbody>
@@ -57,6 +58,9 @@
             <td class="px-6 py-4 font-medium text-black whitespace-nowrap">{{ usuario.boletasUsadas }}</td>
             <td class="px-6 py-4">
               <a [routerLink]="['/app/ver_mas', usuario.auth_id]" class="font-medium text-orange-700 hover:underline">Ver información</a>
+            </td>
+            <td class="px-6 py-4">
+              <a [routerLink]="['/app/chat', usuario.auth_id]" class="font-medium text-orange-700 hover:underline">Chat</a>
             </td>
           </tr>
         </tbody>
