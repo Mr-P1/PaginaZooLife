@@ -1,0 +1,28 @@
+<div class="chat-container p-4">
+  <div class="chat-messages overflow-y-auto h-96 mb-4 bg-gray-50 p-4 border border-gray-300 rounded-lg">
+    <div *ngFor="let message of messages" class="mb-2">
+      <div *ngIf="message.sender === 'admin'" class="text-right">
+        <p class="bg-orange-300 p-2 inline-block rounded-lg">{{ message.message }}</p>
+        <p class="text-xs text-gray-500">{{ message.timestamp.toDate() | date:'short' }}</p>
+      </div>
+      <div *ngIf="message.sender === 'visitor'" class="text-left">
+        <p class="bg-gray-200 p-2 inline-block rounded-lg">{{ message.message }}</p>
+        <p class="text-xs text-gray-500">{{ message.timestamp.toDate() | date:'short' }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input flex">
+    <input
+      type="text"
+      [(ngModel)]="newMessage"
+      class="flex-grow p-2 border border-gray-300 rounded-l-lg"
+      placeholder="Escribe un mensaje..."
+    />
+    <button
+      (click)="sendMessage()"
+      class="bg-orange-500 text-white px-4 py-2 rounded-r-lg hover:bg-orange-700"
+    >
+      Enviar
+    </button>
+  </div>
+</div>

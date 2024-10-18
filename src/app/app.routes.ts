@@ -27,6 +27,7 @@ import { VerMasComponent } from './Paginas/Usuarios/ver-mas/ver-mas.component';
 import {UsoAplicacionComponent} from './Paginas/Estadistica/uso-aplicacion/uso-aplicacion.component';
 import { RespuestasTriviaComponent } from './Paginas/Estadistica/respuestas-trivia/respuestas-trivia.component';
 import { AreasVisitadasComponent } from './Paginas/Estadistica/areas-visitadas/areas-visitadas.component';
+import { ChatComponent } from './Paginas/Usuarios/chat/chat.component';
 
 export const routes: Routes = [
 
@@ -66,6 +67,7 @@ export const routes: Routes = [
       { path:'modificar_noticia/:idNoticia',component:ModificarNoticiaComponent},
       { path:'usuarios',component:ListarUsuariosComponent},
       { path:'ver_mas/:IdUsuario',component:VerMasComponent},
+      { path:'chat/:IdUsuario',component:ChatComponent},
 
 
 
