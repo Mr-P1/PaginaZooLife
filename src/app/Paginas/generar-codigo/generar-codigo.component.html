@@ -1,0 +1,21 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Generar Boleta y QR</h5>
+    <div class="qr-placeholder" [ngClass]="{'qr-generated': qrGenerado}">
+      <qrcode
+        *ngIf="qrGenerado"
+        [qrdata]="qrData"
+        [width]="256"
+        [errorCorrectionLevel]="'M'"
+        (qrCodeURL)="onChangeURL($event)">
+      </qrcode>
+    </div>
+    <div class="actions">
+      <button (click)="generarQr()">Generar QR</button>
+      <a [href]="qrCodeDownloadLink" download="qrcode.png">
+        <button (click)="descargarQr()" [disabled]="!qrGenerado">Descargar QR</button>
+      </a>
+      <button (click)="enviarCorreo()" [disabled]="!qrGenerado">Mandar Correo</button>
+    </div>
+  </div>
+</div>

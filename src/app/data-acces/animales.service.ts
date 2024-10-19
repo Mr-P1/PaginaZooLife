@@ -38,6 +38,7 @@ export interface Animal {
   imagen: string,
   video?: string;
   audio?: string;
+  audioAnimal?:string,
 }
 
 

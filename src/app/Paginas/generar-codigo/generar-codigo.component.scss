@@ -1,0 +1,54 @@
+.card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center; /* Centra el contenido de texto dentro de la tarjeta */
+}
+
+.card-title {
+  margin-bottom: 20px; /* Espacio debajo del título */
+  font-size: 1.5rem; /* Ajusta el tamaño de la fuente para mayor visibilidad */
+}
+
+.qr-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 256px;
+  height: 256px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  margin: 20px auto;
+}
+
+.qr-placeholder.qr-generated {
+  border: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover:enabled {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
