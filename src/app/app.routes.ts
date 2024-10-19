@@ -28,6 +28,7 @@ import {UsoAplicacionComponent} from './Paginas/Estadistica/uso-aplicacion/uso-a
 import { RespuestasTriviaComponent } from './Paginas/Estadistica/respuestas-trivia/respuestas-trivia.component';
 import { AreasVisitadasComponent } from './Paginas/Estadistica/areas-visitadas/areas-visitadas.component';
 import { ChatComponent } from './Paginas/Usuarios/chat/chat.component';
+import { GenerarCodigoComponent } from './Paginas/generar-codigo/generar-codigo.component';
 
 export const routes: Routes = [
 
@@ -68,6 +69,7 @@ export const routes: Routes = [
       { path:'usuarios',component:ListarUsuariosComponent},
       { path:'ver_mas/:IdUsuario',component:VerMasComponent},
       { path:'chat/:IdUsuario',component:ChatComponent},
+      { path:'generar-codigo',component:GenerarCodigoComponent},
 
 
 

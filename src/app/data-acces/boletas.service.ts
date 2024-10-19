@@ -1,6 +1,6 @@
 import { es } from 'date-fns/locale';
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, query, where, getDocs, onSnapshot, Timestamp } from '@angular/fire/firestore';
+import { Firestore, collection, query, where, getDocs, onSnapshot, Timestamp,addDoc, setDoc, doc } from '@angular/fire/firestore';
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns';
 import { Observable, forkJoin, from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -22,8 +22,14 @@ interface BoletaUsada {
   tipo: string;
 }
 
+interface Boleta{
+  id:string,
+  tipo:string,
+}
+
 const PATH_Boletas_usadas = 'Boletas_usadas';
 const PATH_Usuarios = 'Usuarios';
+const PATH_Boletas = 'Boletas';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +38,7 @@ export class BoletasService {
   private _firestore = inject(Firestore);
   private boletasUsadasRef = collection(this._firestore, PATH_Boletas_usadas);
   private _rutaUsuarios = collection(this._firestore, PATH_Usuarios);
+  private _rutaBoletas = collection(this._firestore, PATH_Boletas);
 
 
   obtenerVisitantesHoy(): Observable<number> {
@@ -263,7 +270,34 @@ obtenerBoletasPorUsuario(usuarioId: string): Observable<any> {
 
 
 
+// async guardarBoleta(boleta: Boleta): Promise<void> {
+//   try {
+//     await addDoc(this._rutaBoletas, {
+//       id: boleta.id,
+//       tipo: boleta.tipo,
+//     });
+//     console.log('Boleta guardada con éxito');
+//   } catch (error) {
+//     console.error('Error al guardar la boleta:', error);
+//   }
+// }
 
+async guardarBoleta(boleta: Boleta): Promise<void> {
+  try {
+    // Crea una referencia a un documento específico con el ID de la boleta
+    const docRef = doc(this._rutaBoletas, boleta.id);
+
+    // Usa setDoc para guardar los datos en ese documento con el ID especificado
+    await setDoc(docRef, {
+      tipo: boleta.tipo,
+      fecha: Timestamp.fromDate(new Date())
+    });
+
+    console.log('Boleta guardada con éxito');
+  } catch (error) {
+    console.error('Error al guardar la boleta:', error);
+  }
+}
 
 
 
