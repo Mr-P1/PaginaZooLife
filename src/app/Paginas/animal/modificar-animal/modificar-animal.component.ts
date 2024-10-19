@@ -30,6 +30,10 @@ export class ModificarAnimalComponent  {
   private _animalService = inject(AnimalesService);
   private _router = inject(Router)
 
+  imagenFile: File | null = null;
+  videoFile: File | null = null;
+  audioFile: File | null = null;
+  audioAnimalFile: File | null = null;
 
 
 
@@ -65,6 +69,7 @@ export class ModificarAnimalComponent  {
     imagen: this._formBuilder.control("", [Validators.required]),
     video: this._formBuilder.control("", [Validators.required]),
     audio: this._formBuilder.control("", [Validators.required]),
+    audioAnimal: this._formBuilder.control(""),
 
   })
 
@@ -102,7 +107,9 @@ export class ModificarAnimalComponent  {
             cuidados: animal.cuidados,
             estado_conservacion: animal.estado_conservacion,
             disponibilidad: animal.disponibilidad,
-            imagen: "",
+            imagen: animal.imagen,
+            audio: animal.audio,
+            audioAnimal: animal.audioAnimal || null,
           });
         } else {
           this.errorMessage = "Animal no encontrado.";
@@ -113,9 +120,7 @@ export class ModificarAnimalComponent  {
 
 
 
-  imagenFile: File | null = null;
-  videoFile: File | null = null;
-  audioFile: File | null = null;
+
 
   public cargarFoto(event: Event) {
     const elemento = event.target as HTMLInputElement;
@@ -140,6 +145,15 @@ export class ModificarAnimalComponent  {
       this.audioFile = archivo;
     }
   }
+
+  public cargarAudioAnimal(e: Event) {
+    const elemento = e.target as HTMLInputElement;
+    const archivo = elemento.files ? elemento.files[0] : null;
+    if (archivo) {
+      this.audioAnimalFile = archivo;  // Almacena el archivo de audio seleccionado
+    }
+  }
+
 
 
   async actualizar() {
@@ -217,7 +231,7 @@ export class ModificarAnimalComponent  {
         };
 
         // Llamada al servicio pasando los archivos de imagen, video y audio, si fueron seleccionados
-        await this._animalService.editarAnimal(this.idActiva, animal, this.imagenFile!, this.videoFile!, this.audioFile!);
+        await this._animalService.editarAnimal(this.idActiva, animal, this.imagenFile!, this.videoFile!, this.audioFile!, this.audioAnimalFile!);
 
         Swal.fire({
           title: "Listo!",

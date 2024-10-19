@@ -27,6 +27,7 @@ export class CrearAnimalComponent {
   imagenFile: File | null = null; // Almacenar el archivo de imagen seleccionado
   videoFile: File | null = null; // Almacenar el archivo de imagen seleccionado
   audioFile: File | null = null; // Almacenar el archivo de imagen seleccionado
+  audioAnimalFile: File | null = null; // Almacenar el archivo de imagen seleccionado
 
 
   form = this._formBuilder.group({
@@ -57,6 +58,7 @@ export class CrearAnimalComponent {
     imagen: this._formBuilder.control("", [Validators.required]),
     video: this._formBuilder.control("", [Validators.required]),
     audio: this._formBuilder.control("", [Validators.required]),
+    audioAnimal: this._formBuilder.control(""),
 
   })
 
@@ -94,6 +96,14 @@ export class CrearAnimalComponent {
       const archivo = elemento.files ? elemento.files[0] : null;
       if (archivo) {
         this.audioFile = archivo;  // Almacena el archivo de audio seleccionado
+      }
+    }
+
+    public cargarAudioAnimal(e: Event) {
+      const elemento = e.target as HTMLInputElement;
+      const archivo = elemento.files ? elemento.files[0] : null;
+      if (archivo) {
+        this.audioAnimalFile = archivo;  // Almacena el archivo de audio seleccionado
       }
     }
 
@@ -164,7 +174,7 @@ export class CrearAnimalComponent {
       };
 
       // await this._animalService.create(animal);
-      await this._animalService.createAnimal(animal, this.imagenFile!, this.videoFile! , this.audioFile! );
+      await this._animalService.createAnimal(animal, this.imagenFile!, this.videoFile! , this.audioFile!, this.audioAnimalFile! );
       Swal.fire({
         title: "Listo !",
         text: "Animal agregado correctamente",

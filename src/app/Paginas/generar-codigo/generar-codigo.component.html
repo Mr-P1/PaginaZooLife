@@ -13,7 +13,8 @@
     <div class="actions">
       <button (click)="generarQr()">Generar QR</button>
       <a [href]="qrCodeDownloadLink" download="qrcode.png">
-        <button (click)="descargarQr()" [disabled]="!qrGenerado">Descargar QR</button>
+        <button  [disabled]="!qrGenerado">Descargar QR</button>
+        <!-- <button (click)="descargarQr()" [disabled]="!qrGenerado">Descargar QR</button> -->
       </a>
       <button (click)="enviarCorreo()" [disabled]="!qrGenerado">Mandar Correo</button>
     </div>

@@ -697,6 +697,19 @@
           </div>
 
 
+          <div>
+            <label for="audioAnimal" class="block mb-2 text-sm font-medium text-white">Audio Animal (Opcional)</label>
+            <input
+              type="file"
+              id="audioAnimal"
+              accept="audio/*"
+              formControlName="audioAnimal"
+              (change)="cargarAudioAnimal($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            />
+          </div>
+
+
         </div>
         <!-- fin -->
 

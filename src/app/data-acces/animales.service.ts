@@ -247,23 +247,33 @@ export class AnimalesService {
     return getDownloadURL(snapshot.ref);
   }
 
+   // Subir audio a Cloud Storage
+   async uploadAudioAnimal(file: File): Promise<string> {
+    const filePath = `animales/audiosAnimal/${file.name}`;
+    const storageRef = ref(this._storage, filePath);
+    const snapshot = await uploadBytes(storageRef, file);
+    return getDownloadURL(snapshot.ref);
+  }
 
-  async createAnimal(animal: CrearAnimal, imagenFile: File, videoFile?: File, audioFile?: File) {
+
+  async createAnimal(animal: CrearAnimal, imagenFile: File, videoFile?: File, audioFile?: File,audioAnimalFile?:File) {
     // Sube la imagen, video y audio
     const imageUrl = await this.uploadImage(imagenFile);
     const videoUrl = videoFile ? await this.uploadVideo(videoFile) : '';
     const audioUrl = audioFile ? await this.uploadAudio(audioFile) : '';
+    const audioAnimalUrl = audioAnimalFile ? await this.uploadAudio(audioAnimalFile) : '';
 
     const animalData = {
       ...animal,
       imagen: imageUrl,
       video: videoUrl,
-      audio: audioUrl
+      audio: audioUrl,
+      audioAnimal:audioAnimalUrl,
     };
     return addDoc(this._rutaAnimal, animalData);
   }
 
-  async editarAnimal(id: string, animal: CrearAnimal, imagenFile?: File, videoFile?: File, audioFile?: File) {
+  async editarAnimal(id: string, animal: CrearAnimal, imagenFile?: File, videoFile?: File, audioFile?: File,audioAnimalFile?:File) {
     // Obtener la referencia del documento para acceder a los archivos antiguos
     const document = doc(this._rutaAnimal, id);
     const docSnapshot = await getDoc(document);
@@ -295,17 +305,27 @@ export class AnimalesService {
         });
       }
 
+      // Eliminar el audio animal antiguo si existe y si se proporciona un nuevo audio
+      if (audioAnimalFile && animalActual.audioAnimal) {
+        const oldAudioRef = ref(this._storage, animalActual.audioAnimal);
+        await deleteObject(oldAudioRef).catch((error) => {
+          console.warn('No se pudo eliminar el audio anterior:', error);
+        });
+      }
+
       // Subir los nuevos archivos solo si se proporcionan
       const imageUrl = imagenFile ? await this.uploadImage(imagenFile) : animalActual.imagen;
       const videoUrl = videoFile ? await this.uploadVideo(videoFile) : animalActual.video || '';
       const audioUrl = audioFile ? await this.uploadAudio(audioFile) : animalActual.audio || '';
+      const audioAnimalUrl = audioAnimalFile ? await this.uploadAudio(audioAnimalFile) : animalActual.audioAnimal || '';
 
       // Actualizar los datos del animal con los nuevos archivos (o mantener los actuales)
       const animalData = {
         ...animal,
         imagen: imageUrl,
         video: videoUrl,
-        audio: audioUrl
+        audio: audioUrl,
+        audioAnimal:audioAnimalUrl,
       };
 
       // Actualizar el documento en Firestore
@@ -347,6 +367,14 @@ export class AnimalesService {
         const audioRef = ref(this._storage, animalData.audio);
         await deleteObject(audioRef).catch(() => {
           console.warn(`No se pudo eliminar el audio: ${animalData.audio}`);
+        });
+      }
+
+       // Eliminar audio animal de Firebase Storage si existe
+       if (animalData.audioAnimal) {
+        const audioRef = ref(this._storage, animalData.audioAnimal);
+        await deleteObject(audioRef).catch(() => {
+          console.warn(`No se pudo eliminar el audio: ${animalData.audioAnimal}`);
         });
       }
 
