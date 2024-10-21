@@ -65,20 +65,23 @@
           <div>
             <label for="familia" class="block mb-2 text-sm font-medium text-white">Familia</label>
             <select
-              id="familia"
-              formControlName="familia"
-              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+                id="familia"
+                formControlName="familia"
+                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
             >
-              <option selected disabled>Seleccione una familia</option>
-              <option value="Cupressaceae">Cupressaceae</option>
-              <option value="Fabaceae">Fabaceae</option>
-              <option value="Araucariaceae">Araucariaceae</option>
-              <option value="Proteaceae">Proteaceae</option>
+                <option selected disabled>Seleccione una familia</option>
+                <option value="Arbol">Árbol</option>
+                <option value="Arbusto">Arbusto</option>
+                <option value="Enredadera">Enredadera</option>
+                <option value="Herbaceas">Herbáceas</option>
+                <option value="Palmeras">Palmeras</option>
+                <option value="Plantas acuaticas">Plantas acuáticas</option>
             </select>
             <div *ngIf="form.get('familia')?.touched && form.get('familia')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('familia')?.errors?.['required']">Seleccione una familia</span>
+                <span *ngIf="form.get('familia')?.errors?.['required']">Seleccione una familia</span>
             </div>
-          </div>
+        </div>
+
 
           <!-- Altura y Formato -->
           <div>

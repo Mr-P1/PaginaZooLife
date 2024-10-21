@@ -1,3 +1,169 @@
+// import { Component, OnInit, OnDestroy } from '@angular/core';
+// import { AnimalesService, AnimalConValoraciones } from '../../../data-acces/animales.service';
+// import { CommonModule } from '@angular/common';
+// import { format } from 'date-fns';
+// import { Subscription } from 'rxjs';
+// import { es } from 'date-fns/locale'; // Configuración regional en español
+// import { RespuestasService } from '../../../data-acces/respuestas.service';
+// import { BoletasService } from '../../../data-acces/boletas.service';
+// import {PlantaService, PlantaConValoraciones} from '../../../data-acces/bioparque.service'
+// import { RouterModule } from '@angular/router';
+// import { Chart,ChartType } from 'chart.js/auto';
+
+// @Component({
+//   selector: 'app-estadisticas',
+//   standalone: true,
+//   imports: [CommonModule,RouterModule],
+//   templateUrl: './estadisticas.component.html',
+//   styleUrls: ['./estadisticas.component.scss']
+// })
+
+// export class EstadisticasComponent implements OnInit, OnDestroy {
+
+//   animales: AnimalConValoraciones[] = [];
+//   plantas:PlantaConValoraciones[] = [];
+//   visitantesHoy: number = 0; // Inicializa en 0
+//   today!: string; // Variable para almacenar la fecha de hoy
+//   private visitantesSubscription!: Subscription;
+
+//   respuestasTotales: number = 0;
+//   respuestasCorrectas: number = 0;
+//   respuestasIncorrectas: number = 0;
+//   promedioCorrectas: number = 0;
+//   pieChart!: Chart; // Variable para el gráfico de torta (pie chart)
+
+//   private respuestasSubscription!: Subscription;
+//   private animalesSubscription!: Subscription;
+//   private plantasSubscription!: Subscription;
+
+//   areasMasVisitadas: { area: string, count: number }[] = [];
+
+//   constructor(
+//     private _animalesService: AnimalesService,
+//     private _plantaService:PlantaService,
+//     private _boletasService: BoletasService,
+//     private respuestasService: RespuestasService
+//   ) {
+//     // Formato de la fecha cambiado a 'dd/MM/yyyy'
+//     this.today = format(new Date(), 'dd/MM/yyyy', { locale: es });
+//   }
+
+//   ngOnInit(): void {
+
+//     this.animalesSubscription = this._animalesService.getAnimalesConValoraciones().subscribe({
+//       next: (animales) => {
+//         this.animales = animales;
+//       },
+//       error: (error) => console.error('Error al obtener animales:', error)
+//     });
+
+//     this.plantasSubscription = this._plantaService.getPlantasConValoraciones().subscribe({
+//       next: (plantas) => {
+//         this.plantas = plantas;
+//       },
+//       error: (error) => console.error('Error al obtener plantas:', error)
+//     });
+
+
+//     this.visitantesSubscription = this._boletasService.obtenerVisitantesHoy().subscribe({
+//       next: (visitantes: number) => {
+//         this.visitantesHoy = visitantes;
+//       },
+//       error: (error) => {
+//         console.error('Error al obtener visitantes hoy:', error);
+//       }
+//     });
+
+//     this.respuestasSubscription = this.respuestasService.getRespuestasTrivia().subscribe({
+//       next: (respuestas) => {
+//         this.respuestasTotales = respuestas.total;
+//         this.respuestasCorrectas = respuestas.correctas;
+//         this.respuestasIncorrectas = respuestas.incorrectas;
+
+//         if (this.respuestasTotales > 0) {
+//           this.promedioCorrectas = (this.respuestasCorrectas / this.respuestasTotales) * 100;
+//         } else {
+//           this.promedioCorrectas = 0;  // Evitar dividir por 0 si no hay respuestas
+//         }
+
+//         // Llama a la función para renderizar el gráfico después de recibir las respuestas
+//         this.cargarGraficoPie();
+//       }
+//     });
+
+
+//     this.cargarAreasMasVisitadas();
+
+
+//   }
+
+//   cargarGraficoPie(): void {
+//     if (this.pieChart) {
+//       this.pieChart.destroy(); // Destruir gráfico previo si existe
+//     }
+
+//     const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
+
+//     this.pieChart = new Chart(ctx, {
+//       type: 'doughnut' as ChartType,
+//       data: {
+//         labels: ['Correctas', 'Incorrectas'],
+//         datasets: [{
+//           data: [this.respuestasCorrectas, this.respuestasIncorrectas],
+//           backgroundColor: ['#4CAF50', '#F44336'], // Colores para correctas e incorrectas
+//           hoverOffset: 4
+//         }]
+//       },
+//       options: {
+//         responsive: true,
+//         plugins: {
+//           legend: {
+//             position: 'right' // Mostrar leyenda a la derecha
+//           }
+//         }
+//       }
+//     });
+//   }
+
+
+
+//   ngOnDestroy(): void {
+//     // Asegúrate de desuscribirte cuando el componente se destruya
+//     if (this.visitantesSubscription) {
+//       this.visitantesSubscription.unsubscribe();
+//     }
+
+//     if (this.animalesSubscription) this.animalesSubscription.unsubscribe();
+//     if (this.plantasSubscription) this.plantasSubscription.unsubscribe();
+
+
+//     if (this.respuestasSubscription) {
+//       this.respuestasSubscription.unsubscribe();
+//     }
+//     if (this.pieChart) {
+//       this.pieChart.destroy();
+//     }
+
+
+//   }
+
+//   async cargarAreasMasVisitadas() {
+//     try {
+//       const start = performance.now(); // Para medir tiempo de carga
+//       this.areasMasVisitadas = await this._animalesService.getAreasMasVisitadas();
+//       const end = performance.now();
+//       console.log(`Áreas cargadas en ${end - start} ms`);
+//     } catch (error) {
+//       console.error('Error al cargar las áreas más visitadas:', error);
+//     }
+//   }
+
+
+
+
+// }
+
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AnimalesService, AnimalConValoraciones } from '../../../data-acces/animales.service';
 import { CommonModule } from '@angular/common';
@@ -6,22 +172,21 @@ import { Subscription } from 'rxjs';
 import { es } from 'date-fns/locale'; // Configuración regional en español
 import { RespuestasService } from '../../../data-acces/respuestas.service';
 import { BoletasService } from '../../../data-acces/boletas.service';
-import {PlantaService, PlantaConValoraciones} from '../../../data-acces/bioparque.service'
+import { PlantaService, PlantaConValoraciones } from '../../../data-acces/bioparque.service';
 import { RouterModule } from '@angular/router';
-import { Chart,ChartType } from 'chart.js/auto';
+import { Chart, ChartType } from 'chart.js/auto';
 
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './estadisticas.component.html',
   styleUrls: ['./estadisticas.component.scss']
 })
-
 export class EstadisticasComponent implements OnInit, OnDestroy {
 
   animales: AnimalConValoraciones[] = [];
-  plantas:PlantaConValoraciones[] = [];
+  plantas: PlantaConValoraciones[] = [];
   visitantesHoy: number = 0; // Inicializa en 0
   today!: string; // Variable para almacenar la fecha de hoy
   private visitantesSubscription!: Subscription;
@@ -35,12 +200,13 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   private respuestasSubscription!: Subscription;
   private animalesSubscription!: Subscription;
   private plantasSubscription!: Subscription;
+  private areasSubscription!: Subscription; // Nueva suscripción para las áreas
 
   areasMasVisitadas: { area: string, count: number }[] = [];
 
   constructor(
     private _animalesService: AnimalesService,
-    private _plantaService:PlantaService,
+    private _plantaService: PlantaService,
     private _boletasService: BoletasService,
     private respuestasService: RespuestasService
   ) {
@@ -64,7 +230,6 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
       error: (error) => console.error('Error al obtener plantas:', error)
     });
 
-
     this.visitantesSubscription = this._boletasService.obtenerVisitantesHoy().subscribe({
       next: (visitantes: number) => {
         this.visitantesHoy = visitantes;
@@ -86,43 +251,11 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
           this.promedioCorrectas = 0;  // Evitar dividir por 0 si no hay respuestas
         }
 
-        // Llama a la función para renderizar el gráfico después de recibir las respuestas
-        this.cargarGraficoPie();
+
       }
     });
 
-
-    this.cargarAreasMasVisitadas();
-
-
-  }
-
-  cargarGraficoPie(): void {
-    if (this.pieChart) {
-      this.pieChart.destroy(); // Destruir gráfico previo si existe
-    }
-
-    const ctx = document.getElementById('pieChart') as HTMLCanvasElement;
-
-    this.pieChart = new Chart(ctx, {
-      type: 'doughnut' as ChartType,
-      data: {
-        labels: ['Correctas', 'Incorrectas'],
-        datasets: [{
-          data: [this.respuestasCorrectas, this.respuestasIncorrectas],
-          backgroundColor: ['#4CAF50', '#F44336'], // Colores para correctas e incorrectas
-          hoverOffset: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'right' // Mostrar leyenda a la derecha
-          }
-        }
-      }
-    });
+    this.cargarAreasMasVisitadasEnTiempoReal();
   }
 
 
@@ -135,31 +268,21 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
     if (this.animalesSubscription) this.animalesSubscription.unsubscribe();
     if (this.plantasSubscription) this.plantasSubscription.unsubscribe();
+    if (this.respuestasSubscription) this.respuestasSubscription.unsubscribe();
+    if (this.areasSubscription) this.areasSubscription.unsubscribe();
 
-
-    if (this.respuestasSubscription) {
-      this.respuestasSubscription.unsubscribe();
-    }
     if (this.pieChart) {
       this.pieChart.destroy();
     }
-
-
   }
 
-  async cargarAreasMasVisitadas() {
-    try {
-      const start = performance.now(); // Para medir tiempo de carga
-      this.areasMasVisitadas = await this._animalesService.getAreasMasVisitadas();
-      const end = performance.now();
-      console.log(`Áreas cargadas en ${end - start} ms`);
-    } catch (error) {
-      console.error('Error al cargar las áreas más visitadas:', error);
-    }
+  cargarAreasMasVisitadasEnTiempoReal(): void {
+    this.areasSubscription = this._animalesService.getAreasMasVisitadasRealtime().subscribe({
+      next: (areas) => {
+        this.areasMasVisitadas = areas;
+      },
+      error: (error) => console.error('Error al cargar las áreas más visitadas en tiempo real:', error)
+    });
   }
-
-
-
-
 }
 
