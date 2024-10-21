@@ -57,6 +57,7 @@
           class="mt-4 px-4 py-2 w-full rounded-lg font-semibold text-white"
           [ngClass]="detalle.premioUsuario.estado ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'"
           [disabled]="!detalle.premioUsuario.estado"
+          (click)="canjearPremioUsuario(detalle.premioUsuario.id)"
         >
           {{ detalle.premioUsuario.estado ? 'Canjear' : 'Canjeado' }}
         </button>

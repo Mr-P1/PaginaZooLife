@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService, Usuario, PremioUsuario } from '../../../data-acces/usuarios.service';
-import { PremioTrivia } from '../../../data-acces/premios.service';
+import { PremioTrivia, PremiosService } from '../../../data-acces/premios.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -32,6 +32,7 @@ export class VerMasComponent implements OnInit {
     private usuarioService: UsuarioService,
     private _rutaActiva: ActivatedRoute,
     private boletasService: BoletasService,
+    private premiosService:PremiosService
   ) { }
 
   ngOnInit() {
@@ -88,6 +89,18 @@ export class VerMasComponent implements OnInit {
     });
   }
 
+  canjearPremioUsuario(premioUsuarioId: string) {
+    this.premiosService.canjearPremioUsuario(premioUsuarioId).then(() => {
+      console.log(`Premio con ID ${premioUsuarioId} canjeado exitosamente.`);
+      // Actualizar el estado en la vista
+      const premio = this.premiosDetallados.find(detalle => detalle.premioUsuario.id === premioUsuarioId);
+      if (premio) {
+        premio.premioUsuario.estado = false; // Cambiar a booleano
+      }
+    }).catch(error => {
+      console.error('Error al canjear el premio:', error);
+    });
+  }
 
 
 

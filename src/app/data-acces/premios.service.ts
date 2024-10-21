@@ -26,6 +26,13 @@ export interface PremioTrivia {
 
 }
 
+export interface PremioUsuario {
+  id: string;
+  codigo: string,
+  estado: string,
+  premioId: string,
+  usuarioId: string,
+}
 
 
 //Lo siguiente tiene para omitir el id porque recien lo vamos a crear
@@ -33,6 +40,7 @@ export type CrearPremioTrivia = Omit<PremioTrivia, 'id'>
 
 
 const PATH_PremiosTrivia = 'Premios_trivia'
+const PATH_PremiosUsuarios = 'PremiosUsuarios';
 
 
 @Injectable({
@@ -44,6 +52,8 @@ export class  PremiosService {
 
   private _firestore = inject(Firestore);
   private _rutaPremiosTrivia = collection(this._firestore, PATH_PremiosTrivia);
+  private _rutaPremiosUsuarios = collection(this._firestore, PATH_PremiosUsuarios);
+
   private _storage = inject(Storage); // Agrega Storage
 
 
@@ -192,6 +202,30 @@ export class  PremiosService {
   }
 
 
+    // Método para obtener los premios de un usuario
+    getPremiosPorUsuario(usuarioId: string): Observable<PremioUsuario[]> {
+      const premiosQuery = query(this._rutaPremiosUsuarios, where('usuarioId', '==', usuarioId));
+      return collectionData(premiosQuery, { idField: 'id' }) as Observable<PremioUsuario[]>;
+    }
 
+    // Método para obtener la información del premio de la colección PremioTrivia
+    getPremioTriviaById(premioId: string): Observable<PremioTrivia | null> {
+      const docRef = doc(this._rutaPremiosTrivia, premioId);
+      return from(getDoc(docRef)).pipe(
+        map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as PremioTrivia : null)
+      );
+    }
+
+
+
+
+    async canjearPremioUsuario(premioUsuarioId: string): Promise<void> {
+      try {
+        const premioDocRef = doc(this._firestore, `PremiosUsuarios/${premioUsuarioId}`);
+        await updateDoc(premioDocRef, { estado: false }); // Actualiza el estado a booleano
+      } catch (error) {
+        throw new Error('Error al canjear el premio: ' + error);
+      }
+    }
 
 }

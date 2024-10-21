@@ -3,6 +3,7 @@ import { UsuarioService, Usuario } from '../../../data-acces/usuarios.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import {OirsService} from '../../../data-acces/oirs.service'
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -23,10 +24,40 @@ export class ListarUsuariosComponent implements OnInit {
   // Pila para almacenar las referencias a los documentos de las páginas anteriores
   pageStack: { firstVisible: any, lastVisible: any }[] = [];
 
-  constructor(private usuarioService: UsuarioService) { }
+
+  // Contadores para los tipos de OIRS
+  cantidadConsulta: number = 0;
+  cantidadFelicitacion: number = 0;
+  cantidadReclamo: number = 0;
+  cantidadSugerencia: number = 0;
+
+  constructor(
+    private usuarioService: UsuarioService,
+    private oirsService:OirsService,
+  ) { }
 
   ngOnInit() {
     this.loadInitialPage();
+    this.loadOirsCounts();
+  }
+
+   // Método para cargar la cantidad de OIRS por tipo
+   loadOirsCounts() {
+    this.oirsService.getOirsConsulta().subscribe((oirs) => {
+      this.cantidadConsulta = oirs.length;
+    });
+
+    this.oirsService.getOirsFelicitacion().subscribe((oirs) => {
+      this.cantidadFelicitacion = oirs.length;
+    });
+
+    this.oirsService.getOirsReclamo().subscribe((oirs) => {
+      this.cantidadReclamo = oirs.length;
+    });
+
+    this.oirsService.getOirsSugerencia().subscribe((oirs) => {
+      this.cantidadSugerencia = oirs.length;
+    });
   }
 
   // Cargar la primera página de usuarios

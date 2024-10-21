@@ -21,7 +21,7 @@ export interface Usuario {
 export interface PremioUsuario {
   id: string;
   codigo: string,
-  estado: string,
+  estado: boolean,
   premioId: string,
   usuarioId: string,
 }

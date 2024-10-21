@@ -29,6 +29,10 @@ import { RespuestasTriviaComponent } from './Paginas/Estadistica/respuestas-triv
 import { AreasVisitadasComponent } from './Paginas/Estadistica/areas-visitadas/areas-visitadas.component';
 import { ChatComponent } from './Paginas/Usuarios/chat/chat.component';
 import { GenerarCodigoComponent } from './Paginas/generar-codigo/generar-codigo.component';
+import { OirsConsultaComponent } from './Paginas/Oirs/oirs-consulta/oirs-consulta.component';
+import { OirsFelicitacionComponent } from './Paginas/Oirs/oirs-felicitacion/oirs-felicitacion.component';
+import { OirsReclamoComponent } from './Paginas/Oirs/oirs-reclamo/oirs-reclamo.component';
+import { OirsSugerenciaComponent } from './Paginas/Oirs/oirs-sugerencia/oirs-sugerencia.component';
 
 export const routes: Routes = [
 
@@ -70,6 +74,10 @@ export const routes: Routes = [
       { path:'ver_mas/:IdUsuario',component:VerMasComponent},
       { path:'chat/:IdUsuario',component:ChatComponent},
       { path:'generar-codigo',component:GenerarCodigoComponent},
+      {path:'oirs-consulta',component:OirsConsultaComponent},
+      {path:'oirs-felicitacion',component:OirsFelicitacionComponent},
+      {path:'oirs-reclamo',component:OirsReclamoComponent},
+      {path:'oirs-sugerencia',component:OirsSugerenciaComponent},
 
 
 

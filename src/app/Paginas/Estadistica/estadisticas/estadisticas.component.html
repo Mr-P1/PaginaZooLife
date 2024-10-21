@@ -2,7 +2,10 @@
   <!--  cuadros arriba -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
     <!-- Primer cuadro -->
-    <div class=" bg-white rounded-lg p-6 shadow-lg border border-gray-200 hover:bg-orange-400 group cursor-pointer"   [routerLink]="['/app/uso_aplicacion'] ">
+    <div
+      class="bg-white rounded-lg p-6 shadow-lg border border-gray-200 hover:bg-orange-400 group cursor-pointer"
+      [routerLink]="['/app/uso_aplicacion']"
+    >
       <div class="flex flex-col space-y-4">
         <!-- Título y fecha -->
         <div>
@@ -21,13 +24,15 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- Fin Primer cuadro -->
 
     <!-- Segundo  cuadro -->
-    <div class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5  hover:bg-orange-400 group cursor-pointer" [routerLink]="['/app/areas-visitadas']">
+    <div
+      class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 hover:bg-orange-400 group cursor-pointer"
+      [routerLink]="['/app/areas-visitadas']"
+    >
       <div class="flex justify-between mb-4">
         <div>
           <div class="text-2xl font-semibold mb-4">Áreas más visitadas</div>
@@ -37,10 +42,13 @@
             <div class="text-lg">{{ area.area }} - {{ area.count }} visitas</div>
           </div> -->
 
-          <div *ngFor="let area of areasMasVisitadas" class="text-sm font-medium text-black group-hover:text-white">
+          <div
+            *ngFor="let area of areasMasVisitadas"
+            class="text-sm font-medium text-black group-hover:text-white"
+          >
             {{ area.area }}:
-             <span class="text-black font-bold">{{ area.count }} visitas</span>
-           </div>
+            <span class="text-black font-bold">{{ area.count }} visitas</span>
+          </div>
         </div>
       </div>
     </div>
@@ -49,39 +57,44 @@
     <!-- Tercer  cuadro -->
     <!-- Respuestas -->
     <div
-  class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 hover:bg-orange-400 group cursor-pointer"
-    [routerLink]="['/app/respuestas_trivia']"
->
-  <div class="flex justify-between mb-6">
-    <div>
-      <h3 class="text-xl font-bold text-gray-800">
-        Respuestas preguntas trivia
-        <span class="text-black font-bold">Total respuestas {{ respuestasTotales }}</span>
-      </h3>
+      class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 hover:bg-orange-400 group cursor-pointer"
+      [routerLink]="['/app/respuestas_trivia']"
+    >
+      <div class="flex justify-between mb-6">
+        <div>
+          <h3 class="text-xl font-bold text-gray-800">
+            Respuestas preguntas trivia
+            <span class="text-black font-bold"
+              >Total respuestas {{ respuestasTotales }}</span
+            >
+          </h3>
 
-      <!-- Gráfico de torta -->
+          <!-- Gráfico de torta -->
 
-      <!-- <div style="width: 220px; height: 220px;">
+          <!-- <div style="width: 220px; height: 220px;">
         <canvas id="pieChart"></canvas>
       </div> -->
-      <div class="text-sm font-medium text-gray-400 group-hover:text-white">
-       Respuestas correctas:
-        <span class="text-green-600 font-bold">{{ respuestasCorrectas }}</span>
-      </div>
-      <div class="text-sm font-medium text-gray-400 group-hover:text-white">
-       Respuestas incorrectas:
-        <span class="text-red-600 font-bold">{{ respuestasIncorrectas  }}</span>
-      </div>
-      <div class="text-sm font-medium text-gray-400 group-hover:text-white">
-        Promedio respuestas correctas:
-        <span class="text-blue-600 font-bold">{{ promedioCorrectas | number: '1.0-2' }}%</span>
+          <div class="text-sm font-medium text-gray-400 group-hover:text-white">
+            Respuestas correctas:
+            <span class="text-green-600 font-bold">{{
+              respuestasCorrectas
+            }}</span>
+          </div>
+          <div class="text-sm font-medium text-gray-400 group-hover:text-white">
+            Respuestas incorrectas:
+            <span class="text-red-600 font-bold">{{
+              respuestasIncorrectas
+            }}</span>
+          </div>
+          <div class="text-sm font-medium text-gray-400 group-hover:text-white">
+            Promedio respuestas correctas:
+            <span class="text-blue-600 font-bold"
+              >{{ promedioCorrectas | number : "1.0-2" }}%</span
+            >
+          </div>
+        </div>
       </div>
     </div>
-
-  </div>
-
-</div>
-
   </div>
   <!-- Fin cuadros arriba -->
 
@@ -316,12 +329,5 @@
         </table>
       </div>
     </div>
-
-
-
-
   </div>
-
-
-
 </div>
