@@ -69,13 +69,6 @@ export class OirsService {
   private _rutaOirs = collection(this._firestore, PATH_Oirs);
   private _rutaUsuario = collection(this._firestore, PATH_Usuarios);
 
-// Método para obtener un usuario por su auth_id
-getUsuarioPorAuthId(authId: string): Observable<Usuario | undefined> {
-  const usuarioQuery = query(this._rutaUsuario, where('auth_id', '==', authId));
-  return collectionData<Usuario>(usuarioQuery, { idField: 'id' }).pipe(
-    map((usuarios: Usuario[]) => usuarios.length > 0 ? usuarios[0] : undefined)
-  );
-}
 
 
   // Método para obtener las OIRS de tipo 'Consulta'
@@ -101,6 +94,8 @@ getUsuarioPorAuthId(authId: string): Observable<Usuario | undefined> {
     const sugerenciaQuery = query(this._rutaOirs, where('tipoSolicitud', '==', 'sugerencia'));
     return collectionData(sugerenciaQuery, { idField: 'id' }) as Observable<Oirs[]>;
   }
+
+
 
 
 }

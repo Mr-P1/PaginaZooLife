@@ -340,54 +340,6 @@ export class AnimalesService {
   }
 
 
-  //Eliminar animal Antiguo
-
-  // async eliminarAnimal(id: string): Promise<void> {
-  //   // Obtener el documento del animal
-  //   const animalDoc = doc(this._rutaAnimal, id);
-  //   const animalSnapshot = await getDoc(animalDoc);
-
-  //   if (animalSnapshot.exists()) {
-  //     const animalData = animalSnapshot.data() as Animal;
-
-  //     // Eliminar imagen de Firebase Storage si existe
-  //     if (animalData.imagen) {
-  //       const imageRef = ref(this._storage, animalData.imagen);
-  //       await deleteObject(imageRef).catch(() => {
-  //         console.warn(`No se pudo eliminar la imagen: ${animalData.imagen}`);
-  //       });
-  //     }
-
-  //     // Eliminar video de Firebase Storage si existe
-  //     if (animalData.video) {
-  //       const videoRef = ref(this._storage, animalData.video);
-  //       await deleteObject(videoRef).catch(() => {
-  //         console.warn(`No se pudo eliminar el video: ${animalData.video}`);
-  //       });
-  //     }
-
-  //     // Eliminar audio de Firebase Storage si existe
-  //     if (animalData.audio) {
-  //       const audioRef = ref(this._storage, animalData.audio);
-  //       await deleteObject(audioRef).catch(() => {
-  //         console.warn(`No se pudo eliminar el audio: ${animalData.audio}`);
-  //       });
-  //     }
-
-  //      // Eliminar audio animal de Firebase Storage si existe
-  //      if (animalData.audioAnimal) {
-  //       const audioRef = ref(this._storage, animalData.audioAnimal);
-  //       await deleteObject(audioRef).catch(() => {
-  //         console.warn(`No se pudo eliminar el audio: ${animalData.audioAnimal}`);
-  //       });
-  //     }
-
-  //     // Finalmente, eliminar el documento del animal en Firestore
-  //     await deleteDoc(animalDoc);
-  //   } else {
-  //     throw new Error('Animal no encontrado');
-  //   }
-  // }
 
 
   async eliminarAnimal(id: string): Promise<void> {

@@ -1,7 +1,36 @@
 <div class="container mx-auto p-4 bg-orange-400">
   <h2 class="text-2xl font-bold text-center mb-6 text-white">
-    Oirs Felicitacion
+    OIRS Felicitaciones
   </h2>
 
+  <!-- Listado de OIRS de Felicitación -->
+  <div *ngIf="oirsFelicitaciones.length > 0; else noOirs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div *ngFor="let oir of oirsFelicitaciones" class="bg-white shadow-lg rounded-lg p-4">
+      <h3 class="text-lg font-semibold mb-2">Felicitación</h3>
+      <p><strong>Región:</strong> {{ oir.region }}</p>
+      <p><strong>Comuna:</strong> {{ oir.comuna }}</p>
+      <p><strong>Detalles:</strong> {{ oir.detalles }}</p>
+      <p><strong>Fecha de Envío:</strong> {{ oir.fechaEnvio.toDate() | date: 'dd/MM/yyyy' }}</p>
+      <p><strong>Afectado:</strong> {{ oir.esAfectado ? 'Sí' : 'No' }}</p>
+      <p *ngIf="oir.archivoEvidencia">
+        <a [href]="oir.archivoEvidencia" target="_blank" class="text-blue-500 underline">
+          Ver evidencia
+        </a>
+      </p>
+      <div class="mt-4 text-center">
+        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+        [routerLink]="['/app/responder-oir', oir.id]">
+          Responder
+        </button>
+      </div>
+    </div>
+  </div>
 
+  <!-- Mensaje cuando no hay OIRS -->
 </div>
+
+<ng-template #noOirs>
+  <div class="text-center text-white">
+    <p>No hay felicitaciones disponibles en este momento.</p>
+  </div>
+</ng-template>
