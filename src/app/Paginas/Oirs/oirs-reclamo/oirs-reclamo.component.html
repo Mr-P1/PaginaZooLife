@@ -1,7 +1,35 @@
 <div class="container mx-auto p-4 bg-orange-400">
   <h2 class="text-2xl font-bold text-center mb-6 text-white">
-    Oirs Reclamo
+    OIRS Reclamos
   </h2>
 
+  <!-- Listado de OIRS de Reclamo -->
+  <div *ngIf="oirsReclamos.length > 0; else noOirs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div *ngFor="let oir of oirsReclamos" class="bg-white shadow-lg rounded-lg p-4">
+      <h3 class="text-lg font-semibold mb-2">Reclamo</h3>
+      <p><strong>Región:</strong> {{ oir.region }}</p>
+      <p><strong>Comuna:</strong> {{ oir.comuna }}</p>
+      <p><strong>Detalles:</strong> {{ oir.detalles }}</p>
+      <p><strong>Fecha de Envío:</strong> {{ oir.fechaEnvio.toDate() | date: 'dd/MM/yyyy' }}</p>
+      <p><strong>Afectado:</strong> {{ oir.esAfectado ? 'Sí' : 'No' }}</p>
+      <p *ngIf="oir.archivoEvidencia">
+        <a [href]="oir.archivoEvidencia" target="_blank" class="text-blue-500 underline">
+          Ver evidencia
+        </a>
+      </p>
+      <div class="mt-4 text-center">
+        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+        [routerLink]="['/app/responder-oir', oir.id]">
+          Responder
+        </button>
+      </div>
+    </div>
+  </div>
 
+  <!-- Mensaje cuando no hay OIRS -->
+  <ng-template #noOirs>
+    <div class="text-center text-white">
+      <p>No hay reclamos disponibles en este momento.</p>
+    </div>
+  </ng-template>
 </div>

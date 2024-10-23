@@ -4,13 +4,15 @@ import {
   Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query,
   where, deleteDoc, getDocs, orderBy, limit, startAfter, DocumentData,
   startAt, setDoc,
-  onSnapshot
+  onSnapshot,
+  writeBatch
 } from '@angular/fire/firestore';
 
 import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angular/fire/storage';
 import { catchError, Observable, tap, throwError, from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
+
 
 export interface Animal {
   id: string;
@@ -29,7 +31,7 @@ export interface Animal {
   zona: string,
   dieta: string,
   comportamiento: string,
-  area:string,
+  area: string,
   estado_conservacion: string,
   clase: string,
   posicion_mapa: number,
@@ -38,7 +40,7 @@ export interface Animal {
   imagen: string,
   video?: string;
   audio?: string;
-  audioAnimal?:string,
+  audioAnimal?: string,
 }
 
 
@@ -71,7 +73,8 @@ export type CambiarMapa = Omit<Mapa, 'id'>
 const PATH_Animal = 'Animales';
 const PATH_Mapa = 'Mapa';
 const PATH_Reacciones = 'Reacciones';
-const PATH_Animalesvistos = "AnimalesVistos"
+const PATH_Animalesvistos = "AnimalesVistos";
+const PATH_Preguntas = "Preguntas";
 
 
 
@@ -87,6 +90,7 @@ export class AnimalesService {
 
   private _rutaMapa = collection(this._firestore, PATH_Mapa);
   private _rutaReacciones = collection(this._firestore, PATH_Reacciones);
+  private _rutaPreguntas = collection(this._firestore, PATH_Preguntas);
   public _rutaAnimalesVistos = collection(this._firestore, PATH_Animalesvistos);
   private boletasUsadasRef = collection(this._firestore, 'Boletas_usadas');
 
@@ -247,8 +251,8 @@ export class AnimalesService {
     return getDownloadURL(snapshot.ref);
   }
 
-   // Subir audio a Cloud Storage
-   async uploadAudioAnimal(file: File): Promise<string> {
+  // Subir audio a Cloud Storage
+  async uploadAudioAnimal(file: File): Promise<string> {
     const filePath = `animales/audiosAnimal/${file.name}`;
     const storageRef = ref(this._storage, filePath);
     const snapshot = await uploadBytes(storageRef, file);
@@ -256,7 +260,7 @@ export class AnimalesService {
   }
 
 
-  async createAnimal(animal: CrearAnimal, imagenFile: File, videoFile?: File, audioFile?: File,audioAnimalFile?:File) {
+  async createAnimal(animal: CrearAnimal, imagenFile: File, videoFile?: File, audioFile?: File, audioAnimalFile?: File) {
     // Sube la imagen, video y audio
     const imageUrl = await this.uploadImage(imagenFile);
     const videoUrl = videoFile ? await this.uploadVideo(videoFile) : '';
@@ -268,12 +272,12 @@ export class AnimalesService {
       imagen: imageUrl,
       video: videoUrl,
       audio: audioUrl,
-      audioAnimal:audioAnimalUrl,
+      audioAnimal: audioAnimalUrl,
     };
     return addDoc(this._rutaAnimal, animalData);
   }
 
-  async editarAnimal(id: string, animal: CrearAnimal, imagenFile?: File, videoFile?: File, audioFile?: File,audioAnimalFile?:File) {
+  async editarAnimal(id: string, animal: CrearAnimal, imagenFile?: File, videoFile?: File, audioFile?: File, audioAnimalFile?: File) {
     // Obtener la referencia del documento para acceder a los archivos antiguos
     const document = doc(this._rutaAnimal, id);
     const docSnapshot = await getDoc(document);
@@ -325,7 +329,7 @@ export class AnimalesService {
         imagen: imageUrl,
         video: videoUrl,
         audio: audioUrl,
-        audioAnimal:audioAnimalUrl,
+        audioAnimal: audioAnimalUrl,
       };
 
       // Actualizar el documento en Firestore
@@ -370,13 +374,40 @@ export class AnimalesService {
         });
       }
 
-       // Eliminar audio animal de Firebase Storage si existe
-       if (animalData.audioAnimal) {
+      // Eliminar audio animal de Firebase Storage si existe
+      if (animalData.audioAnimal) {
         const audioRef = ref(this._storage, animalData.audioAnimal);
         await deleteObject(audioRef).catch(() => {
           console.warn(`No se pudo eliminar el audio: ${animalData.audioAnimal}`);
         });
       }
+
+      // Crear un batch para eliminar las asociaciones
+      const batch = writeBatch(this._firestore);
+
+      // Eliminar todas las reacciones asociadas al animal
+      const reaccionesQuery = query(this._rutaReacciones, where('animalId', '==', id));
+      const reaccionesSnapshot = await getDocs(reaccionesQuery);
+      reaccionesSnapshot.forEach((reaccionDoc) => {
+        batch.delete(reaccionDoc.ref);
+      });
+
+      // Eliminar todas las preguntas asociadas al animal
+      const preguntasQuery = query(this._rutaPreguntas, where('animal_id', '==', id));
+      const preguntasSnapshot = await getDocs(preguntasQuery);
+      preguntasSnapshot.forEach((preguntaDoc) => {
+        batch.delete(preguntaDoc.ref);
+      });
+
+      // Eliminar todas las entradas en AnimalesVistos asociadas al animal
+      const animalesVistosQuery = query(this._rutaAnimalesVistos, where('animalId', '==', id));
+      const animalesVistosSnapshot = await getDocs(animalesVistosQuery);
+      animalesVistosSnapshot.forEach((animalVistoDoc) => {
+        batch.delete(animalVistoDoc.ref);
+      });
+
+      // Ejecutar el batch para eliminar reacciones, preguntas y animales vistos
+      await batch.commit();
 
       // Finalmente, eliminar el documento del animal en Firestore
       await deleteDoc(animalDoc);
@@ -384,6 +415,7 @@ export class AnimalesService {
       throw new Error('Animal no encontrado');
     }
   }
+
 
 
   async buscarAnimales(term: string): Promise<Animal[]> {
@@ -416,6 +448,37 @@ export class AnimalesService {
 
 
 
+  // async getAreasMasVisitadas(): Promise<{ area: string, count: number }[]> {
+  //   // Predefinir las áreas existentes
+  //   const areasDisponibles = ['Selva Tropical', 'Sabana Africana', 'Acuario', 'Montañas'];
+  //   const conteoPorArea: { [area: string]: number } = {};
+
+  //   // Inicializar todas las áreas en 0
+  //   areasDisponibles.forEach(area => (conteoPorArea[area] = 0));
+
+  //   // Obtener las visitas de animales y acumular por área
+  //   const animalesVistosSnapshot = await getDocs(this._rutaAnimalesVistos);
+
+  //   for (const vistoDoc of animalesVistosSnapshot.docs) {
+  //     const animalVisto = vistoDoc.data() as { animalId: string };
+  //     const animalRef = doc(this._firestore, `Animales/${animalVisto.animalId}`);
+  //     const animalSnapshot = await getDoc(animalRef);
+
+  //     if (animalSnapshot.exists()) {
+  //       const animalData = animalSnapshot.data() as { area: string };
+  //       const area = animalData.area;
+  //       if (conteoPorArea[area] !== undefined) {
+  //         conteoPorArea[area]++;
+  //       }
+  //     }
+  //   }
+
+  //   // Convertir el objeto en un array y ordenarlo por visitas
+  //   return Object.entries(conteoPorArea)
+  //     .map(([area, count]) => ({ area, count }))
+  //     .sort((a, b) => b.count - a.count);
+  // }
+
   async getAreasMasVisitadas(): Promise<{ area: string, count: number }[]> {
     // Predefinir las áreas existentes
     const areasDisponibles = ['Selva Tropical', 'Sabana Africana', 'Acuario', 'Montañas'];
@@ -424,28 +487,104 @@ export class AnimalesService {
     // Inicializar todas las áreas en 0
     areasDisponibles.forEach(area => (conteoPorArea[area] = 0));
 
-    // Obtener las visitas de animales y acumular por área
+    // Obtener las visitas de animales
     const animalesVistosSnapshot = await getDocs(this._rutaAnimalesVistos);
 
-    for (const vistoDoc of animalesVistosSnapshot.docs) {
+    // Contar cuántas veces aparece cada animalId en AnimalesVistos
+    const conteoPorAnimalId: { [key: string]: number } = {};
+    animalesVistosSnapshot.docs.forEach((vistoDoc) => {
       const animalVisto = vistoDoc.data() as { animalId: string };
-      const animalRef = doc(this._firestore, `Animales/${animalVisto.animalId}`);
-      const animalSnapshot = await getDoc(animalRef);
+      conteoPorAnimalId[animalVisto.animalId] = (conteoPorAnimalId[animalVisto.animalId] || 0) + 1;
+    });
 
+    // Obtener solo los datos de los animales únicos
+    const animalIdsUnicos = Object.keys(conteoPorAnimalId);
+    const promesas = animalIdsUnicos.map(animalId => {
+      const animalRef = doc(this._firestore, `Animales/${animalId}`);
+      return getDoc(animalRef);
+    });
+
+    // Esperar a que se resuelvan todas las promesas
+    const resultados = await Promise.all(promesas);
+
+    // Procesar cada documento de animal
+    resultados.forEach((animalSnapshot) => {
       if (animalSnapshot.exists()) {
         const animalData = animalSnapshot.data() as { area: string };
         const area = animalData.area;
+
+        // Sumar las visitas para el área correspondiente
         if (conteoPorArea[area] !== undefined) {
-          conteoPorArea[area]++;
+          conteoPorArea[area] += conteoPorAnimalId[animalSnapshot.id];
         }
       }
-    }
+    });
 
     // Convertir el objeto en un array y ordenarlo por visitas
     return Object.entries(conteoPorArea)
       .map(([area, count]) => ({ area, count }))
       .sort((a, b) => b.count - a.count);
   }
+
+
+
+  getAreasMasVisitadasRealtime(): Observable<{ area: string, count: number }[]> {
+    return new Observable((observer) => {
+        // Obtener el snapshot en tiempo real de `AnimalesVistos`
+        const unsubscribe = onSnapshot(this._rutaAnimalesVistos, (animalesVistosSnapshot) => {
+            const conteoPorArea: { [area: string]: number } = {
+                'Selva Tropical': 0,
+                'Sabana Africana': 0,
+                'Acuario': 0,
+                'Montañas': 0,
+            };
+
+            const conteoPorAnimalId: { [key: string]: number } = {};
+
+            // Contar cuántas veces aparece cada animalId en AnimalesVistos
+            animalesVistosSnapshot.docs.forEach((vistoDoc) => {
+                const animalVisto = vistoDoc.data() as { animalId: string };
+                conteoPorAnimalId[animalVisto.animalId] = (conteoPorAnimalId[animalVisto.animalId] || 0) + 1;
+            });
+
+            // Obtener solo los datos de los animales únicos
+            const animalIdsUnicos = Object.keys(conteoPorAnimalId);
+            const promesas = animalIdsUnicos.map(animalId => {
+                const animalRef = doc(this._firestore, `Animales/${animalId}`);
+                return getDoc(animalRef);
+            });
+
+            // Esperar a que se resuelvan todas las promesas
+            Promise.all(promesas).then((resultados) => {
+                // Procesar cada documento de animal
+                resultados.forEach((animalSnapshot) => {
+                    if (animalSnapshot.exists()) {
+                        const animalData = animalSnapshot.data() as { area: string };
+                        const area = animalData.area;
+
+                        // Sumar las visitas para el área correspondiente
+                        if (conteoPorArea[area] !== undefined) {
+                            conteoPorArea[area] += conteoPorAnimalId[animalSnapshot.id];
+                        }
+                    }
+                });
+
+                // Convertir el objeto en un array y ordenarlo por visitas
+                const resultado = Object.entries(conteoPorArea)
+                    .map(([area, count]) => ({ area, count }))
+                    .sort((a, b) => b.count - a.count);
+
+                observer.next(resultado);
+            }).catch((error) => {
+                observer.error(error);
+            });
+        });
+
+        // Devolver función para cancelar la suscripción
+        return () => unsubscribe();
+    });
+}
+
 
 
 

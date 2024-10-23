@@ -30,28 +30,25 @@
 
     <!-- Segundo  cuadro -->
     <div
-      class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 hover:bg-orange-400 group cursor-pointer"
-      [routerLink]="['/app/areas-visitadas']"
-    >
-      <div class="flex justify-between mb-4">
-        <div>
-          <div class="text-2xl font-semibold mb-4">Áreas más visitadas</div>
-          <div class="text-sm font-medium text-gray-400 mb-4">Áreas</div>
+    class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5 hover:bg-orange-400 group cursor-pointer"
+    [routerLink]="['/app/areas-visitadas']"
+  >
+    <div class="flex justify-between mb-4">
+      <div>
+        <div class="text-2xl font-semibold mb-4">Áreas más visitadas</div>
+        <div class="text-sm font-medium text-gray-400 mb-4">Áreas</div>
 
-          <!-- <div *ngFor="let area of areasMasVisitadas">
-            <div class="text-lg">{{ area.area }} - {{ area.count }} visitas</div>
-          </div> -->
-
-          <div
-            *ngFor="let area of areasMasVisitadas"
-            class="text-sm font-medium text-black group-hover:text-white"
-          >
-            {{ area.area }}:
-            <span class="text-black font-bold">{{ area.count }} visitas</span>
-          </div>
+        <div
+          *ngFor="let area of areasMasVisitadas"
+          class="text-sm font-medium text-black group-hover:text-white"
+        >
+          {{ area.area }}:
+          <span class="font-bold group-hover:text-white">{{ area.count }} visitas</span>
         </div>
       </div>
     </div>
+  </div>
+
     <!--Fin Segundo  cuadro -->
 
     <!-- Tercer  cuadro -->

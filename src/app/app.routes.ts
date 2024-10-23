@@ -33,6 +33,7 @@ import { OirsConsultaComponent } from './Paginas/Oirs/oirs-consulta/oirs-consult
 import { OirsFelicitacionComponent } from './Paginas/Oirs/oirs-felicitacion/oirs-felicitacion.component';
 import { OirsReclamoComponent } from './Paginas/Oirs/oirs-reclamo/oirs-reclamo.component';
 import { OirsSugerenciaComponent } from './Paginas/Oirs/oirs-sugerencia/oirs-sugerencia.component';
+import { ResponderOirsComponent } from './Paginas/Oirs/responder-oirs/responder-oirs.component';
 
 export const routes: Routes = [
 
@@ -78,6 +79,7 @@ export const routes: Routes = [
       {path:'oirs-felicitacion',component:OirsFelicitacionComponent},
       {path:'oirs-reclamo',component:OirsReclamoComponent},
       {path:'oirs-sugerencia',component:OirsSugerenciaComponent},
+      {path:'responder-oir/:id',component:ResponderOirsComponent}
 
 
 

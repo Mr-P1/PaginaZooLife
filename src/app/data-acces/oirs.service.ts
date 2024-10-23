@@ -18,18 +18,28 @@ import { Timestamp } from '@angular/fire/firestore';
 
 
 export interface Oirs {
-  id:string
-  archivoEvidencia?:string,
-  comuna:string,
-  region:string,
-  detalles:number,
-  fechaEnvio: Timestamp ,
-  tipoSolicitud:string,
-  esAfectado:boolean,
-  userId:string
+  id: string
+  archivoEvidencia?: string,
+  comuna: string,
+  region: string,
+  detalles: number,
+  fechaEnvio: Timestamp,
+  tipoSolicitud: string,
+  esAfectado: boolean,
+  userId: string
 
 }
 
+export interface Usuario {
+  id: string;
+  nombre: string;
+  correo: string;
+  telefono: string;
+  nivel: number;
+  puntos: number;
+  patente: string;
+  auth_id: string;
+}
 
 
 export interface RespuestaOirs {
@@ -44,6 +54,7 @@ export type CrearRespuestaOirs = Omit<RespuestaOirs, 'id'>
 
 
 const PATH_Oirs = 'Oirs'
+const PATH_Usuarios = 'Usuarios'
 
 
 
@@ -56,6 +67,8 @@ export class OirsService {
 
   private _firestore = inject(Firestore);
   private _rutaOirs = collection(this._firestore, PATH_Oirs);
+  private _rutaUsuario = collection(this._firestore, PATH_Usuarios);
+
 
 
   // Método para obtener las OIRS de tipo 'Consulta'
@@ -81,6 +94,8 @@ export class OirsService {
     const sugerenciaQuery = query(this._rutaOirs, where('tipoSolicitud', '==', 'sugerencia'));
     return collectionData(sugerenciaQuery, { idField: 'id' }) as Observable<Oirs[]>;
   }
+
+
 
 
 }
