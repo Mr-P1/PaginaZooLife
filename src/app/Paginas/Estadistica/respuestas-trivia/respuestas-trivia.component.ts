@@ -32,9 +32,13 @@ export class RespuestasTriviaComponent {
   respuestasNinoCorrectas: number = 0;
   respuestasNinoIncorrectas: number = 0;
 
-  respuestasMasculino: number = 0;
-  respuestasFemenino: number = 0;
-  respuestasSinDefinir: number = 0;
+  respuestasdividido:number = 0;
+  promedioCorrectas2: number = 0;
+  promedioIncorrectas: number = 0;
+
+  // respuestasMasculino: number = 0;
+  // respuestasFemenino: number = 0;
+  // respuestasSinDefinir: number = 0;
 
   constructor(private respuestasService: RespuestasService) {}
 
@@ -45,7 +49,7 @@ export class RespuestasTriviaComponent {
 
     this.cargarGraficoPorTipoYResultado();
 
-    this.cargarGraficoPorGenero();
+    // this.cargarGraficoPorGenero();
 
     this.respuestasSubscription = this.respuestasService.getRespuestasTrivia().subscribe({
       next: (respuestas) => {
@@ -55,6 +59,8 @@ export class RespuestasTriviaComponent {
 
         if (this.respuestasTotales > 0) {
           this.promedioCorrectas = (this.respuestasCorrectas / this.respuestasTotales) * 100;
+          this.promedioIncorrectas = (this.respuestasIncorrectas / this.respuestasTotales) * 100;
+          this.respuestasdividido = this.respuestasTotales / 10
         } else {
           this.promedioCorrectas = 0;  // Evitar dividir por 0 si no hay respuestas
         }
@@ -212,20 +218,20 @@ export class RespuestasTriviaComponent {
   }
 
 
-  cargarGraficoPorGenero() {
-    this.respuestasService.getRespuestasPorGenero().subscribe(({ masculino, femenino, sinDefinir }) => {
-      // Asignar los valores recibidos a las variables
-      this.respuestasMasculino = masculino;
-      this.respuestasFemenino = femenino;
-      this.respuestasSinDefinir = sinDefinir;
+  // cargarGraficoPorGenero() {
+  //   this.respuestasService.getRespuestasPorGenero().subscribe(({ masculino, femenino, sinDefinir }) => {
+  //     // Asignar los valores recibidos a las variables
+  //     this.respuestasMasculino = masculino;
+  //     this.respuestasFemenino = femenino;
+  //     this.respuestasSinDefinir = sinDefinir;
 
-      // Llamar al método para generar el gráfico
-      this.generarGraficoGenero('graficoGenero', 'doughnut',
-        ['Masculino', 'Femenino', 'Sin definir'],
-        [masculino, femenino, sinDefinir]
-      );
-    });
-  }
+  //     // Llamar al método para generar el gráfico
+  //     this.generarGraficoGenero('graficoGenero', 'doughnut',
+  //       ['Masculino', 'Femenino', 'Sin definir'],
+  //       [masculino, femenino, sinDefinir]
+  //     );
+  //   });
+  // }
 
   private generarGraficoGenero(id: string, tipo: ChartType, labels: string[], data: number[]) {
     const ctx = document.getElementById(id) as HTMLCanvasElement;
