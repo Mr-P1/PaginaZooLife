@@ -1,66 +1,104 @@
-import { Component, SecurityContext } from '@angular/core';
-import { QRCodeModule } from 'angularx-qrcode';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { BoletasService } from '../,,/../../data-acces/boletas.service'; // Importa tu servicio de Boletas
+import { Component, ElementRef, ViewChild, SecurityContext } from '@angular/core';
+import { QRCodeModule } from 'angularx-qrcode';
+import { BoletasService } from '../../data-acces/boletas.service';
 import { Timestamp } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
-
+import { CorreoService } from '../../data-acces/correo.service';
 
 @Component({
   selector: 'app-generar-codigo',
   standalone: true,
-  imports: [QRCodeModule,CommonModule],
+  imports: [QRCodeModule, CommonModule],
   templateUrl: './generar-codigo.component.html',
-  styleUrl: './generar-codigo.component.scss'
+  styleUrls: ['./generar-codigo.component.scss']
 })
 export class GenerarCodigoComponent {
   public qrData!: string;
   public boletaId!: string;
+  public qrGenerado: boolean = false;
+  public qrCodeBase64: string = ''; // Base64 del QR
   public qrCodeDownloadLink: SafeUrl = '';
-  public qrGenerado: boolean = false; // Indica si el QR ha sido generado
 
-  constructor(private sanitizer: DomSanitizer, private boletasService: BoletasService) {}
+  @ViewChild('qrcode', { static: false }) qrcodeElement!: ElementRef;
+
+  constructor(
+    private boletasService: BoletasService,
+    private correoService: CorreoService,
+    private sanitizer: DomSanitizer
+  ) { }
 
   generarIdBoleta(): string {
     return Math.random().toString(36).substring(2, 15);
   }
 
   generarQr(): void {
-    // Genera un nuevo ID de boleta
     this.boletaId = this.generarIdBoleta();
-    this.qrData =this.boletaId;
-    this.qrGenerado = true; // Marcar que el QR ha sido generado
+    this.qrData = this.boletaId;
+    this.qrGenerado = true;
 
-    // Crear la boleta y guardarla en Firebase
     const nuevaBoleta = {
       id: this.boletaId,
-      tipo: 'general', // Aquí puedes poner el tipo que corresponda
+      tipo: 'general',
       fecha: Timestamp.fromDate(new Date())
     };
 
     this.boletasService.guardarBoleta(nuevaBoleta).then(() => {
       console.log('Boleta guardada en Firebase');
+
+      // Convertir el QR a base64 cuando el QR esté disponible
+      this.convertirQrABase64();
+
     }).catch(error => {
       console.error('Error al guardar la boleta en Firebase:', error);
     });
   }
 
-  onChangeURL(url: SafeUrl): void {
-    // Captura el URL generado y lo almacena para descarga
-    this.qrCodeDownloadLink = this.sanitizer.sanitize(SecurityContext.URL, url) || '';
+  convertirQrABase64(): void {
+    const canvas = this.qrcodeElement.nativeElement.querySelector('canvas');
+    if (canvas) {
+      this.qrCodeBase64 = canvas.toDataURL('image/png').split(',')[1]; // Convertir a base64 y eliminar el encabezado
+      this.qrCodeDownloadLink = this.sanitizer.sanitize(SecurityContext.URL, canvas.toDataURL('image/png')) || '';
+    }
   }
 
-  descargarQr(): void {
-    // Lógica para descargar el QR
-    const link = document.createElement('a');
-    link.href = this.qrCodeDownloadLink as string;
-    link.download = `qr-code-${this.boletaId}.png`;
-    link.click();
+sendEmail(): void {
+  if (!this.qrCodeBase64) {
+    console.error("El código QR no está listo en formato base64");
+    return;
   }
 
-  enviarCorreo(): void {
-    alert(`Enviando correo con el QR asociado a la boleta ID: ${this.boletaId}...`);
-    // Implementa la lógica para enviar el correo usando un servicio backend
-  }
+  const formContent = `
+    <p>¡Hola! Aquí tienes el código QR asociado a tu boleta:</p>
+    <p>Puedes usar este código QR directamente para tus propósitos.</p>
+
+
+    <p>Qr en formato base64</p>
+    <p>${this.qrCodeBase64}</p>
+
+    <p>-------------------------</p>
+  `;
+
+  const destinatario = "salvojose84@gmail.com";
+
+  const emailData = {
+    formContent,
+    destinatario,
+    attachment: this.qrCodeBase64 // Base64 del QR como adjunto
+  };
+
+  this.correoService.sendEmailWithAttachment(emailData).subscribe(
+    (response) => {
+      console.log('Correo enviado con éxito:', response);
+      alert('Correo enviado con éxito');
+    },
+    (error) => {
+      console.error('Error al enviar el correo:', error);
+    }
+  );
+}
+
+
+
 
 }

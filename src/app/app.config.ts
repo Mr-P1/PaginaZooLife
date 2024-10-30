@@ -7,19 +7,11 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAnalytics } from "firebase/analytics";
 import { getStorage, provideStorage } from '@angular/fire/storage'; // Importa Storage
-
+import { provideHttpClient } from '@angular/common/http'; // Importa provideHttpClient
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideFirebaseApp(() =>
     initializeApp({
-      // apiKey: "AIzaSyDUwNvKnwaLgggujx0VWZVkG7IzaBqvWVY",
-      // authDomain: "zoo-life-7127b.firebaseapp.com",
-      // databaseURL: "https://zoo-life-7127b-default-rtdb.firebaseio.com",
-      // projectId: "zoo-life-7127b",
-      // storageBucket: "zoo-life-7127b.appspot.com",
-      // messagingSenderId: "962324795350",
-      // appId: "1:962324795350:web:a91379d1565710859e9e77",
-      // measurementId: "G-7ES232S4CN",
       apiKey: "AIzaSyCgSN2tQRpaPP-E11zqyJ7FHEsjqsqjE1o",
       authDomain: "appzoolife.firebaseapp.com",
       projectId: "appzoolife",
@@ -30,5 +22,7 @@ export const appConfig: ApplicationConfig = {
     })),
       provideAuth(() => getAuth()),
       provideFirestore(() => getFirestore()),
-      provideStorage(() => getStorage())]
+      provideStorage(() => getStorage()),
+    provideHttpClient()]
+
 };
