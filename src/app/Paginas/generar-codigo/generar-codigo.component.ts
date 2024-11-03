@@ -1,32 +1,47 @@
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { Component, ElementRef, ViewChild, SecurityContext } from '@angular/core';
+import { Component, ElementRef, ViewChild, SecurityContext, OnInit } from '@angular/core';
 import { QRCodeModule } from 'angularx-qrcode';
-import { BoletasService } from '../../data-acces/boletas.service';
+import { BoletasService,Usuario } from '../../data-acces/boletas.service';
 import { Timestamp } from '@angular/fire/firestore';
 import { CommonModule } from '@angular/common';
 import { CorreoService } from '../../data-acces/correo.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-generar-codigo',
   standalone: true,
-  imports: [QRCodeModule, CommonModule],
+  imports: [QRCodeModule, CommonModule,FormsModule],
   templateUrl: './generar-codigo.component.html',
   styleUrls: ['./generar-codigo.component.scss']
 })
-export class GenerarCodigoComponent {
+export class GenerarCodigoComponent implements OnInit{
+  public usuarios: Usuario[] = [];
+
   public qrData!: string;
   public boletaId!: string;
   public qrGenerado: boolean = false;
-  public qrCodeBase64: string = ''; // Base64 del QR
   public qrCodeDownloadLink: SafeUrl = '';
 
   @ViewChild('qrcode', { static: false }) qrcodeElement!: ElementRef;
+  public correoSeleccionado: string = '';
+
 
   constructor(
     private boletasService: BoletasService,
     private correoService: CorreoService,
     private sanitizer: DomSanitizer
   ) { }
+
+  ngOnInit(): void {
+    this.boletasService.obtenerUsuarios().subscribe(
+      (usuarios) => {
+        this.usuarios = usuarios;
+      },
+      (error) => {
+        console.error('Error al cargar usuarios:', error);
+      }
+    );
+  }
 
   generarIdBoleta(): string {
     return Math.random().toString(36).substring(2, 15);
@@ -57,14 +72,14 @@ export class GenerarCodigoComponent {
   convertirQrABase64(): void {
     const canvas = this.qrcodeElement.nativeElement.querySelector('canvas');
     if (canvas) {
-      this.qrCodeBase64 = canvas.toDataURL('image/png').split(',')[1]; // Convertir a base64 y eliminar el encabezado
       this.qrCodeDownloadLink = this.sanitizer.sanitize(SecurityContext.URL, canvas.toDataURL('image/png')) || '';
     }
   }
 
-sendEmail(): void {
-  if (!this.qrCodeBase64) {
-    console.error("El código QR no está listo en formato base64");
+sendEmail(correo:string): void {
+
+  if (!this.qrCodeDownloadLink) {
+    alert("Vuelva a intentarlo mas tarde");
     return;
   }
 
@@ -73,18 +88,14 @@ sendEmail(): void {
     <p>Puedes usar este código QR directamente para tus propósitos.</p>
 
 
-    <p>Qr en formato base64</p>
-    <p>${this.qrCodeBase64}</p>
-
-    <p>-------------------------</p>
   `;
 
-  const destinatario = "salvojose84@gmail.com";
+  const destinatario = correo;
 
   const emailData = {
     formContent,
     destinatario,
-    attachment: this.qrCodeBase64 // Base64 del QR como adjunto
+    attachment: this.qrCodeDownloadLink
   };
 
   this.correoService.sendEmailWithAttachment(emailData).subscribe(
