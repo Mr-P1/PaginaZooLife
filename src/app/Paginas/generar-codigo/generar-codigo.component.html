@@ -1,4 +1,4 @@
-<div class="card">
+<!-- <div class="card">
   <div class="card-body">
     <h5 class="card-title">Generar Boleta y QR</h5>
     <div #qrcode class="qr-placeholder" [ngClass]="{'qr-generated': qrGenerado}">
@@ -13,7 +13,7 @@
       <button (click)="generarQr()">Generar QR</button>
       <a [href]="qrCodeDownloadLink" download="qrcode.png">
         <button  [disabled]="!qrGenerado">Descargar QR</button>
-        <!-- <button (click)="descargarQr()" [disabled]="!qrGenerado">Descargar QR</button> -->
+
       </a>
       <button (click)="sendEmail()" [disabled]="!qrGenerado">Mandar Correo</button>
 
@@ -21,4 +21,44 @@
   </div>
 </div>
 
+ -->
 
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">Generar Boleta y QR</h5>
+    <div
+      #qrcode
+      class="qr-placeholder"
+      [ngClass]="{ 'qr-generated': qrGenerado }"
+    >
+      <qrcode
+        *ngIf="qrGenerado"
+        [qrdata]="qrData"
+        [width]="256"
+        [errorCorrectionLevel]="'M'"
+      ></qrcode>
+    </div>
+
+    <!-- Select de usuarios -->
+    <div *ngIf="qrGenerado">
+      <label for="usuarioSelect"
+        >Seleccione un usuario para enviar el QR:</label
+      >
+      <select id="usuarioSelect" [(ngModel)]="correoSeleccionado">
+        <option *ngFor="let usuario of usuarios" [value]="usuario.correo">
+          {{ usuario.nombre }} - {{ usuario.correo }}
+        </option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <button (click)="generarQr()">Generar QR</button>
+      <a [href]="qrCodeDownloadLink" download="qrcode.png">
+        <button [disabled]="!qrGenerado">Descargar QR</button>
+      </a>
+      <button (click)="sendEmail(correoSeleccionado)" [disabled]="!qrGenerado">
+        Mandar Correo
+      </button>
+    </div>
+  </div>
+</div>

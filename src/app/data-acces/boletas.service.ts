@@ -7,7 +7,7 @@ import { map, switchMap } from 'rxjs/operators';
 
 
 
-interface Usuario {
+export interface Usuario {
   auth_id: string;
   correo: string;
   nivel: number;
@@ -264,24 +264,6 @@ obtenerBoletasPorUsuario(usuarioId: string): Observable<any> {
 }
 
 
-
-
-
-
-
-
-// async guardarBoleta(boleta: Boleta): Promise<void> {
-//   try {
-//     await addDoc(this._rutaBoletas, {
-//       id: boleta.id,
-//       tipo: boleta.tipo,
-//     });
-//     console.log('Boleta guardada con éxito');
-//   } catch (error) {
-//     console.error('Error al guardar la boleta:', error);
-//   }
-// }
-
 async guardarBoleta(boleta: Boleta): Promise<void> {
   try {
     // Crea una referencia a un documento específico con el ID de la boleta
@@ -300,6 +282,11 @@ async guardarBoleta(boleta: Boleta): Promise<void> {
 }
 
 
+obtenerUsuarios(): Observable<Usuario[]> {
+  return from(getDocs(this._rutaUsuarios)).pipe(
+    map(snapshot => snapshot.docs.map(doc => doc.data() as Usuario))
+  );
+}
 
 
 
