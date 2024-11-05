@@ -16,6 +16,7 @@ export interface Usuario {
   puntos: number;
   patente: string;
   auth_id: string;
+  token?:string;
 }
 
 export interface PremioUsuario {
@@ -209,7 +210,21 @@ export class UsuarioService {
 
 
 
-
+    // Nueva función para obtener los tokens de todos los usuarios
+    obtenerTokensDeUsuarios(): Observable<string[]> {
+      return from(getDocs(this._rutaUsuarios)).pipe(
+        map((querySnapshot) => {
+          const tokens: string[] = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data() as Usuario;
+            if (data.token) { // Asegurarse de que el token exista
+              tokens.push(data.token);
+            }
+          });
+          return tokens;
+        })
+      );
+    }
 
 
 
