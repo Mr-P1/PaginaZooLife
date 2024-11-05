@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { OirsService } from '../../../data-acces/oirs.service'
 import { NotificacionesService } from '../../../data-acces/notificaciones.service'
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -158,33 +159,104 @@ export class ListarUsuariosComponent implements OnInit {
 
 
 
-
-  //  // Método para enviar una notificación de prueba
-  //  enviarNotificacion() {
-  //   const tokens = [this.token]; // Arreglo con el token que quieres usar
-  //   const data = {}; // Puedes agregar datos adicionales si deseas
-
-  //   this.notificacionesService.sendPushNotification(tokens, data).subscribe(
-  //     (response) => {
-  //       console.log('Notificación enviada con éxito:', response);
-  //     },
-  //     (error) => {
-  //       console.error('Error al enviar la notificación:', error);
-  //     }
-  //   );
-  // }
+  private token2 = "eX6eSeIzQ0a-x4SmkcN_6l:APA91bGGp-VqCthb-UDisSzODv2Ekn85gTOitg1K28FhzNkxHis0sbK9R8nDRWejleSvHPAzTOp_T9Rd5BGaWUEZjo56npvnQ9er9IhA6HqyhVgdm8Lne-wqRvodQ6anDTDDzDMv36y-"
 
 
-  private token2="eX6eSeIzQ0a-x4SmkcN_6l:APA91bGGp-VqCthb-UDisSzODv2Ekn85gTOitg1K28FhzNkxHis0sbK9R8nDRWejleSvHPAzTOp_T9Rd5BGaWUEZjo56npvnQ9er9IhA6HqyhVgdm8Lne-wqRvodQ6anDTDDzDMv36y-"
+  private token3 = "eyKAniVvQHiP_xs_7Cxkg8:APA91bEghwmEMzjudZdFzXdKy6CyUUJ4akGmXarTiiWPLyKwOVsK3heaOaQWKHK-b-OAxwf8ME59rpdwsdNFxF8rPvWGwMS6ukZzUIerZa1qrm0LnKq2lQQ"
+
+  private token = "d43dwQqYQQ-lQlhFCP1cbk:APA91bHrWcyNY2wpMf-00B7ITgR1HhCmHmQf5jEKCyJwgExPdabcG0Eo0MDBDZ-1Y7iXTT4IbvMazXmczIo2gndz-IpY90MJ_u565QKCzFlyAJXfmaYN2Zs"
 
 
-  private token ="eyKAniVvQHiP_xs_7Cxkg8:APA91bEghwmEMzjudZdFzXdKy6CyUUJ4akGmXarTiiWPLyKwOVsK3heaOaQWKHK-b-OAxwf8ME59rpdwsdNFxF8rPvWGwMS6ukZzUIerZa1qrm0LnKq2lQQ"
-  // Método para enviar una notificación de prueba
-  enviarNotificacion2() {
-    const tokens = [this.token2,this.token]; // Arreglo con el token que quieres usar
+
+  convertirImagenABase64(file: File): Promise<string | null> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
+  }
+
+
+  mostrarFormulario(token: string | null) {
+    Swal.fire({
+      icon: "question",
+      title: 'Enviar notificación',
+      html: `
+        <input type="text" id="titulo" class="swal2-input" placeholder="Título">
+        <textarea id="contenido" class="swal2-textarea" placeholder="Contenido" style="width: 90%;  resize: none;"></textarea>
+      `,
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar',
+      showCancelButton: true,
+      focusConfirm: false,
+      preConfirm: () => {
+        // Obtener los valores ingresados por el usuario
+        const titulo = (document.getElementById('titulo') as HTMLInputElement).value;
+        const contenido = (document.getElementById('contenido') as HTMLTextAreaElement).value;
+        //const imagenUrl = (document.getElementById('imagenUrl') as HTMLInputElement).value || null;
+
+        if (!titulo || !contenido) {
+          Swal.showValidationMessage('Por favor, ingresa un título y contenido');
+          return false;
+        }
+
+
+        // Si no hay imagen, devuelve solo título y contenido
+        return { titulo, contenido, imagenUrl: null };
+
+
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const { titulo, contenido, imagenUrl } = result.value!;
+        // Llama a enviarNotificacion2 pasando el token como un array y los datos de la notificación
+        this.enviarNotificacion(token ? [token] : [], titulo, contenido, imagenUrl);
+      }
+    });
+  }
+
+
+
+  mostrarFormularioTodos() {
+    Swal.fire({
+      icon: "question",
+      title: 'Enviar notificación',
+      html: `
+        <input type="text" id="titulo" class="swal2-input" placeholder="Título">
+        <textarea id="contenido" class="swal2-textarea" placeholder="Contenido" style="width: 90%;  resize: none;"></textarea>
+      `,
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar',
+      showCancelButton: true,
+      focusConfirm: false,
+      preConfirm: () => {
+        const titulo = (document.getElementById('titulo') as HTMLInputElement).value;
+        const contenido = (document.getElementById('contenido') as HTMLTextAreaElement).value;
+
+        if (!titulo || !contenido) {
+          Swal.showValidationMessage('Por favor, ingresa un título y contenido');
+          return false;
+        }
+
+        return { titulo, contenido };
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const { titulo, contenido } = result.value!;
+        // Llama a obtenerTokensDeUsuarios para obtener los tokens y luego envía la notificación
+        this.usuarioService.obtenerTokensDeUsuarios().subscribe((tokens) => {
+          this.enviarNotificacion(tokens, titulo, contenido, null);
+        });
+      }
+    });
+  }
+
+
+  enviarNotificacion(tokens: string[], title: string, bodyContent: string, imageUrl: string | null = null) {
     const data = {}; // Puedes agregar datos adicionales si deseas
 
-    this.notificacionesService.sendPushNotification2(tokens, data).subscribe(
+    this.notificacionesService.sendPushNotification3(tokens, title, bodyContent, imageUrl, data).subscribe(
       (response) => {
         console.log('Notificación enviada con éxito:', response);
       },
@@ -193,6 +265,8 @@ export class ListarUsuariosComponent implements OnInit {
       }
     );
   }
+
+
 
 
 }

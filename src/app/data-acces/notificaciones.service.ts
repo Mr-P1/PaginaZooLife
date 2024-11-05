@@ -27,6 +27,23 @@ export class NotificacionesService {
 
 
 
+  // Agrega title, body y imageUrl como parámetros opcionales
+  sendPushNotification3(tokens: string[], title: string, bodyContent: string, imageUrl: string | null = null, data: any = {}): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = {
+      secret: 'firebaseIsCool',
+      tokens: tokens,
+      title: title,       // Agrega el título al cuerpo
+      body: bodyContent,   // Agrega el contenido al cuerpo
+      imageUrl: imageUrl,  // Agrega la URL de la imagen (opcional)
+      data: data           // Datos adicionales opcionales
+    };
+
+    return this.http.post<any>(this.functionUrl, body, { headers });
+  }
+
+
+
 
 
 }
