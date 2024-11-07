@@ -69,61 +69,6 @@ if (!admin.apps.length) {
 const messaging = admin.messaging(); // Inicializa el servicio de mensajería de Firebase
 
 // Función para enviar notificación push
-// const sendNotificationPush = async (tokens:any, data = {}, tag = "") => {
-//     console.log("Enviando notificación de prueba");
-
-//     // Definir el mensaje multicast con el título y cuerpo especificados
-//     const multicastMessage = {
-//         tokens,
-//         data,
-//         notification: {
-//             title: "Esto es una prueba",
-//             body: "Esto es una prueba desde la página",
-//         },
-//         android: {
-//             notification: {
-//                 color: "#05498c",
-//                 priority: "max",
-//                 visibility: "public",
-//             },
-//         },
-//     };
-
-//     // Enviar el mensaje a todos los tokens proporcionados
-//     const response = await messaging.sendEachForMulticast(multicastMessage);
-//     console.log("Número de notificaciones enviadas con éxito:", response.successCount);
-//     return response;
-// };
-
-// // Define la función en Firebase con CORS habilitado
-// exports.sendPushNotification = functions.https.onRequest((request:any, response:any) => {
-//     cors(request, response, async () => {
-//         // Verifica un secreto o autenticación básica si deseas añadir seguridad
-//         if (request.body.secret !== "firebaseIsCool") {
-//             return response.status(403).json({ error: "Secreto incorrecto" });
-//         }
-
-//         // Extrae los tokens y datos del cuerpo de la solicitud
-//         const tokens = request.body.tokens;
-//         const data = request.body.data || {};
-
-//         try {
-//             const sendResponse = await sendNotificationPush(tokens, data);
-//             response.json({
-//                 message: "Notificación enviada correctamente",
-//                 successCount: sendResponse.successCount,
-//                 failureCount: sendResponse.failureCount,
-//             });
-//         } catch (error:any) {
-//             console.error("Error al enviar notificación:", error);
-//             response.status(500).json({ error: "Error al enviar la notificación", details: error.toString() });
-//         }
-//     });
-// });
-
-
-
-// Función para enviar notificación push
 const sendNotificationPush = async (tokens: any, title: string, body: string, imageUrl: string | null, data = {}, tag = "") => {
   console.log("Enviando notificación con título y contenido personalizados");
 
