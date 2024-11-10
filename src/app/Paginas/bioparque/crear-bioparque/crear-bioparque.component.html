@@ -82,6 +82,37 @@
             </div>
         </div>
 
+        <div>
+          <label
+            for="area"
+            class="block mb-2 text-sm font-medium  text-white"
+            >Area</label
+          >
+          <select
+            id="area"
+            formControlName="area"
+            class=" border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+          >
+            <option selected disabled>Escoja una opción</option>
+            <option value="Selva Tropical">Selva Tropical</option>
+            <option value="Sabana Africana">Sabana Africana</option>
+            <option value="Acuario">Acuario</option>
+            <option value="Montañas">Montañas</option>
+
+          </select>
+
+          <div
+            *ngIf="
+              form.get('area')?.touched && form.get('area')?.invalid
+            "
+            class="text-sm text-white"
+          >
+            <span *ngIf="form.get('area')?.errors?.['required']"
+              >Seleccione una area</span
+            >
+          </div>
+        </div>
+
 
           <!-- Altura y Formato -->
           <div>

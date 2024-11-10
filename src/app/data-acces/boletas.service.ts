@@ -4,6 +4,7 @@ import { Firestore, collection, query, where, getDocs, onSnapshot, Timestamp,add
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns';
 import { Observable, forkJoin, from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 
@@ -16,6 +17,7 @@ export interface Usuario {
   telefono: string;
   tipo: string;
 }
+
 interface BoletaUsada {
   fecha: string | Timestamp;
   id_usuario: string;
@@ -39,6 +41,11 @@ export class BoletasService {
   private boletasUsadasRef = collection(this._firestore, PATH_Boletas_usadas);
   private _rutaUsuarios = collection(this._firestore, PATH_Usuarios);
   private _rutaBoletas = collection(this._firestore, PATH_Boletas);
+
+
+  private functionUrl = 'https://us-central1-appzoolife.cloudfunctions.net/calcularVisitasPorPeriodo';
+
+  constructor(private http: HttpClient) {}
 
 
   obtenerVisitantesHoy(): Observable<number> {
@@ -288,7 +295,9 @@ obtenerUsuarios(): Observable<Usuario[]> {
   );
 }
 
-
+  obtenerDatosVisitas(): Observable<any> {
+    return this.http.get<any>(this.functionUrl);
+  }
 
 
 

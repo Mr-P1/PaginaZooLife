@@ -28,77 +28,107 @@
     </div>
   </div>
 
-  <!-- Botón para añadir pregunta -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4 justify-center">
-    <div class="">
-      <a
-        routerLink="/app/crear_pregunta"
-        class="flex items-center justify-center p-2 bg-orange-500 text-base font-medium text-white rounded-lg hover:bg-orange-700 group"
-      >
-        <svg
-          class="w-6 h-6 text-white"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
-        <span class="ml-2">Añadir Pregunta</span>
-      </a>
+<!-- Contenedor principal -->
+<div class="flex flex-col">
+
+
+<!-- Contenedor de botones alineados horizontalmente -->
+<div class="flex justify-between items-center mb-4">
+  <!-- Botón para añadir pregunta (existente) -->
+  <a
+    routerLink="/app/crear_pregunta"
+    class="flex items-center p-2 bg-orange-500 text-base font-medium text-white rounded-lg hover:bg-orange-700 group"
+  >
+    <svg
+      class="w-6 h-6 text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+    <span class="ml-2">Añadir Pregunta Fauna</span>
+  </a>
+
+  <!-- Botón Crear Pregunta Planta al fondo derecha -->
+  <a
+    routerLink="/app/crear_pregunta_planta"
+    class="flex items-center p-2 bg-green-500 text-base font-medium text-white rounded-lg hover:bg-green-700 group"
+  >
+    <svg
+      class="w-6 h-6 text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+    <span class="ml-2">Crear Pregunta Flora</span>
+  </a>
+</div>
+
+
+
+ <!-- Tabla de preguntas -->
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <ng-container *ngIf="preguntasConEspecies$ | async as preguntasConEspecies; else noPreguntas">
+    <table class="w-full text-sm text-left text-gray-400">
+      <thead class="text-xs uppercase bg-orange-500 text-white">
+        <tr>
+          <th scope="col" class="px-6 py-3">Pregunta</th>
+          <th scope="col" class="px-6 py-3">Respuesta Correcta</th>
+          <th scope="col" class="px-6 py-3">Tipo Pregunta</th>
+          <th scope="col" class="px-6 py-3">Especie Asociada</th>
+          <th scope="col" class="px-6 py-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of preguntasConEspecies" class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100">
+          <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            {{ item.pregunta.pregunta }}
+          </td>
+          <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            {{ item.pregunta.respuestas[item.pregunta.respuesta_correcta] }}
+          </td>
+          <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            {{ item.pregunta.tipo }}
+          </td>
+          <td class="px-6 py-4 text-black font-medium whitespace-nowrap">
+            {{ item.especie?.nombre_comun || item.especie?.nombre_cientifico || 'Desconocido' }}
+          </td>
+          <td class="px-6 py-4">
+            <a (click)="navigateToEdit(item)" class="font-medium text-orange-700 hover:underline">Editar</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <!-- Mensaje cuando no hay preguntas -->
+  <ng-template #noPreguntas>
+    <div class="p-6 text-center text-gray-500">
+      <p class="text-lg font-semibold">Aún no hay preguntas</p>
     </div>
-  </div>
-
-  <!-- Tabla de preguntas -->
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <ng-container *ngIf="preguntasConAnimales$ | async as preguntasConAnimales; else noPreguntas">
-      <table class="w-full text-sm text-left text-gray-400">
-        <thead class="text-xs uppercase bg-orange-500 text-white">
-          <tr>
-            <th scope="col" class="px-6 py-3">Pregunta</th>
-            <th scope="col" class="px-6 py-3">Respuesta correcta</th>
-            <th scope="col" class="px-6 py-3">Tipo pregunta</th>
-            <th scope="col" class="px-6 py-3">Animal Asociado</th>
-            <th scope="col" class="px-6 py-3">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of preguntasConAnimales" class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100">
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ item.pregunta.pregunta }}
-            </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ item.pregunta.respuestas[item.pregunta.respuesta_correcta] }}
-            </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ item.pregunta.tipo }}
-            </td>
-            <td class="px-6 py-4 text-black font-medium whitespace-nowrap">
-              {{ item.animal?.nombre_comun || 'Desconocido' }}
-            </td>
-            <td class="px-6 py-4">
-              <a [routerLink]="['/app/modificar_pregunta', item.pregunta.id]" class="font-medium text-orange-700 hover:underline">Editar</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ng-container>
-
-    <!-- Mensaje cuando no hay preguntas -->
-    <ng-template #noPreguntas>
-      <div class="p-6 text-center text-gray-500">
-        <p class="text-lg font-semibold">Aún no hay preguntas</p>
-      </div>
-    </ng-template>
-  </div>
+  </ng-template>
+</div>
 
   <!-- Paginación -->
   <div class="flex justify-between mt-4">

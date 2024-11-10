@@ -30,6 +30,7 @@ export class CrearBioparqueComponent {
     nombre_comun: this._formBuilder.control("", [Validators.required]),
     nombre_cientifico: this._formBuilder.control("", [Validators.required]),
     familia: this._formBuilder.control("", [Validators.required]),
+    area: this._formBuilder.control("", [Validators.required]),
     altura: this._formBuilder.control(0, [Validators.required]),
     altura_formato: this._formBuilder.control("", [Validators.required]),
     peso: this._formBuilder.control(0, [Validators.required]),
@@ -107,13 +108,15 @@ export class CrearBioparqueComponent {
         curiosidad,
         precaucion,
         usos,
-        posicion_mapa
+        posicion_mapa,
+        area
       } = this.form.value;
 
       const planta: CrearPlanta = {
         nombre_comun: nombre_comun!,
         nombre_cientifico: nombre_cientifico!,
         familia: familia!,
+        area:String(area),
         altura:  `${altura} ${altura_formato}`,
         peso:  `${peso} ${peso_formato}`,
         usos:usos!,
