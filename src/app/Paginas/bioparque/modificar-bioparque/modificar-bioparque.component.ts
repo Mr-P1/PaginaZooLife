@@ -35,6 +35,7 @@ export class ModificarBioparqueComponent {
     nombre_comun: this._formBuilder.control("", [Validators.required]),
     nombre_cientifico: this._formBuilder.control("", [Validators.required]),
     familia: this._formBuilder.control("", [Validators.required]),
+    area: this._formBuilder.control("", [Validators.required]),
     altura: this._formBuilder.control("", [Validators.required]),
     altura_formato: this._formBuilder.control("", [Validators.required]),
     peso: this._formBuilder.control(0, [Validators.required]),
@@ -99,7 +100,7 @@ export class ModificarBioparqueComponent {
             altura_formato: altura_formato || "", // Si no hay formato, asigna vacío
             peso: 0 , // Si no hay valor de altura, asigna vacío
             peso_formato: altura_formato || "", // Si no hay formato, asigna vacío
-
+            area:planta.area,
             descripcion_1: planta.descripcion_1,
             descripcion_2: planta.descripcion_2,
             descripcion_3: planta.descripcion_3,
@@ -113,7 +114,9 @@ export class ModificarBioparqueComponent {
             usos: planta.usos,
             posicion_mapa: planta.posicion_mapa,
             // Las siguientes propiedades las manejaremos por separado con los archivos subidos
-            imagen: "", // Aquí manejamos la imagen como un archivo separado
+            imagen: planta.imagen, // Aquí manejamos la imagen como un archivo separado
+            video:planta.video,
+            audio:planta.audio
           });
         } else {
           this.errorMessage = "Planta no encontrada.";
@@ -162,13 +165,15 @@ export class ModificarBioparqueComponent {
           curiosidad,
           precaucion,
           usos,
-          posicion_mapa
+          posicion_mapa,
+          area
         } = this.form.value;
 
         const planta: CrearPlanta = {
           nombre_comun: nombre_comun!,
           nombre_cientifico: nombre_cientifico!,
           familia: familia!,
+          area:String(area),
           altura:  `${altura} ${altura_formato}`,
           peso:  `${peso} ${peso_formato}`,
           usos:usos!,

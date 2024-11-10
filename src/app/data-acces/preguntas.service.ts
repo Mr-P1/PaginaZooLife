@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query, where, deleteDoc, getDocs, orderBy, limit, startAfter, startAt } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query, where, deleteDoc, getDocs, orderBy, limit, startAfter, startAt, QueryConstraint } from '@angular/fire/firestore';
 import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AnimalesService } from './animales.service';
+import { PlantaService } from './bioparque.service';
 
 export interface PreguntaTrivia {
   id: string;              // ID único de la pregunta
@@ -13,6 +14,16 @@ export interface PreguntaTrivia {
   animal_id: string;  // ID del animal asociado
 }
 
+
+export interface PreguntaTriviaPlantas {
+  id: string;              // ID único de la pregunta
+  pregunta: string;        // Texto de la pregunta
+  respuestas: Respuestas;  // Las 4 posibles respuestas
+  respuesta_correcta: string;   // Clave de la respuesta correcta (a, b, c, d)
+  tipo: string;  // Tipo de pregunta: para niño o adulto
+  planta_id: string;  // ID del animal asociado
+}
+
 export interface Respuestas {
   [key: string]: string;
   a: string;  // Respuesta opción A
@@ -21,10 +32,15 @@ export interface Respuestas {
   d: string;  // Respuesta opción D
 }
 
+
+type PreguntaUnificada = PreguntaTrivia | PreguntaTriviaPlantas;
+
 // Lo siguiente es para omitir el id porque se creará al añadir la pregunta
 export type CrearPregunta = Omit<PreguntaTrivia, 'id'>;
+export type CrearPreguntaPlanta = Omit<PreguntaTriviaPlantas, 'id'>;
 
 const PATH_Preguntas = 'Preguntas';
+const PATH_PreguntasPlantas = 'PreguntasPlantas';
 const PATH_RespuestasTrivia = 'RespuestasTrivia'
 
 @Injectable({
@@ -33,90 +49,104 @@ const PATH_RespuestasTrivia = 'RespuestasTrivia'
 export class PreguntaService {
   private _firestore = inject(Firestore);
   private _rutaPreguntas = collection(this._firestore, PATH_Preguntas);
+  private _rutaPreguntasPlantas = collection(this._firestore, PATH_PreguntasPlantas);
   private _rutaRespuestasTrivia = collection(this._firestore, PATH_RespuestasTrivia);
   private animalesService = inject(AnimalesService);
+  private plantaService = inject(PlantaService);
 
   // Crear una nueva pregunta
   createPreguntaTrivia(pregunta: CrearPregunta) {
     return addDoc(this._rutaPreguntas, pregunta);
   }
 
-  // Obtener preguntas paginadas
-  async getPreguntasPaginadas(pageSize: number, lastVisibleDoc: any = null): Promise<{ preguntas: PreguntaTrivia[], lastVisible: any, firstVisible: any }> {
-    let q;
+  createPreguntaTriviaPlantas(pregunta: CrearPreguntaPlanta) {
+    return addDoc(this._rutaPreguntasPlantas, pregunta);
+  }
+
+
+  // Obtener preguntas paginadas /Antiguo
+  // async getPreguntasPaginadas(pageSize: number, lastVisibleDoc: any = null): Promise<{ preguntas: PreguntaTrivia[], lastVisible: any, firstVisible: any }> {
+  //   let q;
+  //   if (lastVisibleDoc) {
+  //     q = query(this._rutaPreguntas, orderBy('pregunta'), startAfter(lastVisibleDoc), limit(pageSize));
+  //   } else {
+  //     q = query(this._rutaPreguntas, orderBy('pregunta'), limit(pageSize));
+  //   }
+
+  //   const snapshot = await getDocs(q);
+  //   const preguntas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PreguntaTrivia[];
+  //   const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+  //   const firstVisible = snapshot.docs[0];
+
+  //   return { preguntas, lastVisible, firstVisible };
+  // }
+
+
+
+
+  // Obtener preguntas paginadas (Preguntas de Animales y Plantas combinadas)
+  // Obtener preguntas paginadas (Animales y Plantas combinadas)
+  async getPreguntasPaginadas(
+    pageSize: number,
+    lastVisibleDoc: any = null
+  ): Promise<{ preguntas: PreguntaUnificada[], lastVisible: any, firstVisible: any }> {
+    const constraints: QueryConstraint[] = [orderBy('pregunta'), limit(pageSize)];
     if (lastVisibleDoc) {
-      q = query(this._rutaPreguntas, orderBy('pregunta'), startAfter(lastVisibleDoc), limit(pageSize));
-    } else {
-      q = query(this._rutaPreguntas, orderBy('pregunta'), limit(pageSize));
+      constraints.push(startAfter(lastVisibleDoc));
     }
 
-    const snapshot = await getDocs(q);
-    const preguntas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PreguntaTrivia[];
-    const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-    const firstVisible = snapshot.docs[0];
+    const qAnimales = query(this._rutaPreguntas, ...constraints);
+    const qPlantas = query(this._rutaPreguntasPlantas, ...constraints);
 
-    return { preguntas, lastVisible, firstVisible };
+    const [snapshotAnimales, snapshotPlantas] = await Promise.all([getDocs(qAnimales), getDocs(qPlantas)]);
+
+    const preguntasAnimales = snapshotAnimales.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PreguntaTrivia[];
+    const preguntasPlantas = snapshotPlantas.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PreguntaTriviaPlantas[];
+
+    const preguntasUnificadas: PreguntaUnificada[] = [...preguntasAnimales, ...preguntasPlantas];
+    preguntasUnificadas.sort((a, b) => a.pregunta.localeCompare(b.pregunta));
+
+    const lastVisible = snapshotAnimales.docs[snapshotAnimales.docs.length - 1] || snapshotPlantas.docs[snapshotPlantas.docs.length - 1];
+    const firstVisible = snapshotAnimales.docs[0] || snapshotPlantas.docs[0];
+
+    return { preguntas: preguntasUnificadas, lastVisible, firstVisible };
   }
+
+  // Obtener la página anterior de preguntas /Antiguo
+  // async getPreguntasPaginadasAnterior(pageSize: number, firstVisibleDoc: any): Promise<{ preguntas: PreguntaTrivia[], lastVisible: any, firstVisible: any }> {
+  //   const q = query(this._rutaPreguntas, orderBy('pregunta'), startAt(firstVisibleDoc), limit(pageSize));
+
+  //   const snapshot = await getDocs(q);
+  //   const preguntas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PreguntaTrivia[];
+  //   const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+  //   const firstVisible = snapshot.docs[0];
+
+  //   return { preguntas, lastVisible, firstVisible };
+  // }
 
   // Obtener la página anterior de preguntas
-  async getPreguntasPaginadasAnterior(pageSize: number, firstVisibleDoc: any): Promise<{ preguntas: PreguntaTrivia[], lastVisible: any, firstVisible: any }> {
-    const q = query(this._rutaPreguntas, orderBy('pregunta'), startAt(firstVisibleDoc), limit(pageSize));
+  async getPreguntasPaginadasAnterior(
+    pageSize: number,
+    firstVisibleDoc: any
+  ): Promise<{ preguntas: PreguntaUnificada[], lastVisible: any, firstVisible: any }> {
+    const constraints: QueryConstraint[] = [orderBy('pregunta'), startAt(firstVisibleDoc), limit(pageSize)];
 
-    const snapshot = await getDocs(q);
-    const preguntas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PreguntaTrivia[];
-    const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-    const firstVisible = snapshot.docs[0];
+    const qAnimales = query(this._rutaPreguntas, ...constraints);
+    const qPlantas = query(this._rutaPreguntasPlantas, ...constraints);
 
-    return { preguntas, lastVisible, firstVisible };
+    const [snapshotAnimales, snapshotPlantas] = await Promise.all([getDocs(qAnimales), getDocs(qPlantas)]);
+
+    const preguntasAnimales = snapshotAnimales.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PreguntaTrivia[];
+    const preguntasPlantas = snapshotPlantas.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PreguntaTriviaPlantas[];
+
+    const preguntasUnificadas: PreguntaUnificada[] = [...preguntasAnimales, ...preguntasPlantas];
+    preguntasUnificadas.sort((a, b) => a.pregunta.localeCompare(b.pregunta));
+
+    const lastVisible = snapshotAnimales.docs[snapshotAnimales.docs.length - 1] || snapshotPlantas.docs[snapshotPlantas.docs.length - 1];
+    const firstVisible = snapshotAnimales.docs[0] || snapshotPlantas.docs[0];
+
+    return { preguntas: preguntasUnificadas, lastVisible, firstVisible };
   }
-
- // Buscar preguntas por término
- async buscarPreguntas(term: string): Promise<PreguntaTrivia[]> {
-  // Primero buscar el animal por nombre común o científico
-  const animalesEncontrados = await this.animalesService.buscarAnimales(term);
-
-  // Extraer los IDs de los animales encontrados
-  const animalIds = animalesEncontrados.map(animal => animal.id);
-
-  if (animalIds.length === 0) {
-    // Si no se encuentran animales, retornamos una lista vacía
-    return [];
-  }
-
-  // Crear la consulta para buscar las preguntas asociadas a los animales encontrados
-  const q1 = query(
-    this._rutaPreguntas,
-    where('pregunta', '>=', term),
-    where('pregunta', '<=', term + '\uf8ff')
-  );
-
-  const q2 = query(
-    this._rutaPreguntas,
-    where('tipo', '>=', term),
-    where('tipo', '<=', term + '\uf8ff')
-  );
-
-  // Consulta de preguntas basadas en el animal_id
-  const q3 = query(
-    this._rutaPreguntas,
-    where('animal_id', 'in', animalIds)  // Usar 'in' para buscar preguntas de múltiples animales
-  );
-
-  const [snapshot1, snapshot2, snapshot3] = await Promise.all([getDocs(q1), getDocs(q2), getDocs(q3)]);
-
-  // Unir los resultados de las consultas
-  const preguntas1 = snapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() } as PreguntaTrivia));
-  const preguntas2 = snapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() } as PreguntaTrivia));
-  const preguntas3 = snapshot3.docs.map(doc => ({ id: doc.id, ...doc.data() } as PreguntaTrivia));
-
-  // Eliminar duplicados combinando las listas y filtrando por ID único
-  const allPreguntas = [...preguntas1, ...preguntas2, ...preguntas3];
-  const uniquePreguntas = Array.from(new Set(allPreguntas.map(p => p.id)))
-    .map(id => allPreguntas.find(p => p.id === id)!);
-
-  return uniquePreguntas;
-}
-
 
 
 
@@ -127,6 +157,12 @@ export class PreguntaService {
     return updateDoc(document, pregunta);
   }
 
+  async editarPreguntaPlanta(id: string, pregunta: CrearPreguntaPlanta) {
+    const document = doc(this._rutaPreguntasPlantas, id);
+    return updateDoc(document, pregunta);
+  }
+
+
   // Obtener una pregunta específica por su ID
   getPregunta(id: string): Observable<PreguntaTrivia | null> {
     const docRef = doc(this._rutaPreguntas, id);
@@ -134,6 +170,15 @@ export class PreguntaService {
       map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as PreguntaTrivia : null)
     );
   }
+
+
+  getPreguntaPlanta(id: string): Observable<PreguntaTriviaPlantas | null> {
+    const docRef = doc(this._rutaPreguntasPlantas, id);
+    return from(getDoc(docRef)).pipe(
+      map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as PreguntaTriviaPlantas : null)
+    );
+  }
+
 
   // Eliminar una pregunta
   async eliminarPregunta(id: string): Promise<void> {
@@ -147,8 +192,22 @@ export class PreguntaService {
     }
   }
 
+
+  async eliminarPreguntaPlanta(id: string): Promise<void> {
+    const preguntaDoc = doc(this._rutaPreguntasPlantas, id);
+    const preguntaSnapshot = await getDoc(preguntaDoc);
+
+    if (preguntaSnapshot.exists()) {
+      await deleteDoc(preguntaDoc);
+    } else {
+      throw new Error('Pregunta no encontrada');
+    }
+  }
+
   // Obtener todas las preguntas
   getPreguntas(): Observable<PreguntaTrivia[]> {
     return collectionData(this._rutaPreguntas, { idField: 'id' }) as Observable<PreguntaTrivia[]>;
   }
+
+
 }

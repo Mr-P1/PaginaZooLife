@@ -18,6 +18,7 @@ export interface Planta {
   video?: string;
   nombre_comun: string;
   nombre_cientifico: string;
+  area:string,
   familia: string;
   altura: string;
   peso:string;
@@ -70,6 +71,12 @@ export class PlantaService {
       map(doc => doc.exists() ? { id: doc.id, ...doc.data() } as Planta : null)
     );
   }
+
+
+  getAnimales(): Observable<Planta[]> {
+    return collectionData(this._rutaPlantas, { idField: 'id' }) as Observable<Planta[]>;
+  }
+
 
   async getPlantasPaginadas(pageSize: number, lastVisibleDoc: any = null): Promise<{ plantas: Planta[], lastVisible: any, firstVisible: any }> {
     let q;

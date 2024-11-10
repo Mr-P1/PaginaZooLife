@@ -7,8 +7,6 @@
   <div *ngIf="oirsConsultas.length > 0; else noOirs" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <div *ngFor="let oir of oirsConsultas" class="bg-white shadow-lg rounded-lg p-4">
       <h3 class="text-lg font-semibold mb-2">Consulta</h3>
-      <p><strong>Región:</strong> {{ oir.region }}</p>
-      <p><strong>Comuna:</strong> {{ oir.comuna }}</p>
       <p><strong>Detalles:</strong> {{ oir.detalles }}</p>
       <p><strong>Fecha de Envío:</strong> {{ oir.fechaEnvioFormatted }}</p>
       <p><strong>Afectado:</strong> {{ oir.esAfectado ? 'Sí' : 'No' }}</p>
@@ -17,9 +15,16 @@
           Ver evidencia
         </a>
       </p>
+      <!-- Mostrar respuesta  -->
+      <p class="truncate">
+        <strong>Respuesta:</strong>
+        {{ oir.respuesta ? oir.respuesta : 'Aún no se ha respondido' }}
+      </p>
       <div class="mt-4 text-center">
-        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
-        [routerLink]="['/app/responder-oir', oir.id]">
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
+          (click)="responderOIR(oir.userId, oir.id)"
+        >
           Responder
         </button>
       </div>

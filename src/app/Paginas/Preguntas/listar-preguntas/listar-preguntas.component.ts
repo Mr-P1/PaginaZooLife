@@ -3,14 +3,18 @@ import { Animal, AnimalesService } from '../../../data-acces/animales.service';
 import { Observable, forkJoin, from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { PreguntaService, PreguntaTrivia } from '../../../data-acces/preguntas.service';
+import { Router, RouterModule } from '@angular/router';
+import { PreguntaService, PreguntaTrivia, PreguntaTriviaPlantas } from '../../../data-acces/preguntas.service';
 import { FormsModule } from '@angular/forms';
+import { PlantaService, Planta } from '../../../data-acces/bioparque.service';
 
-interface PreguntaConAnimal {
-  pregunta: PreguntaTrivia;
-  animal: Animal | null;
+interface PreguntaConEspecie {
+  pregunta: PreguntaTrivia | PreguntaTriviaPlantas;
+  especie: Animal | Planta | null;
 }
+
+type PreguntaUnificada = PreguntaTrivia | PreguntaTriviaPlantas;
+
 
 @Component({
   selector: 'app-listar-preguntas',
@@ -20,7 +24,7 @@ interface PreguntaConAnimal {
   imports: [RouterModule, CommonModule, FormsModule],
 })
 export class ListarPreguntasComponent implements OnInit {
-  preguntasConAnimales$: Observable<PreguntaConAnimal[]> | null = null;
+  preguntasConEspecies$: Observable<PreguntaConEspecie[]> | null = null;
   lastVisible: any = null;
   firstVisible: any = null;
   pageSize = 5;
@@ -33,42 +37,49 @@ export class ListarPreguntasComponent implements OnInit {
 
   constructor(
     private animalesService: AnimalesService,
-    private preguntasService: PreguntaService
-  ) {}
+    private plantasService: PlantaService,
+    private preguntasService: PreguntaService,
+    private router: Router,
+  ) { }
 
   ngOnInit() {
     this.loadInitialPage();
   }
 
-  // Cargar la primera página de preguntas con animales
+  // Cargar la primera página de preguntas
   loadInitialPage() {
     this.loading = true;
-    // Convertimos la promesa en un observable usando 'from'
-    this.preguntasConAnimales$ = from(this.preguntasService.getPreguntasPaginadas(this.pageSize)).pipe(
+    this.preguntasConEspecies$ = from(this.preguntasService.getPreguntasPaginadas(this.pageSize)).pipe(
       switchMap(data => {
         this.lastVisible = data.lastVisible;
         this.firstVisible = data.firstVisible;
-        this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
+        this.pageStack = [{ firstVisible: this.firstVisible, lastVisible: this.lastVisible }];
 
         const preguntas = data.preguntas;
-        const animalRequests = preguntas.map((pregunta: PreguntaTrivia) =>
-          this.animalesService.getAnimal(pregunta.animal_id).pipe(
-            map(animal => ({ pregunta, animal }))
-          )
-        );
+        const especieRequests = preguntas.map((pregunta: PreguntaTrivia | PreguntaTriviaPlantas) => {
+          if ('animal_id' in pregunta) {
+            return this.animalesService.getAnimal(pregunta.animal_id).pipe(
+              map(animal => ({ pregunta, especie: animal }))
+            );
+          } else if ('planta_id' in pregunta) {
+            return this.plantasService.getPlanta(pregunta.planta_id).pipe(
+              map(planta => ({ pregunta, especie: planta }))
+            );
+          }
+          return null;
+        }).filter(request => request !== null) as Observable<PreguntaConEspecie>[];
 
         this.loading = false;
-        return forkJoin(animalRequests);
+        return forkJoin(especieRequests);
       })
     );
   }
 
-  // Cargar la siguiente página de preguntas con animales
+  // Cargar la siguiente página
   loadNextPage() {
     if (this.lastVisible) {
       this.loading = true;
-      // Convertimos la promesa en un observable usando 'from'
-      this.preguntasConAnimales$ = from(this.preguntasService.getPreguntasPaginadas(this.pageSize, this.lastVisible)).pipe(
+      this.preguntasConEspecies$ = from(this.preguntasService.getPreguntasPaginadas(this.pageSize, this.lastVisible)).pipe(
         switchMap(data => {
           this.lastVisible = data.lastVisible;
           this.firstVisible = data.firstVisible;
@@ -76,20 +87,27 @@ export class ListarPreguntasComponent implements OnInit {
           this.currentPage += 1;
 
           const preguntas = data.preguntas;
-          const animalRequests = preguntas.map((pregunta: PreguntaTrivia) =>
-            this.animalesService.getAnimal(pregunta.animal_id).pipe(
-              map(animal => ({ pregunta, animal }))
-            )
-          );
+          const especieRequests = preguntas.map((pregunta: PreguntaTrivia | PreguntaTriviaPlantas) => {
+            if ('animal_id' in pregunta) {
+              return this.animalesService.getAnimal(pregunta.animal_id).pipe(
+                map(animal => ({ pregunta, especie: animal }))
+              );
+            } else if ('planta_id' in pregunta) {
+              return this.plantasService.getPlanta(pregunta.planta_id).pipe(
+                map(planta => ({ pregunta, especie: planta }))
+              );
+            }
+            return null;
+          }).filter(request => request !== null) as Observable<PreguntaConEspecie>[];
 
           this.loading = false;
-          return forkJoin(animalRequests);
+          return forkJoin(especieRequests);
         })
       );
     }
   }
 
-  // Cargar la página anterior de preguntas con animales
+  // Cargar la página anterior
   loadPreviousPage() {
     if (this.currentPage > 1) {
       this.pageStack.pop();
@@ -97,51 +115,44 @@ export class ListarPreguntasComponent implements OnInit {
 
       if (previousPage) {
         this.loading = true;
-        // Convertimos la promesa en un observable usando 'from'
-        this.preguntasConAnimales$ = from(this.preguntasService.getPreguntasPaginadasAnterior(this.pageSize, previousPage.firstVisible)).pipe(
+        this.preguntasConEspecies$ = from(this.preguntasService.getPreguntasPaginadasAnterior(this.pageSize, previousPage.firstVisible)).pipe(
           switchMap(data => {
             this.lastVisible = data.lastVisible;
             this.firstVisible = previousPage.firstVisible;
             this.currentPage -= 1;
 
             const preguntas = data.preguntas;
-            const animalRequests = preguntas.map((pregunta: PreguntaTrivia) =>
-              this.animalesService.getAnimal(pregunta.animal_id).pipe(
-                map(animal => ({ pregunta, animal }))
-              )
-            );
+            const especieRequests = preguntas.map((pregunta: PreguntaTrivia | PreguntaTriviaPlantas) => {
+              if ('animal_id' in pregunta) {
+                return this.animalesService.getAnimal(pregunta.animal_id).pipe(
+                  map(animal => ({ pregunta, especie: animal }))
+                );
+              } else if ('planta_id' in pregunta) {
+                return this.plantasService.getPlanta(pregunta.planta_id).pipe(
+                  map(planta => ({ pregunta, especie: planta }))
+                );
+              }
+              return null;
+            }).filter(request => request !== null) as Observable<PreguntaConEspecie>[];
 
             this.loading = false;
-            return forkJoin(animalRequests);
+            return forkJoin(especieRequests);
           })
         );
       }
     }
   }
 
-  // Manejar cambios en el campo de búsqueda
   onSearchChange(event: any) {
-    const searchTerm = event.target.value.trim();
-
-    if (searchTerm) {
-      this.loading = true;
-      this.preguntasService.buscarPreguntas(searchTerm).then(preguntas => {
-        const animalRequests = preguntas.map((pregunta: PreguntaTrivia) =>
-          this.animalesService.getAnimal(pregunta.animal_id).pipe(
-            map(animal => ({ pregunta, animal }))
-          )
-        );
-
-        forkJoin(animalRequests).subscribe(preguntasConAnimales => {
-          this.preguntasConAnimales$ = new Observable(subscriber => {
-            subscriber.next(preguntasConAnimales);
-            subscriber.complete();
-          });
-          this.loading = false;
-        });
-      });
-    } else {
-      this.loadInitialPage(); // Volver a la paginación cuando no haya búsqueda
+    console.log()
+  }
+  navigateToEdit(item: PreguntaConEspecie) {
+    if ('animal_id' in item.pregunta) {
+      // Si la pregunta es sobre un animal
+      this.router.navigate(['/app/modificar_pregunta', item.pregunta.id]);
+    } else if ('planta_id' in item.pregunta) {
+      // Si la pregunta es sobre una planta
+      this.router.navigate(['/app/modificar_pregunta_planta', item.pregunta.id]);
     }
   }
 }

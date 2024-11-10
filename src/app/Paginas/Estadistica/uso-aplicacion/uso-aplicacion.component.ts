@@ -15,11 +15,19 @@ export class UsoAplicacionComponent implements OnInit {
   constructor(private boletasService: BoletasService) {}
   usuariosConBoletas: any[] = [];
 
+  private chart: Chart | undefined;
+  dataVisitas: any;
+  nivelActual: 'anual' | 'mensual' | 'semanal' | 'diario' = 'anual';
+  nivelClave: string | null = null; // Para almacenar el año o mes actual
+
   ngOnInit() {
     this.cargarTodosLosGraficos();
 
-    this.cargarUsuariosConBoletas();
 
+    this.boletasService.obtenerDatosVisitas().subscribe(data => {
+      this.dataVisitas = data;
+      this.crearGrafico();
+    });
 
   }
 
@@ -87,13 +95,92 @@ export class UsoAplicacionComponent implements OnInit {
     return colores[id] || '#000000'; // Negro por defecto
   }
 
-  cargarUsuariosConBoletas() {
-    this.boletasService.obtenerUsuariosConBoletas().subscribe(usuarios => {
-      this.usuariosConBoletas = usuarios;
+
+
+  crearGrafico(): void {
+    const ctx = document.getElementById('myChart') as HTMLCanvasElement;
+
+    if (this.chart) this.chart.destroy();
+
+    const { labels, dataset } = this.obtenerDatosPorNivel();
+    console.log(`Nivel actual: ${this.nivelActual}, Clave de nivel: ${this.nivelClave}`);
+    console.log('Etiquetas:', labels, 'Datos:', dataset);
+
+    this.chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: `Usuarios por ${this.nivelActual}`,
+          data: dataset,
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        onClick: (event, elements) => {
+          if (elements.length) {
+            const index = elements[0].index;
+            this.cambiarNivel(index);
+          }
+        }
+      }
     });
   }
 
+  obtenerDatosPorNivel(): { labels: string[], dataset: number[] } {
+    let labels: string[] = [];
+    let dataset: number[] = [];
+    const nivelData = this.dataVisitas[this.nivelActual];
 
+    if (this.nivelActual === 'anual') {
+      labels = Object.keys(nivelData);
+      dataset = Object.values(nivelData);
+    } else if (this.nivelActual === 'mensual') {
+      labels = Object.keys(nivelData).filter(key => key.startsWith(this.nivelClave!));
+      dataset = labels.map(key => nivelData[key]);
+    } else if (this.nivelActual === 'semanal') {
+      labels = Object.keys(nivelData).filter(key => key.startsWith(this.nivelClave!));
+      dataset = labels.map(key => nivelData[key]);
+    } else if (this.nivelActual === 'diario') {
+      labels = Object.keys(nivelData).filter(key => key.startsWith(this.nivelClave!));
+      dataset = labels.map(key => nivelData[key]);
+    }
+
+    return { labels, dataset };
+  }
+
+  cambiarNivel(index: number): void {
+    if (this.nivelActual === 'anual') {
+      this.nivelActual = 'mensual';
+      this.nivelClave = this.chart!.data.labels![index] as string;
+    } else if (this.nivelActual === 'mensual') {
+      this.nivelActual = 'semanal';
+      this.nivelClave = `${this.nivelClave}-W${index + 1}`;
+    } else if (this.nivelActual === 'semanal') {
+      this.nivelActual = 'diario';
+      const day = index + 1;
+      this.nivelClave = `${this.nivelClave}-${day}`;
+    }
+
+    console.log(`Nuevo nivel: ${this.nivelActual}, Clave de nivel: ${this.nivelClave}`);
+    this.crearGrafico();
+  }
+
+  retrocederNivel(): void {
+    if (this.nivelActual === 'diario') {
+      this.nivelActual = 'semanal';
+    } else if (this.nivelActual === 'semanal') {
+      this.nivelActual = 'mensual';
+    } else if (this.nivelActual === 'mensual') {
+      this.nivelActual = 'anual';
+      this.nivelClave = null; // Restablecer nivel clave para volver al nivel de año
+    }
+    console.log(`Nivel anterior: ${this.nivelActual}`);
+    this.crearGrafico();
+  }
 
 
 }

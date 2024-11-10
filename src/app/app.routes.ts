@@ -34,6 +34,8 @@ import { OirsFelicitacionComponent } from './Paginas/Oirs/oirs-felicitacion/oirs
 import { OirsReclamoComponent } from './Paginas/Oirs/oirs-reclamo/oirs-reclamo.component';
 import { OirsSugerenciaComponent } from './Paginas/Oirs/oirs-sugerencia/oirs-sugerencia.component';
 import { ResponderOirsComponent } from './Paginas/Oirs/responder-oirs/responder-oirs.component';
+import { CrearPreguntasPlantasComponent } from './Paginas/Preguntas/crear-preguntas-plantas/crear-preguntas-plantas.component';
+import { ModificarPreguntasPlantasComponent } from './Paginas/Preguntas/modificar-preguntas-plantas/modificar-preguntas-plantas.component';
 
 export const routes: Routes = [
 
@@ -79,7 +81,9 @@ export const routes: Routes = [
       {path:'oirs-felicitacion',component:OirsFelicitacionComponent},
       {path:'oirs-reclamo',component:OirsReclamoComponent},
       {path:'oirs-sugerencia',component:OirsSugerenciaComponent},
-      {path:'responder-oir/:id',component:ResponderOirsComponent}
+      {path:'responder-oir/:id',component:ResponderOirsComponent},
+      {path:'crear_pregunta_planta',component:CrearPreguntasPlantasComponent},
+      { path:'modificar_pregunta_planta/:idPregunta',component:ModificarPreguntasPlantasComponent},
 
 
 
