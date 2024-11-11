@@ -1,361 +1,746 @@
+Main modal
+<div
+  id="updateProductModal"
+  tabindex="-1"
+  aria-hidden="true"
+  class="justify-end items-end w-full md:inset-0 h-modal md:h-full "
 
-<div class="p-6">
-  <!--  cuadros arriba -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+>
+  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto ">
+    <!-- Modal content -->
     <div
-      class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5"
+      class="relative p-4 rounded-lg border  sm:p-5 bg-orange-400  border-orange-500 shadow-lg"
     >
-
-    <!-- Primer  cuadro -->
-    <div class="flex justify-between mb-6">
-        <div>
-          <div class="text-2xl font-semibold mb-1">Estoy lol</div>
-          <div class="text-sm font-medium text-gray-400">Active orders</div>
-        </div>
-
+      <!-- Modal header -->
+      <div
+        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800"
+      >
+        <h3 class="text-lg font-semibold  text-white">
+          Crear Animal
+        </h3>
       </div>
-      <div class="flex items-center">
+      <!-- Modal body -->
+      <form>
+        <!-- comienzo -->
+        <div class="grid gap-4 mb-4 sm:grid-cols-2">
 
-        <span class="text-sm font-medium text-gray-600 ml-4">80%</span>
-      </div>
-    </div>
 
-    <!-- Segundo  cuadro -->
-    <div
-      class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5"
-    >
-      <div class="flex justify-between mb-4">
-        <div>
-          <div class="flex items-center mb-1">
-            <div class="text-2xl font-semibold">324</div>
-            <div
-              class="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2"
+          <div>
+            <label
+              for="nombre_comun"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Nombre Común</label
             >
-              +30%
+            <input
+              type="text"
+              name="nombre_comun"
+              id="nombre_comun"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Nombre común"
+              formControlName="nombre_comun"
+            />
+
+            <div
+              *ngIf="
+                form.get('nombre_comun')?.touched &&
+                form.get('nombre_comun')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('nombre_comun')?.errors?.['required']"
+                >Ingrese un nombre común</span
+              >
             </div>
           </div>
-          <div class="text-sm font-medium text-gray-400">Visitors</div>
-        </div>
-        <div class="dropdown">
-          <button
-            type="button"
-            class="dropdown-toggle text-gray-400 hover:text-gray-600"
-          >
-            <i class="ri-more-fill"></i>
-          </button>
 
-        </div>
-      </div>
-    </div>
+          <div>
+            <label
+              for="nombre_cientifico"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Nombre Científico</label
+            >
+            <input
+              type="text"
+              name="nombre_cientifico"
+              id="nombre_cientifico"
+              formControlName="nombre_cientifico"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Nombre Científico"
+            />
 
-
-
-    <!-- Tercer  cuadro -->
-    <div
-      class="bg-white rounded-md border border-gray-100 p-6 shadow-md shadow-black/5"
-    >
-      <div class="flex justify-between mb-6">
-        <div>
-          <div class="text-2xl font-semibold mb-1">
-            <span class="text-base font-normal text-gray-400 align-top"
-              >&dollar;</span
-            >2,345
+            <div
+              *ngIf="
+                form.get('nombre_cientifico')?.touched &&
+                form.get('nombre_cientifico')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('nombre_cientifico')?.errors?.['required']"
+                >Ingrese un nombre Científico</span
+              >
+            </div>
           </div>
-          <div class="text-sm font-medium text-gray-400">Active orders</div>
+
+          <div>
+            <label
+              for="clase"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Especie</label
+            >
+            <select
+              id="clase"
+              formControlName="clase"
+              class=" border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option selected disabled>Escoja una opción</option>
+              <option value="Mamífero">Mamíferos</option>
+              <option value="Ave">Aves</option>
+              <option value="Reptil">Reptiles</option>
+              <option value="Anfibio">Anfibios</option>
+              <option value="Pez">Peces</option>
+              <option value="Insecto">Insectos</option>
+              <option value="Molusco">Moluscos</option>
+              <option value="Arácnido">Arácnidos</option>
+              <option value="Crustáceo">Crustáceos</option>
+              <option value="Equinodermo">Equinodermos</option>
+            </select>
+
+            <div
+              *ngIf="
+                form.get('clase')?.touched && form.get('clase')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('clase')?.errors?.['required']"
+                >Seleccione una especie</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="disponibilidad"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Disponibilidad</label
+            >
+            <select
+              id="disponibilidad"
+              formControlName="disponibilidad"
+              class=" border   text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option selected disabled>Escoga una opcion</option>
+              <option value="Disponible">Disponible</option>
+              <option value="Tratamiento">Tratamiento</option>
+              <option value="Proximamente">Proximamente</option>
+            </select>
+
+            <div
+              *ngIf="form.get('disponibilidad')?.touched && form.get('disponibilidad')?.invalid"
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('disponibilidad')?.errors?.['required']"
+                >Seleccione un disponibilidad</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="posicion_mapa"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Posición mapa</label
+            >
+            <input
+              type="number"
+              name="posicion_mapa"
+              id="posicion_mapa"
+              formControlName="posicion_mapa"
+              min="1"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Posición mapa"
+            />
+
+            <div
+              *ngIf="
+                form.get('posicion_mapa')?.touched &&
+                form.get('posicion_mapa')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('posicion_mapa')?.errors?.['required']"
+                >Ingrese la posición del mapa</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="dato_curioso"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Curiosidad</label
+            >
+            <input
+              type="text"
+              name="dato_curioso"
+              id="dato_curioso"
+              formControlName="dato_curioso"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Ingrese una curiosidad"
+            />
+
+            <div
+              *ngIf="
+                form.get('dato_curioso')?.touched &&
+                form.get('dato_curioso')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('dato_curioso')?.errors?.['required']"
+                >Ingrese una curiosidad</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="precaucion"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Precaución 1</label
+            >
+            <input
+              type="text"
+              name="precaucion_1"
+              id="precaucion_1"
+              formControlName="precaucion_1"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Ej: no meter las manos"
+            />
+
+            <div
+              *ngIf="
+                form.get('precaucion_1')?.touched &&
+                form.get('precaucion_1')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('precaucion_1')?.errors?.['required']"
+                >Ingrese una precaucion</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="precaucion"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Precaución 2</label
+            >
+            <input
+              type="text"
+              name="precaucion_2"
+              id="precaucion_2"
+              formControlName="precaucion_2"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Ej: no meter las manos"
+            />
+
+            <div
+              *ngIf="
+                form.get('precaucion_2')?.touched &&
+                form.get('precaucion_2')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('precaucion_2')?.errors?.['required']"
+                >Ingrese una 2da precaucion</span
+              >
+            </div>
+          </div>
+
+
+          <div>
+            <label
+              for="precaucion_3"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Precaución 3</label
+            >
+            <input
+              type="text"
+              name="precaucion_3"
+              id="precaucion_3"
+              formControlName="precaucion_3"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Ej: no meter las manos"
+            />
+
+            <div
+              *ngIf="
+                form.get('precaucion_3')?.touched &&
+                form.get('precaucion_3')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('precaucion_3')?.errors?.['required']"
+                >Ingrese una 3ra precaucion</span
+              >
+            </div>
+          </div>
+
+
+          <div>
+            <label for="peso" class="block mb-2 text-sm font-medium text-white">Peso</label>
+            <div class="flex">
+              <input
+                id="peso"
+                type="number"
+                formControlName="peso"
+                min="1"
+                class="border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+                placeholder="Ingrese peso"
+              />
+              <select
+                formControlName="unidad_peso"
+                class="border ml-2 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-auto p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              >
+                <option selected disabled>Unidad</option>
+                <option value="kg">kg</option>
+                <option value="gr">gr</option>
+              </select>
+            </div>
+            <div *ngIf="form.get('peso')?.touched && form.get('peso')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('peso')?.errors?.['required']">Ingrese un valor de peso</span>
+            </div>
+            <div *ngIf="form.get('unidad_peso')?.touched && form.get('unidad_peso')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('unidad_peso')?.errors?.['required']">Seleccione un tipo de unidad de peso</span>
+            </div>
+
+          </div>
+
+
+          <div>
+            <label for="altura" class="block mb-2 text-sm font-medium text-white">Altura</label>
+            <div class="flex">
+              <input
+                id="altura"
+                type="number"
+                formControlName="altura"
+                min="1"
+                class="border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+                placeholder="Ingrese altura"
+              />
+              <select
+                formControlName="unidad_altura"
+                class="border ml-2 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-auto p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              >
+                <option selected disabled>Unidad</option>
+                <option value="cm">cm</option>
+                <option value="mt">mt</option>
+              </select>
+            </div>
+            <div *ngIf="form.get('altura')?.touched && form.get('altura')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('altura')?.errors?.['required']">Ingrese un valor de altura</span>
+            </div>
+
+            <div *ngIf="form.get('unidad_altura')?.touched && form.get('unidad_altura')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('unidad_altura')?.errors?.['required']">Seleccione un tipo de unidad de altura</span>
+            </div>
+          </div>
+
+
+          <div>
+            <label
+              for="habitad"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Hábitat</label
+            >
+            <input
+              type="text"
+              name="habitad"
+              id="habitad"
+              formControlName="habitad"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Ingrese hábitat"
+            />
+
+            <div
+              *ngIf="
+                form.get('habitad')?.touched &&
+                form.get('habitad')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('habitad')?.errors?.['required']"
+                >Ingrese una habitad</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="zona"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Zona</label
+            >
+            <input
+              type="text"
+              name="zona"
+              id="zona"
+              formControlName="zona"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Ingrese una zona"
+            />
+
+            <div
+              *ngIf="
+                form.get('zona')?.touched &&
+                form.get('zona')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('zona')?.errors?.['required']"
+                >Ingrese una zona</span
+              >
+            </div>
+          </div>
+
+
+
+          <div >
+            <label for="dieta" class="block mb-2 text-sm font-medium text-white">Dieta</label>
+            <div class="flex">
+              <input
+                type="text"
+                name="dieta_descripcion"
+                id="dieta_descripcion"
+                formControlName="dieta_descripcion"
+                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-3/4 p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+                placeholder="Descripción de la dieta"
+              />
+              <select
+                formControlName="dieta"
+                class="border ml-2 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-1/4 p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              >
+                <option selected disabled>Seleccione un tipo de dieta</option>
+                <option value="omnivoro">Omnívoro</option>
+                <option value="carnivoro">Carnívoro</option>
+                <option value="herbivoro">Herbívoro</option>
+                <option value="frugívoros">Frugívoros</option>
+              </select>
+            </div>
+            <div *ngIf="form.get('dieta_descripcion')?.touched && form.get('dieta_descripcion')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('dieta_descripcion')?.errors?.['required']">Ingrese una descripción de la dieta</span>
+            </div>
+            <div *ngIf="form.get('dieta')?.touched && form.get('dieta')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('dieta')?.errors?.['required']">Seleccione un tipo de dieta</span>
+            </div>
+          </div>
+
+
+          <div>
+            <label
+              for="cuidados"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Cuidados</label
+            >
+            <input
+              type="text"
+              name="cuidados"
+              id="cuidados"
+              formControlName="cuidados"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Cuidados"
+            />
+
+            <div
+              *ngIf="
+                form.get('cuidados')?.touched &&
+                form.get('cuidados')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('cuidados')?.errors?.['required']"
+                >Ingrese un cuidado</span
+              >
+            </div>
+          </div>
+
+
+          <div>
+            <label
+              for="estado_conservacion"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Estado de conservacion</label
+            >
+            <input
+              type="text"
+              name="estado_conservacion"
+              id="estado_conservacion"
+              formControlName="estado_conservacion"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Estado de conservacion"
+            />
+
+            <div
+              *ngIf="
+                form.get('estado_conservacion')?.touched &&
+                form.get('estado_conservacion')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('estado_conservacion')?.errors?.['required']"
+                >Ingrese un estado de conservacion del animal</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="comportamiento"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Comportamiento</label
+            >
+            <input
+              type="text"
+              name="comportamiento"
+              id="comportamiento"
+              class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Comportamiento"
+              formControlName="comportamiento"
+            />
+
+            <div
+              *ngIf="
+                form.get('comportamiento')?.touched &&
+                form.get('comportamiento')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('comportamiento')?.errors?.['required']"
+                >Ingrese un comportamiento</span
+              >
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="area"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Area</label
+            >
+            <select
+              id="area"
+              formControlName="area"
+              class=" border text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option selected disabled>Escoja una opción</option>
+              <option value="Selva Tropical">Selva Tropical</option>
+              <option value="Sabana Africana">Sabana Africana</option>
+              <option value="Acuario">Acuario</option>
+              <option value="Montañas">Montañas</option>
+
+            </select>
+
+            <div
+              *ngIf="
+                form.get('area')?.touched && form.get('area')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('area')?.errors?.['required']"
+                >Seleccione una area</span
+              >
+            </div>
+          </div>
+
+
+
+          <div class="sm:col-span-2">
+            <label
+              for="descripcion"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Descripción 1</label
+            >
+
+            <textarea
+              id="descripcion_1"
+              formControlName="descripcion_1"
+              name="descripcion_1"
+              rows="5"
+              class="block p-2.5 w-full text-sm   rounded-lg border  focus:ring-primary-500 focus:border-primary-500 bg-white border-white-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Escriba una descripción"
+            ></textarea>
+
+            <div
+              *ngIf="
+                form.get('descripcion_1')?.touched &&
+                form.get('descripcion_1')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('descripcion_1')?.errors?.['required']"
+                >Ingrese una descripcion</span
+              >
+            </div>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label
+              for="descripcion"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Descripción 2</label
+            >
+
+            <textarea
+              id="descripcion_2"
+              formControlName="descripcion_2"
+              name="descripcion_2"
+              rows="5"
+              class="block p-2.5 w-full text-sm   rounded-lg border  focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Escriba una descripción"
+            ></textarea>
+
+            <div
+              *ngIf="
+                form.get('descripcion_2')?.touched &&
+                form.get('descripcion_2')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('descripcion_2')?.errors?.['required']"
+                >Ingrese una descripcion</span
+              >
+            </div>
+          </div>
+
+
+          <div class="sm:col-span-2">
+            <label
+              for="descripcion"
+              class="block mb-2 text-sm font-medium  text-white"
+              >Descripción 3</label
+            >
+
+            <textarea
+              id="descripcion_3"
+              formControlName="descripcion_3"
+              name="descripcion_3"
+              rows="5"
+              class="block p-2.5 w-full text-sm   rounded-lg border  focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+              placeholder="Escriba una descripción"
+            ></textarea>
+
+            <div
+              *ngIf="
+                form.get('descripcion_3')?.touched &&
+                form.get('descripcion_3')?.invalid
+              "
+              class="text-sm text-white"
+            >
+              <span *ngIf="form.get('descripcion_3')?.errors?.['required']"
+                >Ingrese una descripcion</span
+              >
+            </div>
+          </div>
+
+
+
+
+
+          <div>
+            <label for="imagen" class="block mb-2 text-sm font-medium text-white">Imagen</label>
+            <input
+              type="file"
+              id="imagen"
+              accept="image/*"
+              formControlName="imagen"
+              (change)="cargarFoto($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            />
+            <div *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('imagen')?.errors?.['required']">Seleccione una imagen</span>
+            </div>
+          </div>
+
+          <div>
+            <label for="video" class="block mb-2 text-sm font-medium text-white">Video</label>
+            <input
+              type="file"
+              id="video"
+              accept="video/*"
+              formControlName="video"
+              (change)="cargarVideo($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            />
+
+
+            <div *ngIf="form.get('video')?.touched && form.get('video')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('video')?.errors?.['required']">Seleccione un video</span>
+            </div>
+          </div>
+
+          <div>
+            <label for="audio" class="block mb-2 text-sm font-medium text-white">Audio</label>
+            <input
+              type="file"
+              id="audio"
+              accept="audio/*"
+              formControlName="audio"
+              (change)="cargarAudio($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            />
+
+            <div *ngIf="form.get('audio')?.touched && form.get('audio')?.invalid" class="text-sm text-white">
+              <span *ngIf="form.get('audio')?.errors?.['required']">Seleccione un audio</span>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label for="audioAnimal" class="block mb-2 text-sm font-medium text-white">Audio Animal (Opcional)</label>
+            <input
+              type="file"
+              id="audioAnimal"
+              accept="audio/*"
+              formControlName="audioAnimal"
+              (change)="cargarAudioAnimal($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            />
+          </div>
+
+
         </div>
-      </div>
-      <a href="#" class="text-blue-500 font-medium text-sm hover:text-blue-600"
-        >View details</a
-      >
-    </div>
-
-  </div>
-  <!-- Fin cuadros arriba -->
+        <!-- fin -->
 
 
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-    <div
-      class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md"
-    >
-      <div class="flex justify-between mb-4 items-start">
-        <div class="font-medium">Popularidad animales</div>
-
-      </div>
-      <form action="" class="flex items-center mb-4">
-        <div class="relative w-full mr-2">
-          <input
-            type="text"
-            class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-700 rounded-md text-sm focus:border-blue-500"
-            placeholder="Search..."
-          />
-          <i
-            class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
-          ></i>
+        <div class="flex items-center space-x-4">
+          <button
+            [disabled]="loading()"
+            type="submit"
+            class="w-full text-white bg-orange-500 hover:bg-orange-400 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            <svg
+              class="w-6 h-6 text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+            {{ loading() ? "Guardando ..." : "Guardar animal" }}
+          </button>
         </div>
 
       </form>
-
-    <!-- Popularidad animal -->
-      <div class="overflow-x-auto">
-        <table
-          class="w-full min-w-[540px]"
-          data-tab-for="order"
-          data-page="active"
-        >
-
-          <thead>
-            <tr>
-              <th
-                class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md"
-              >
-                Animal
-              </th>
-              <th
-                class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left"
-              >
-                Likes
-              </th>
-              <th
-                class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left"
-              >
-                Dislikes
-              </th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="py-2 px-4 border-b border-b-gray-50">
-                <div class="flex items-center">
-                  <img
-                    src="https://placehold.co/32x32"
-                    alt=""
-                    class="w-8 h-8 rounded object-cover block"
-                  />
-                  <span  class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">
-                    nombre animal
-                  </span>
-
-
-                </div>
-              </td>
-              <td class="py-2 px-4 border-b border-b-gray-50">
-                <span class="text-[13px] font-medium text-gray-400">3 likes</span
-                >
-              </td>
-              <td class="py-2 px-4 border-b border-b-gray-50">
-                <span class="text-[13px] font-medium text-gray-400">5 dislikes</span>
-              </td>
-
-            </tr>
-
-          </tbody>
-        </table>
-
-      </div>
-    </div>
-    <!-- Fin Popularidad animal -->
-
-
-    <!-- segunda tabla -->
-
-    <div
-      class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md"
-    >
-      <div class="flex justify-between mb-4 items-start">
-        <div class="font-medium">Otro servicio</div>
-
-      </div>
-
-      <form action="" class="flex items-center mb-4">
-        <div class="relative w-full mr-2">
-          <input
-            type="text"
-            class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500"
-            placeholder="Search..."
-          />
-          <i
-            class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
-          ></i>
-        </div>
-
-      </form>
-
-      <div class="overflow-x-auto">
-        <table class="w-full min-w-[540px]">
-          <thead>
-            <tr>
-              <th
-                class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md"
-              >
-                Service
-              </th>
-              <th
-                class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left"
-              >
-                Price
-              </th>
-              <th
-                class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left"
-              >
-                Clicks
-              </th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="py-2 px-4 border-b border-b-gray-50">
-                <div class="flex items-center">
-                  <img
-                    src="https://placehold.co/32x32"
-                    alt=""
-                    class="w-8 h-8 rounded object-cover block"
-                  />
-                  <a
-                    href="#"
-                    class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate"
-                    >Create landing page</a
-                  >
-                </div>
-              </td>
-              <td class="py-2 px-4 border-b border-b-gray-50">
-                <span class="text-[13px] font-medium text-gray-400">$235</span>
-              </td>
-              <td class="py-2 px-4 border-b border-b-gray-50">
-                <span class="text-[13px] font-medium text-gray-400">1K</span>
-              </td>
-
-            </tr>
-
-
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!-- Fin segunda tabla -->
-  </div>
-
-
-  <!-- Grafico / tabla derecha  -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-    <div
-      class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md lg:col-span-2"
-    >
-      <div class="flex justify-between mb-4 items-start">
-        <div class="font-medium">Order Statistics</div>
-        <div class="dropdown">
-          <button
-            type="button"
-            class="dropdown-toggle text-gray-400 hover:text-gray-600"
-          >
-            <i class="ri-more-fill"></i>
-          </button>
-          <ul
-            class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]"
-          >
-            <li>
-              <a
-                href="#"
-                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
-                >Profile</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
-                >Settings</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
-                >Logout</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-        <div class="rounded-md border border-dashed border-gray-200 p-4">
-          <div class="flex items-center mb-0.5">
-            <div class="text-xl font-semibold">10</div>
-            <span
-              class="p-1 rounded text-[12px] font-semibold bg-blue-500/10 text-blue-500 leading-none ml-1"
-              >$80</span
-            >
-          </div>
-          <span class="text-gray-400 text-sm">Active</span>
-        </div>
-        <div class="rounded-md border border-dashed border-gray-200 p-4">
-          <div class="flex items-center mb-0.5">
-            <div class="text-xl font-semibold">50</div>
-            <span
-              class="p-1 rounded text-[12px] font-semibold bg-emerald-500/10 text-emerald-500 leading-none ml-1"
-              >+$469</span
-            >
-          </div>
-          <span class="text-gray-400 text-sm">Completed</span>
-        </div>
-        <div class="rounded-md border border-dashed border-gray-200 p-4">
-          <div class="flex items-center mb-0.5">
-            <div class="text-xl font-semibold">4</div>
-            <span
-              class="p-1 rounded text-[12px] font-semibold bg-rose-500/10 text-rose-500 leading-none ml-1"
-              >-$130</span
-            >
-          </div>
-          <span class="text-gray-400 text-sm">Canceled</span>
-        </div>
-      </div>
-      <div>
-        <canvas id="order-chart"></canvas>
-      </div>
-    </div>
-    <div
-      class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md"
-    >
-      <div class="flex justify-between mb-4 items-start">
-        <div class="font-medium">Earnings</div>
-        <div class="dropdown">
-          <button
-            type="button"
-            class="dropdown-toggle text-gray-400 hover:text-gray-600"
-          >
-            <i class="ri-more-fill"></i>
-          </button>
-          <ul
-            class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]"
-          >
-            <li>
-              <a
-                href="#"
-                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
-                >Profile</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
-                >Settings</a
-              >
-            </li>
-            <li>
-              <a
-                href="#"
-                class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50"
-                >Logout</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-
     </div>
   </div>
-
-
 </div>

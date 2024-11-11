@@ -63,7 +63,7 @@ export const routes: Routes = [
       { path:'preguntas',component:ListarPreguntasComponent},
       { path:'crear_pregunta',component:CrearPreguntasComponent},
       { path:'modificar_pregunta/:idPregunta',component:ModificarPreguntasComponent},
-      { path:'dashboard',component:DashboardComponent},
+      { path:'prueba',component:DashboardComponent},
       { path:'premios',component:ListarPremiosTriviaComponent},
       { path:'crear_premio',component:CrearPremiosTriviaComponent},
       { path:'modificar_premio/:idPremio',component:ModificarPremiosTriviaComponent},
