@@ -8,9 +8,9 @@ import {
 } from '@angular/fire/firestore';
 
 import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angular/fire/storage';
-import { catchError, Observable, tap, throwError, from } from 'rxjs';
+import { catchError, Observable, tap, throwError, from, forkJoin } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -227,5 +227,56 @@ export class  PremiosService {
         throw new Error('Error al canjear el premio: ' + error);
       }
     }
+
+
+
+// Método para obtener premios no reclamados y reclamados
+getPremiosNoReclamados(): Observable<{ nombre: string; noReclamados: number; reclamados: number }[]> {
+  // Consultar los premios en estado no reclamado (estado = true)
+  const premiosUsuariosNoReclamadosQuery = query(this._rutaPremiosUsuarios, where('estado', '==', true));
+  // Consultar los premios en estado reclamado (estado = false)
+  const premiosUsuariosReclamadosQuery = query(this._rutaPremiosUsuarios, where('estado', '==', false));
+
+  return collectionData(premiosUsuariosNoReclamadosQuery, { idField: 'id' }).pipe(
+    switchMap((premiosUsuariosNoReclamados: PremioUsuario[]) => {
+      const premiosNoReclamadosCount: { [premioId: string]: number } = {};
+      premiosUsuariosNoReclamados.forEach(premioUsuario => {
+        premiosNoReclamadosCount[premioUsuario.premioId] = (premiosNoReclamadosCount[premioUsuario.premioId] || 0) + 1;
+      });
+
+      // Obtener los premios reclamados y contar cuántos hay de cada uno
+      return collectionData(premiosUsuariosReclamadosQuery, { idField: 'id' }).pipe(
+        switchMap((premiosUsuariosReclamados: PremioUsuario[]) => {
+          const premiosReclamadosCount: { [premioId: string]: number } = {};
+          premiosUsuariosReclamados.forEach(premioUsuario => {
+            premiosReclamadosCount[premioUsuario.premioId] = (premiosReclamadosCount[premioUsuario.premioId] || 0) + 1;
+          });
+
+          // Obtener IDs únicos de premios para buscar en la colección de premios
+          const premiosIds = Object.keys({ ...premiosNoReclamadosCount, ...premiosReclamadosCount });
+          const premiosObservables = premiosIds.map(premioId =>
+            from(getDoc(doc(this._firestore, `${PATH_PremiosTrivia}/${premioId}`))).pipe(
+              map(premioDoc => {
+                if (premioDoc.exists()) {
+                  const premioData = premioDoc.data() as PremioTrivia;
+                  return {
+                    nombre: premioData.nombre,
+                    noReclamados: premiosNoReclamadosCount[premioId] || 0,
+                    reclamados: premiosReclamadosCount[premioId] || 0
+                  };
+                }
+                return null;
+              })
+            )
+          );
+
+          return forkJoin(premiosObservables).pipe(
+            map(premios => premios.filter((premio): premio is { nombre: string; noReclamados: number; reclamados: number } => premio !== null))
+          );
+        })
+      );
+    })
+  );
+}
 
 }

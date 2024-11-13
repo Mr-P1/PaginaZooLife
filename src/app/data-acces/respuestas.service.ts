@@ -18,17 +18,40 @@ export class RespuestasService {
   private respuestasTriviaRef = collection(this._firestore, PATH_RespuestasTrivia);
 
   // Método para obtener todas las respuestas de trivia
-  getRespuestasTrivia(): Observable<{ total: number, correctas: number, incorrectas: number }> {
-    const respuestasQuery = query(this._rutaRespuestasTrivia);
-    return collectionData(respuestasQuery, { idField: 'id' }).pipe(
-      map((respuestas: any[]) => {
-        const correctas = respuestas.filter(respuesta => respuesta.resultado === true).length;
-        const incorrectas = respuestas.filter(respuesta => respuesta.resultado === false).length;
-        const total = respuestas.length;
-        return { total, correctas, incorrectas };
-      })
-    );
-  }
+  // getRespuestasTrivia(): Observable<{ total: number, correctas: number, incorrectas: number }> {
+  //   const respuestasQuery = query(this._rutaRespuestasTrivia);
+  //   return collectionData(respuestasQuery, { idField: 'id' }).pipe(
+  //     map((respuestas: any[]) => {
+  //       const correctas = respuestas.filter(respuesta => respuesta.resultado === true).length;
+  //       const incorrectas = respuestas.filter(respuesta => respuesta.resultado === false).length;
+  //       const total = respuestas.length;
+  //       return { total, correctas, incorrectas };
+  //     })
+  //   );
+  // }
+
+
+  // Método para obtener todas las respuestas de trivia, incluyendo el tiempo promedio y la tasa de abandono
+getRespuestasTrivia(): Observable<{ total: number, correctas: number, incorrectas: number, tiempoPromedio: number, tasaAbandono: number }> {
+  const respuestasQuery = query(this._rutaRespuestasTrivia);
+  return collectionData(respuestasQuery, { idField: 'id' }).pipe(
+    map((respuestas: any[]) => {
+      const correctas = respuestas.filter(respuesta => respuesta.resultado === true).length;
+      const incorrectas = respuestas.filter(respuesta => respuesta.resultado === false).length;
+      const total = respuestas.length;
+
+      // Calcular tiempo promedio
+      const tiempoTotal = respuestas.reduce((sum, respuesta) => sum + (respuesta.tiempoRespuesta || 0), 0);
+      const tiempoPromedio = total > 0 ? tiempoTotal / total : 0;
+
+      // Calcular tasa de abandono
+      const abandonadas = respuestas.filter(respuesta => respuesta.abandonada === true).length;
+      const tasaAbandono = total > 0 ? (abandonadas / total) * 100 : 0;
+
+      return { total, correctas, incorrectas, tiempoPromedio, tasaAbandono };
+    })
+  );
+}
 
   // Obtener respuestas trivia por día (hoy)
   obtenerRespuestasPorDia(): Observable<any> {

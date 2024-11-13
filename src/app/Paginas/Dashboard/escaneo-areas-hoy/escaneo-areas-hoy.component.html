@@ -1,0 +1,43 @@
+<!-- <div class="bg-white p-6 rounded-lg shadow mb-6">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Escaneos por Área</h3>
+  <div class="overflow-x-auto">
+      <table class="w-full">
+          <thead>
+              <tr>
+                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Área</th>
+                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Escaneos QR</th>
+                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Accesos Otros</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let area of areasVisitadasHoy$ | async">
+                  <td class="py-2 px-4 border-b border-gray-200">{{ area.area }}</td>
+                  <td class="py-2 px-4 border-b border-gray-200">{{ area.countQR }}</td>
+                  <td class="py-2 px-4 border-b border-gray-200">{{ area.countOtros }}</td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+</div> -->
+
+
+<div class="bg-white p-6 rounded-lg shadow mb-6">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Áreas mas populares</h3>
+  <div class="overflow-x-auto">
+      <table class="w-full">
+          <thead>
+              <tr>
+                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Área</th>
+                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Cantidad</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let area of areasMasVisitadas">
+                  <td class="py-2 px-4 border-b border-gray-200">{{ area.area }}</td>
+                  <td class="py-2 px-4 border-b border-gray-200">{{ area.count }}</td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+</div>
+

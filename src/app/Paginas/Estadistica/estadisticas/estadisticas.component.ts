@@ -162,57 +162,6 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     });
   }
 
-  // crearGraficoOirs(labels: string[], data: number[]): void {
-  //   const ctx = document.getElementById('oirsChart') as HTMLCanvasElement;
-  //   if (this.oirsChart) {
-  //     this.oirsChart.destroy(); // Destruye el gráfico anterior si existe para evitar duplicados
-  //   }
-
-  //   this.oirsChart = new Chart(ctx, {
-  //     type: 'bar',
-  //     data: {
-  //       labels: labels,
-  //       datasets: [
-  //         {
-  //           label: 'Consulta',
-  //           data: [data[0]], // Datos para 'Consulta'
-  //           backgroundColor: '#FF6384',
-  //           borderColor: '#FF6384',
-  //           borderWidth: 1,
-  //         },
-  //         {
-  //           label: 'Felicitación',
-  //           data: [data[1]], // Datos para 'Felicitación'
-  //           backgroundColor: '#36A2EB',
-  //           borderColor: '#36A2EB',
-  //           borderWidth: 1,
-  //         },
-  //         {
-  //           label: 'Reclamo',
-  //           data: [data[2]], // Datos para 'Reclamo'
-  //           backgroundColor: '#FFCE56',
-  //           borderColor: '#FFCE56',
-  //           borderWidth: 1,
-  //         },
-  //         {
-  //           label: 'Sugerencia',
-  //           data: [data[3]], // Datos para 'Sugerencia'
-  //           backgroundColor: '#4BC0C0',
-  //           borderColor: '#4BC0C0',
-  //           borderWidth: 1,
-  //         },
-  //       ],
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       scales: {
-  //         y: {
-  //           beginAtZero: true,
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
 
 
 

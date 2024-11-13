@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title class="text-center justify-center">Dashboard Operativo</title> -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <!-- Header -->
+        <!-- <div class=" flex justify-center  items-center mb-6">
+            <h1 class="text-3xl font-semibold text-gray-700 ">Dashboard Operativo</h1>
+        </div> -->
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <!-- Ingresos app -->
+          <app-ingresos-app></app-ingresos-app>
+
+          <!--Visitas hoy  -->
+          <app-visitas-hoy></app-visitas-hoy>
+
+          <!-- Solicitudes oirs pendientes -->
+          <app-solicitudes-pendientes-oirs></app-solicitudes-pendientes-oirs>
+
+          <!-- Satisfaccion promedio -->
+          <app-satisfaccion-promedio></app-satisfaccion-promedio>
+
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <!-- Bar Chart Placeholder -->
+            <app-grafico-oirs-hoy></app-grafico-oirs-hoy>
+
+            <!-- Pie Chart Placeholder -->
+            <app-respuestas-trivia></app-respuestas-trivia>
+         </div>
+
+
+        <!-- Recent OIRS Table -->
+        <app-solicitudes-oirs-recientes></app-solicitudes-oirs-recientes>
+
+        <!-- Popularidad Animales -->
+        <app-popularidad-animal></app-popularidad-animal>
+
+        <!-- Popularidad Plantas -->
+        <app-popularidad-planta></app-popularidad-planta>
+
+
+
+        <!-- Escaneos por Área -->
+        <app-escaneo-areas-hoy></app-escaneo-areas-hoy>
+
+
+        <!-- Premios no Reclamados -->
+        <app-premios-no-reclamados></app-premios-no-reclamados>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-gray-500 text-center">
+            &copy; 2024 Bioparque Dashboard
+        </footer>
+    </div>
+</body>
+</html>

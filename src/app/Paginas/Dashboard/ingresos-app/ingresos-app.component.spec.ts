@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResponderOirsComponent } from './responder-oirs.component';
+import { IngresosAppComponent } from './ingresos-app.component';
 
-describe('ResponderOirsComponent', () => {
-  let component: ResponderOirsComponent;
-  let fixture: ComponentFixture<ResponderOirsComponent>;
+describe('IngresosAppComponent', () => {
+  let component: IngresosAppComponent;
+  let fixture: ComponentFixture<IngresosAppComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ResponderOirsComponent]
+      imports: [IngresosAppComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ResponderOirsComponent);
+    fixture = TestBed.createComponent(IngresosAppComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

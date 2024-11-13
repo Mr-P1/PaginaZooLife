@@ -1,0 +1,37 @@
+<div class="bg-white p-6 rounded-lg shadow gap-4 mb-6">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Solicitudes Recientes de OIRS</h3>
+  <table class="w-full text-left">
+    <thead>
+      <tr class="text-gray-600 border-b">
+        <th class="py-2">Fecha</th>
+        <th class="py-2">Tipo</th>
+        <th class="py-2">Detalles</th>
+        <th class="py-2">Evidencia</th>
+        <th class="py-2">Estado</th>
+        <th class="py-2">Responder</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let solicitud of recentOirsRequests$ | async" class="border-b">
+        <td class="py-2">{{ solicitud.fechaEnvio.toDate() | date:'dd/MM/yyyy' }}</td>
+        <td class="py-2">{{ solicitud.tipoSolicitud }}</td>
+        <td class="py-2">{{ solicitud.detalles }}</td>
+        <td class="py-2">
+          <a *ngIf="solicitud.archivoEvidencia" href="{{ solicitud.archivoEvidencia }}" target="_blank" class="text-blue-500">Link Evidencia</a>
+        </td>
+        <td class="py-2" [ngClass]="solicitud.respondido ? 'text-green-500' : 'text-red-500'">
+          {{ solicitud.respondido ? 'Respondido' : 'Pendiente' }}
+        </td>
+        <td class="py-2">
+          <!-- Botón de respuesta deshabilitado para sugerencias y felicitaciones -->
+          <button
+            class="bg-blue-500 text-white px-2 py-1 rounded"
+            [disabled]="solicitud.tipoSolicitud === 'sugerencia' || solicitud.tipoSolicitud === 'felicitacion'"
+            (click)="responderOIR(solicitud.userId, solicitud.id)">
+            Responder
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

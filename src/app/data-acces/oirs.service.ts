@@ -11,6 +11,7 @@ import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angula
 import { catchError, Observable, tap, throwError, from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
+import { startOfDay, endOfDay } from 'date-fns';
 
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -121,6 +122,38 @@ export class OirsService {
     const sugerenciaQuery = query(this._rutaOirs, where('tipoSolicitud', '==', 'sugerencia'));
     return collectionData(sugerenciaQuery, { idField: 'id' }) as Observable<Oirs[]>;
   }
+
+
+    // Método para obtener las OIRS del día de hoy separadas por tipo
+    getOirsHoyPorTipo(): Observable<{ sugerencia: number; felicitacion: number; consulta: number; reclamo: number }> {
+      const todayStart = Timestamp.fromDate(startOfDay(new Date()));
+      const todayEnd = Timestamp.fromDate(endOfDay(new Date()));
+
+      const oirsQuery = query(this._rutaOirs, where('fechaEnvio', '>=', todayStart), where('fechaEnvio', '<=', todayEnd));
+
+      return collectionData(oirsQuery, { idField: 'id' }).pipe(
+        map((oirs: Oirs[]) => {
+          const contador = { sugerencia: 0, felicitacion: 0, consulta: 0, reclamo: 0 };
+          oirs.forEach(oir => {
+            switch (oir.tipoSolicitud) {
+              case 'sugerencia':
+                contador.sugerencia++;
+                break;
+              case 'felicitacion':
+                contador.felicitacion++;
+                break;
+              case 'consulta':
+                contador.consulta++;
+                break;
+              case 'reclamo':
+                contador.reclamo++;
+                break;
+            }
+          });
+          return contador;
+        })
+      );
+    }
 
 
 
