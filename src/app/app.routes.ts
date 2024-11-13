@@ -33,9 +33,9 @@ import { OirsConsultaComponent } from './Paginas/Oirs/oirs-consulta/oirs-consult
 import { OirsFelicitacionComponent } from './Paginas/Oirs/oirs-felicitacion/oirs-felicitacion.component';
 import { OirsReclamoComponent } from './Paginas/Oirs/oirs-reclamo/oirs-reclamo.component';
 import { OirsSugerenciaComponent } from './Paginas/Oirs/oirs-sugerencia/oirs-sugerencia.component';
-import { ResponderOirsComponent } from './Paginas/Oirs/responder-oirs/responder-oirs.component';
 import { CrearPreguntasPlantasComponent } from './Paginas/Preguntas/crear-preguntas-plantas/crear-preguntas-plantas.component';
 import { ModificarPreguntasPlantasComponent } from './Paginas/Preguntas/modificar-preguntas-plantas/modificar-preguntas-plantas.component';
+import { DashboardEstadisticoComponent } from './Paginas/Dashboard/dashboard-estadistico/dashboard-estadistico.component';
 
 export const routes: Routes = [
 
@@ -63,7 +63,6 @@ export const routes: Routes = [
       { path:'preguntas',component:ListarPreguntasComponent},
       { path:'crear_pregunta',component:CrearPreguntasComponent},
       { path:'modificar_pregunta/:idPregunta',component:ModificarPreguntasComponent},
-      { path:'prueba',component:DashboardComponent},
       { path:'premios',component:ListarPremiosTriviaComponent},
       { path:'crear_premio',component:CrearPremiosTriviaComponent},
       { path:'modificar_premio/:idPremio',component:ModificarPremiosTriviaComponent},
@@ -81,12 +80,13 @@ export const routes: Routes = [
       {path:'oirs-felicitacion',component:OirsFelicitacionComponent},
       {path:'oirs-reclamo',component:OirsReclamoComponent},
       {path:'oirs-sugerencia',component:OirsSugerenciaComponent},
-      {path:'responder-oir/:id',component:ResponderOirsComponent},
       {path:'crear_pregunta_planta',component:CrearPreguntasPlantasComponent},
       { path:'modificar_pregunta_planta/:idPregunta',component:ModificarPreguntasPlantasComponent},
 
 
+      { path:'prueba',component:DashboardComponent},
 
+      { path:'dashboard',component:DashboardEstadisticoComponent},
     ],
   },
   {

@@ -1,0 +1,21 @@
+<div class="bg-white p-6 rounded-lg shadow mb-6">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Premios No Reclamados y Reclamados</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Premio</th>
+          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Cantidad No Reclamada</th>
+          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Cantidad Reclamada</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let premio of premiosNoReclamados">
+          <td class="py-2 px-4 border-b border-gray-200">{{ premio.nombre }}</td>
+          <td class="py-2 px-4 border-b border-gray-200">{{ premio.noReclamados }}</td>
+          <td class="py-2 px-4 border-b border-gray-200">{{ premio.reclamados }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
