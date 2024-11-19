@@ -1,24 +1,34 @@
 <!-- <div class="bg-white p-6 rounded-lg shadow mb-6">
-  <h3 class="text-lg font-semibold text-gray-700 mb-4">Escaneos por Área</h3>
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Escaneos por Área (Semana Actual)</h3>
   <div class="overflow-x-auto">
-      <table class="w-full">
-          <thead>
-              <tr>
-                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Área</th>
-                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Escaneos QR</th>
-                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Accesos Otros</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let area of areasVisitadasHoy$ | async">
-                  <td class="py-2 px-4 border-b border-gray-200">{{ area.area }}</td>
-                  <td class="py-2 px-4 border-b border-gray-200">{{ area.countQR }}</td>
-                  <td class="py-2 px-4 border-b border-gray-200">{{ area.countOtros }}</td>
-              </tr>
-          </tbody>
-      </table>
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Área</th>
+          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Escaneos QR</th>
+          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Accesos Otros</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let area of areasVisitadasSemana$ | async">
+          <td class="py-2 px-4 border-b border-gray-200">{{ area.area }}</td>
+          <td class="py-2 px-4 border-b border-gray-200">{{ area.countQR }}</td>
+          <td class="py-2 px-4 border-b border-gray-200">{{ area.countOtros }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div> -->
+
+<div class="bg-white p-6 rounded-lg shadow mb-6">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Escaneos por Área (Semana Actual)</h3>
+  <div class="h-64 flex items-center justify-center">
+    <canvas id="escaneosChart"></canvas>
+  </div>
+</div>
+
+
+<!--
 
 
 <div class="bg-white p-6 rounded-lg shadow mb-6">
@@ -40,4 +50,4 @@
       </table>
   </div>
 </div>
-
+ -->

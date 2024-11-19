@@ -13,7 +13,7 @@
             <h1 class="text-3xl font-semibold text-gray-700 ">Dashboard Operativo</h1>
         </div> -->
 
-        <!-- Stats Cards -->
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <!-- Ingresos app -->
           <app-ingresos-app></app-ingresos-app>
@@ -31,16 +31,20 @@
 
         <!-- Charts Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <!-- Bar Chart Placeholder -->
-            <app-grafico-oirs-hoy></app-grafico-oirs-hoy>
-
             <!-- Pie Chart Placeholder -->
             <app-respuestas-trivia></app-respuestas-trivia>
+
+            <!-- Bar Chart Placeholder -->
+            <app-grafico-oirs-hoy></app-grafico-oirs-hoy>
          </div>
 
 
         <!-- Recent OIRS Table -->
         <app-solicitudes-oirs-recientes></app-solicitudes-oirs-recientes>
+
+         <!-- Premios no Reclamados -->
+         <app-premios-no-reclamados></app-premios-no-reclamados>
+
 
         <!-- Popularidad Animales -->
         <app-popularidad-animal></app-popularidad-animal>
@@ -54,8 +58,6 @@
         <app-escaneo-areas-hoy></app-escaneo-areas-hoy>
 
 
-        <!-- Premios no Reclamados -->
-        <app-premios-no-reclamados></app-premios-no-reclamados>
 
         <!-- Footer -->
         <footer class="mt-8 text-gray-500 text-center">

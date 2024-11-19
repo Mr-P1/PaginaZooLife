@@ -3,6 +3,7 @@ import { Chart, ChartType } from 'chart.js/auto';
 import { OirsService } from '../../../data-acces/oirs.service';
 import { Subscription } from 'rxjs';
 
+
 @Component({
   selector: 'app-grafico-oirs-hoy',
   standalone: true,
