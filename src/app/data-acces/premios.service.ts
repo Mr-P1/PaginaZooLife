@@ -4,7 +4,9 @@ import {
   Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query,
   where, deleteDoc, getDocs, orderBy, limit, startAfter, DocumentData,
   startAt, setDoc,
-  onSnapshot
+  onSnapshot,
+  Timestamp,
+  QueryConstraint
 } from '@angular/fire/firestore';
 
 import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angular/fire/storage';
@@ -35,12 +37,29 @@ export interface PremioUsuario {
 }
 
 
+export interface Usuario {
+  auth_id: string; // ID de autenticación
+  comuna: string; // Comuna del usuario
+  correo: string; // Correo electrónico del usuario
+  fechaNacimiento: Timestamp | null; // Fecha de nacimiento como objeto Date
+  genero: string; // Género del usuario (e.g., "masculino", "femenino")
+  nivel: number; // Nivel del usuario (e.g., 0)
+  nombre: string; // Nombre del usuario
+  patente: string; // Patente asociada al usuario
+  puntos: number; // Puntos acumulados por el usuario
+  region: string; // Región donde reside el usuario
+  telefono: string; // Número de teléfono del usuario
+}
+
+
+
 //Lo siguiente tiene para omitir el id porque recien lo vamos a crear
 export type CrearPremioTrivia = Omit<PremioTrivia, 'id'>
 
 
 const PATH_PremiosTrivia = 'Premios_trivia'
 const PATH_PremiosUsuarios = 'PremiosUsuarios';
+const PATH_Usuarios = "Usuarios"
 
 
 @Injectable({
@@ -53,6 +72,7 @@ export class  PremiosService {
   private _firestore = inject(Firestore);
   private _rutaPremiosTrivia = collection(this._firestore, PATH_PremiosTrivia);
   private _rutaPremiosUsuarios = collection(this._firestore, PATH_PremiosUsuarios);
+  private _rutaUsuarios = collection(this._firestore, PATH_Usuarios);
 
   private _storage = inject(Storage); // Agrega Storage
 
@@ -278,5 +298,145 @@ getPremiosNoReclamados(): Observable<{ nombre: string; noReclamados: number; rec
     })
   );
 }
+
+async getUsuarioPorAuthId(authId: string): Promise<Usuario | null> {
+  try {
+    const usuarioQuery = query(this._rutaUsuarios, where('auth_id', '==', authId));
+    const snapshot = await getDocs(usuarioQuery);
+
+    if (!snapshot.empty) {
+      const usuarioDoc = snapshot.docs[0]; // Solo debe haber un usuario con ese auth_id
+      const data = usuarioDoc.data() as Partial<Usuario>;
+
+      const usuario: Usuario = {
+        auth_id: data.auth_id || '',
+        comuna: data.comuna || '',
+        correo: data.correo || '',
+        fechaNacimiento: data.fechaNacimiento || null,
+        genero: data.genero || '',
+        nivel: data.nivel || 0,
+        nombre: data.nombre || '',
+        patente: data.patente || '',
+        puntos: data.puntos || 0,
+        region: data.region || '',
+        telefono: data.telefono || '',
+      };
+
+      return usuario;
+    } else {
+      console.warn(`Usuario con auth_id ${authId} no encontrado.`);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error al obtener el usuario por auth_id:', error);
+    throw new Error('No se pudo obtener la información del usuario.');
+  }
+}
+
+
+async getTodasLasRecompensas(): Promise<PremioUsuario[]> {
+  try {
+    const snapshot = await getDocs(this._rutaPremiosUsuarios);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PremioUsuario[];
+  } catch (error) {
+    console.error('Error al obtener todas las recompensas:', error);
+    throw new Error('No se pudo obtener las recompensas.');
+  }
+}
+
+
+async getRecompensasPaginadas(
+  pageSize: number,
+  lastVisibleDoc: any = null
+): Promise<{ recompensas: PremioUsuario[]; lastVisible: any; firstVisible: any }> {
+  let q;
+  if (lastVisibleDoc) {
+    q = query(this._rutaPremiosUsuarios, orderBy('codigo'), startAfter(lastVisibleDoc), limit(pageSize));
+  } else {
+    q = query(this._rutaPremiosUsuarios, orderBy('codigo'), limit(pageSize));
+  }
+
+  const snapshot = await getDocs(q);
+  const recompensas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as PremioUsuario[];
+  const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+  const firstVisible = snapshot.docs[0];
+
+  return { recompensas, lastVisible, firstVisible };
+}
+
+
+
+
+
+async getFilteredRecompensas(
+  estado?: boolean, // Ahora acepta true (No Reclamado) o false (Reclamado)
+  pageSize: number = 5,
+  lastVisibleDoc: any = null
+): Promise<{ recompensas: PremioUsuario[]; lastVisible: any; firstVisible: any }> {
+  const constraints: QueryConstraint[] = [orderBy('codigo')];
+
+  if (estado !== undefined) {
+    constraints.push(where('estado', '==', estado)); // Filtro booleano
+  }
+
+  if (lastVisibleDoc) {
+    constraints.push(startAfter(lastVisibleDoc));
+  }
+
+  const recompensasQuery = query(this._rutaPremiosUsuarios, ...constraints, limit(pageSize));
+  const snapshot = await getDocs(recompensasQuery);
+
+  const recompensas = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as PremioUsuario[];
+  const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+  const firstVisible = snapshot.docs[0]; // Incluido para devolver el primer documento visible
+
+  return { recompensas, lastVisible, firstVisible };
+}
+
+  // Obtener detalles de un premio trivia
+  // async getPremioTriviaById(premioId: string): Promise<PremioTrivia | null> {
+  //   try {
+  //     const docRef = doc(this._firestore, `${PATH_PremiosTrivia}/${premioId}`);
+  //     const snapshot = await getDocs(query(docRef));
+
+  //     if (!snapshot.empty) {
+  //       return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() } as PremioTrivia;
+  //     }
+  //     return null;
+  //   } catch (error) {
+  //     console.error('Error al obtener el premio trivia:', error);
+  //     return null;
+  //   }
+  // }
+
+
+
+ // Obtener recompensas paginadas para página anterior
+ async getRecompensasPaginaAnterior(
+  estado?: boolean, // Ahora acepta un booleano o undefined
+  pageSize: number = 5,
+  firstVisibleDoc?: any
+): Promise<{ recompensas: PremioUsuario[]; lastVisible: any }> {
+  const constraints: QueryConstraint[] = [orderBy('codigo')];
+
+  if (estado !== undefined) {
+    constraints.push(where('estado', '==', estado)); // Filtra directamente por booleano
+  }
+
+  if (firstVisibleDoc) {
+    constraints.push(startAt(firstVisibleDoc)); // Cambiado a `startAt` para manejar la paginación hacia atrás
+  }
+
+  const recompensasQuery = query(this._rutaPremiosUsuarios, ...constraints, limit(pageSize));
+  const snapshot = await getDocs(recompensasQuery);
+
+  const recompensas = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as PremioUsuario[];
+  const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+
+  return { recompensas, lastVisible };
+}
+
+
+
 
 }

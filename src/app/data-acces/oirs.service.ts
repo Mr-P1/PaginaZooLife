@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {
   Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query,
   where, deleteDoc, getDocs, orderBy, limit, startAfter, DocumentData,
-  startAt, setDoc,
+  startAt, setDoc,QueryConstraint,
   onSnapshot
 } from '@angular/fire/firestore';
 
@@ -156,6 +156,26 @@ export class OirsService {
     }
 
 
+
+  // Método genérico para obtener OIRS con filtros dinámicos
+  getFilteredOirs(
+    tipoSolicitud: string = '',
+    estadoSolicitud: string = ''
+  ): Observable<Oirs[]> {
+    const constraints: QueryConstraint[] = [];
+
+    if (tipoSolicitud) {
+      constraints.push(where('tipoSolicitud', '==', tipoSolicitud));
+    }
+
+    if (estadoSolicitud) {
+      const isRespondido = estadoSolicitud === 'respondido';
+      constraints.push(where('respondido', '==', isRespondido));
+    }
+
+    const oirsQuery = query(this._rutaOirs, ...constraints);
+    return collectionData(oirsQuery, { idField: 'id' }) as Observable<Oirs[]>;
+  }
 
 
 }

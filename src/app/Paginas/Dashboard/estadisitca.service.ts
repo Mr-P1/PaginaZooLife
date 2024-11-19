@@ -9,7 +9,7 @@ import {
 
 import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angular/fire/storage';
 import { catchError, Observable, tap, throwError, from } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, timestamp } from 'rxjs/operators';
 
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -18,6 +18,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 import { startOfDay, endOfDay } from 'date-fns';
+import { startOfWeek, endOfWeek } from 'date-fns';
 
 
 
@@ -142,13 +143,22 @@ export interface ReaccionPlanta {
 }
 
 export interface AnimalesVistos {
-  animalId: string;
-  fecha: Timestamp;
+  animalId:string,
+  area:string,
+  metodoIngreso:string ,//qr, searchbar, card
+  userId:string,
+  vistoEn:Timestamp
+
 }
+
+
 
 export interface PlantasVistas {
   plantaId: string;
-  fecha: Timestamp;
+  area:string,
+  metodoIngreso:string ,//qr, searchbar, card
+  userId:string,
+  vistoEn:Timestamp
 }
 
 
@@ -196,10 +206,18 @@ export class estadisticaService {
 
 
 
-  // oirs.service.ts
+  getAverageRatingSemanaActual(): Observable<number> {
+    const hoy = new Date();
+    const inicioSemana = Timestamp.fromDate(startOfWeek(hoy));
+    const finSemana = Timestamp.fromDate(endOfWeek(hoy));
 
-  getAverageRating(): Observable<number> {
-    return collectionData(this._rutaRating, { idField: 'id' }).pipe(
+    const ratingsQuery = query(
+      this._rutaRating,
+      where('date', '>=', inicioSemana),
+      where('date', '<=', finSemana)
+    );
+
+    return collectionData(ratingsQuery, { idField: 'id' }).pipe(
       map((ratings: Rating[]) => {
         if (ratings.length === 0) return 0; // Evitar división por cero
         const totalRating = ratings.reduce((sum, rating) => sum + rating.rating, 0);
@@ -207,7 +225,6 @@ export class estadisticaService {
       })
     );
   }
-
   // En el servicio estadisticaService
   getPendingOirsCount(): Observable<number> {
     const q = query(this._rutaOirs, where("respondido", "==", false));
@@ -308,217 +325,91 @@ getVisitsTodayCount(): Observable<number> {
     });
   }
 
-    //Area mas visitada HOY
-//   getAreasMasVisitadasHoy(): Observable<{ area: string; countQR: number; countOtros: number }[]> {
-//     const todayStart = Timestamp.fromDate(startOfDay(new Date()));
-//     const todayEnd = Timestamp.fromDate(endOfDay(new Date()));
-
-//     return new Observable(observer => {
-//         // Obtener datos de `AnimalesVistos`
-//         const unsubscribeAnimales = onSnapshot(
-//             query(this._rutaAnimalesVistos, where('fecha', '>=', todayStart), where('fecha', '<=', todayEnd)),
-//             animalesVistosSnapshot => {
-//                 console.log("Snapshot de AnimalesVistos obtenido:", animalesVistosSnapshot.docs.length);
-
-//                 const conteoPorAreaQR: { [area: string]: number } = {};
-//                 const conteoPorAreaOtros: { [area: string]: number } = {};
-
-//                 const conteoPorAnimalId: { [key: string]: number } = {};
-
-//                 // Contar cada `animalId` en `AnimalesVistos`
-//                 animalesVistosSnapshot.docs.forEach(vistoDoc => {
-//                     const animalVisto = vistoDoc.data() as AnimalesVistos;
-//                     console.log("Animal visto:", animalVisto);
-//                     conteoPorAnimalId[animalVisto.animalId] = (conteoPorAnimalId[animalVisto.animalId] || 0) + 1;
-//                 });
-
-//                 const animalIdsUnicos = Object.keys(conteoPorAnimalId);
-//                 const promesasAnimales = animalIdsUnicos.map(animalId => getDoc(getFirestoreDoc(this._firestore, `Animales/${animalId}`)));
-
-//                 Promise.all(promesasAnimales).then(resultados => {
-//                     resultados.forEach(animalSnapshot => {
-//                         if (animalSnapshot.exists()) {
-//                             const animalData = animalSnapshot.data() as { area: string; tipoAcceso: string };
-//                             console.log("Datos del animal:", animalData);
-
-//                             const area = animalData.area;
-//                             const tipoAcceso = animalData.tipoAcceso; // tipoAcceso: 'qr' o 'otro'
-
-//                             if (tipoAcceso === 'qr') {
-//                                 conteoPorAreaQR[area] = (conteoPorAreaQR[area] || 0) + conteoPorAnimalId[animalSnapshot.id];
-//                             } else {
-//                                 conteoPorAreaOtros[area] = (conteoPorAreaOtros[area] || 0) + conteoPorAnimalId[animalSnapshot.id];
-//                             }
-//                         }
-//                     });
-
-//                     const resultado = Object.keys(conteoPorAreaQR).map(area => ({
-//                         area,
-//                         countQR: conteoPorAreaQR[area] || 0,
-//                         countOtros: conteoPorAreaOtros[area] || 0
-//                     }));
-//                     console.log("Resultado final:", resultado);
-//                     observer.next(resultado);
-//                 }).catch(error => {
-//                     console.error("Error en promesas de animales:", error);
-//                     observer.error(error);
-//                 });
-//             },
-//             error => {
-//                 console.error("Error en onSnapshot de AnimalesVistos:", error);
-//                 observer.error(error);
-//             }
-//         );
-
-//         // Desuscribirse del observador al finalizar
-//         return () => unsubscribeAnimales();
-//     });
-// }
 
 
+  getAreasMasVisitadasSemana(): Observable<{ area: string; countQR: number; countOtros: number }[]> {
+    const startOfCurrentWeek = Timestamp.fromDate(startOfWeek(new Date())); // Inicio de la semana actual
+    const endOfCurrentWeek = Timestamp.fromDate(endOfWeek(new Date())); // Fin de la semana actual
 
-// getAreasMasVisitadasRealtime(): Observable<{ area: string, count: number }[]> {
-//   return new Observable((observer) => {
-//       // Obtener el snapshot en tiempo real de `AnimalesVistos`
-//       const unsubscribe = onSnapshot(this._rutaAnimalesVistos, (animalesVistosSnapshot) => {
-//           const conteoPorArea: { [area: string]: number } = {
-//               'Selva Tropical': 0,
-//               'Sabana Africana': 0,
-//               'Acuario': 0,
-//               'Montañas': 0,
-//           };
+    // Define los valores posibles para las áreas
+    type Area = 'Selva Tropical' | 'Sabana Africana' | 'Acuario' | 'Montañas';
 
-//           const conteoPorAnimalId: { [key: string]: number } = {};
-
-//           // Contar cuántas veces aparece cada animalId en AnimalesVistos
-//           animalesVistosSnapshot.docs.forEach((vistoDoc) => {
-//               const animalVisto = vistoDoc.data() as { animalId: string };
-//               conteoPorAnimalId[animalVisto.animalId] = (conteoPorAnimalId[animalVisto.animalId] || 0) + 1;
-//           });
-
-//           // Obtener solo los datos de los animales únicos
-//           const animalIdsUnicos = Object.keys(conteoPorAnimalId);
-//           const promesas = animalIdsUnicos.map(animalId => {
-//               const animalRef = doc(this._firestore, `Animales/${animalId}`);
-//               return getDoc(animalRef);
-//           });
-
-//           // Esperar a que se resuelvan todas las promesas
-//           Promise.all(promesas).then((resultados) => {
-//               // Procesar cada documento de animal
-//               resultados.forEach((animalSnapshot) => {
-//                   if (animalSnapshot.exists()) {
-//                       const animalData = animalSnapshot.data() as { area: string };
-//                       const area = animalData.area;
-
-//                       // Sumar las visitas para el área correspondiente
-//                       if (conteoPorArea[area] !== undefined) {
-//                           conteoPorArea[area] += conteoPorAnimalId[animalSnapshot.id];
-//                       }
-//                   }
-//               });
-
-//               // Convertir el objeto en un array y ordenarlo por visitas
-//               const resultado = Object.entries(conteoPorArea)
-//                   .map(([area, count]) => ({ area, count }))
-//                   .sort((a, b) => b.count - a.count);
-
-//               observer.next(resultado);
-//           }).catch((error) => {
-//               observer.error(error);
-//           });
-//       });
-
-//       // Devolver función para cancelar la suscripción
-//       return () => unsubscribe();
-//   });
-// }
-
-
-
-getAreasMasVisitadasRealtime(): Observable<{ area: string, count: number }[]> {
-  return new Observable((observer) => {
-    // Obtener el snapshot en tiempo real de `AnimalesVistos`
-    const unsubscribeAnimales = onSnapshot(this._rutaAnimalesVistos, (animalesVistosSnapshot) => {
-      // Inicializar conteo por área con valores predefinidos para cada área
-      const conteoPorArea: { [area: string]: number } = {
-        'Selva Tropical': 0,
-        'Sabana Africana': 0,
-        'Acuario': 0,
-        'Montañas': 0,
-      };
-
-      const conteoPorAnimalId: { [key: string]: number } = {};
-
-      // Contar cuántas veces aparece cada animalId en `AnimalesVistos`
-      animalesVistosSnapshot.docs.forEach((vistoDoc) => {
-        const animalVisto = vistoDoc.data() as { animalId: string };
-        conteoPorAnimalId[animalVisto.animalId] = (conteoPorAnimalId[animalVisto.animalId] || 0) + 1;
-      });
-
-      // Obtener solo los datos de los animales únicos
-      const animalIdsUnicos = Object.keys(conteoPorAnimalId);
-      const promesasAnimales = animalIdsUnicos.map(animalId => {
-        const animalRef = doc(this._firestore, `Animales/${animalId}`);
-        return getDoc(animalRef);
-      });
-
-      // Obtener el snapshot en tiempo real de `PlantasVistas`
-      const unsubscribePlantas = onSnapshot(this._rutaPlantasVistas, (plantasVistasSnapshot) => {
-        const conteoPorPlantaId: { [key: string]: number } = {};
-
-        // Contar cuántas veces aparece cada plantaId en `PlantasVistas`
-        plantasVistasSnapshot.docs.forEach((vistoDoc) => {
-          const plantaVisto = vistoDoc.data() as { plantaId: string };
-          conteoPorPlantaId[plantaVisto.plantaId] = (conteoPorPlantaId[plantaVisto.plantaId] || 0) + 1;
-        });
-
-        // Obtener solo los datos de las plantas únicas
-        const plantaIdsUnicos = Object.keys(conteoPorPlantaId);
-        const promesasPlantas = plantaIdsUnicos.map(plantaId => {
-          const plantaRef = doc(this._firestore, `Plantas/${plantaId}`);
-          return getDoc(plantaRef);
-        });
-
-        // Esperar a que se resuelvan todas las promesas de `Animales` y `Plantas`
-        Promise.all([...promesasAnimales, ...promesasPlantas]).then((resultados) => {
-          resultados.forEach((snapshot) => {
-            if (snapshot.exists()) {
-              const data = snapshot.data() as { area: string };
-              const area = data.area;
-
-              if (conteoPorArea[area] === undefined) {
-                conteoPorArea[area] = 0;
-              }
-
-              // Verificar si el snapshot pertenece a `AnimalesVistos` o `PlantasVistas`
-              if (animalIdsUnicos.includes(snapshot.id)) {
-                conteoPorArea[area] += conteoPorAnimalId[snapshot.id];
-              } else if (plantaIdsUnicos.includes(snapshot.id)) {
-                conteoPorArea[area] += conteoPorPlantaId[snapshot.id];
-              }
-            }
-          });
-
-          // Convertir el objeto en un array y ordenarlo por visitas
-          const resultado = Object.entries(conteoPorArea)
-            .map(([area, count]) => ({ area, count }))
-            .sort((a, b) => b.count - a.count);
-
-          observer.next(resultado);
-        }).catch((error) => {
-          observer.error(error);
-        });
-      });
-
-      // Desuscribirse del observador de `PlantasVistas` al finalizar
-      return () => unsubscribePlantas();
+    // Función para inicializar conteos
+    const inicializarConteos = (): { QR: Record<Area, number>; Otros: Record<Area, number> } => ({
+      QR: { 'Selva Tropical': 0, 'Sabana Africana': 0, 'Acuario': 0, 'Montañas': 0 },
+      Otros: { 'Selva Tropical': 0, 'Sabana Africana': 0, 'Acuario': 0, 'Montañas': 0 },
     });
 
-    // Desuscribirse del observador de `AnimalesVistos` al finalizar
-    return () => unsubscribeAnimales();
-  });
-}
+    return new Observable((observer) => {
+      let conteoActual = inicializarConteos();
+
+      const procesarSnapshot = (snapshot: any, tipo: string): { QR: Record<Area, number>; Otros: Record<Area, number> } => {
+        const conteos = inicializarConteos();
+
+        snapshot.docs.forEach((doc: any) => {
+          const data = doc.data() as { area: Area; metodoIngreso: string };
+          const area = data.area;
+
+          if (data.metodoIngreso === 'qr') {
+            conteos.QR[area]++;
+          } else {
+            conteos.Otros[area]++;
+          }
+        });
+
+        console.log(`Datos procesados (${tipo}):`, conteos);
+        return conteos;
+      };
+
+      const combinarResultados = (
+        conteos1: { QR: Record<Area, number>; Otros: Record<Area, number> },
+        conteos2: { QR: Record<Area, number>; Otros: Record<Area, number> }
+      ): { QR: Record<Area, number>; Otros: Record<Area, number> } => {
+        const resultado = inicializarConteos();
+
+        (Object.keys(conteos1.QR) as Area[]).forEach((area) => {
+          resultado.QR[area] = (conteos1.QR[area] || 0) + (conteos2.QR[area] || 0);
+          resultado.Otros[area] = (conteos1.Otros[area] || 0) + (conteos2.Otros[area] || 0);
+        });
+
+        return resultado;
+      };
+
+      const enviarResultado = () => {
+        const resultado = (Object.keys(conteoActual.QR) as Area[]).map((area) => ({
+          area,
+          countQR: conteoActual.QR[area],
+          countOtros: conteoActual.Otros[area],
+        }));
+
+        console.log('Resultado final:', resultado);
+        observer.next(resultado);
+      };
+
+      const unsubscribeAnimales = onSnapshot(
+        query(this._rutaAnimalesVistos, where('vistoEn', '>=', startOfCurrentWeek), where('vistoEn', '<=', endOfCurrentWeek)),
+        (snapshot) => {
+          const conteosAnimales = procesarSnapshot(snapshot, 'Animales');
+          conteoActual = combinarResultados(conteosAnimales, conteoActual);
+          enviarResultado();
+        }
+      );
+
+      const unsubscribePlantas = onSnapshot(
+        query(this._rutaPlantasVistas, where('vistoEn', '>=', startOfCurrentWeek), where('vistoEn', '<=', endOfCurrentWeek)),
+        (snapshot) => {
+          const conteosPlantas = procesarSnapshot(snapshot, 'Plantas');
+          conteoActual = combinarResultados(conteoActual, conteosPlantas);
+          enviarResultado();
+        }
+      );
+
+      return () => {
+        unsubscribeAnimales();
+        unsubscribePlantas();
+      };
+    });
+  }
 
 
 

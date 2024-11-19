@@ -1,0 +1,44 @@
+<div class="bg-white p-6 rounded-lg shadow space-y-6">
+  <h3 class="text-lg font-semibold text-gray-700">Comentarios sobre el Uso de la Aplicación</h3>
+
+  <!-- Filtros de comentarios -->
+  <div class="flex flex-wrap gap-4">
+    <select class="border border-gray-300 rounded-md p-2" [(ngModel)]="selectedRating" (change)="applyFilters()">
+      <option value="">Todas las Calificaciones</option>
+      <option value="1">1 Estrella</option>
+      <option value="2">2 Estrellas</option>
+      <option value="3">3 Estrellas</option>
+      <option value="4">4 Estrellas</option>
+      <option value="5">5 Estrellas</option>
+    </select>
+  </div>
+
+  <!-- Listado de comentarios -->
+  <div class="space-y-4">
+    <div *ngFor="let comment of paginatedComments" class="bg-gray-50 p-4 rounded-lg shadow border border-gray-200">
+      <p class="text-sm text-gray-600">"{{ comment.comments }}"</p>
+      <div class="flex justify-between items-center mt-2">
+        <p class="text-xs text-gray-500">Fecha: {{ comment.date | date:'dd/MM/yyyy' }}</p>
+        <p class="text-yellow-500 font-bold">{{ comment.rating }} Estrellas</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de paginación -->
+  <div class="flex justify-between items-center mt-4">
+    <button
+      class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+      [disabled]="currentPage === 1"
+      (click)="changePage('prev')"
+    >
+      Anterior
+    </button>
+    <button
+      class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+      [disabled]="currentPage === totalPages"
+      (click)="changePage('next')"
+    >
+      Siguiente
+    </button>
+  </div>
+</div>

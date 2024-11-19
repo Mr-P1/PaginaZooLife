@@ -36,6 +36,7 @@ import { OirsSugerenciaComponent } from './Paginas/Oirs/oirs-sugerencia/oirs-sug
 import { CrearPreguntasPlantasComponent } from './Paginas/Preguntas/crear-preguntas-plantas/crear-preguntas-plantas.component';
 import { ModificarPreguntasPlantasComponent } from './Paginas/Preguntas/modificar-preguntas-plantas/modificar-preguntas-plantas.component';
 import { DashboardEstadisticoComponent } from './Paginas/Dashboard/dashboard-estadistico/dashboard-estadistico.component';
+import { OirsSatisfaccionComponent } from './Paginas/ApartadoGestion/oirs-satisfaccion/oirs-satisfaccion.component';
 
 export const routes: Routes = [
 
@@ -55,10 +56,6 @@ export const routes: Routes = [
       { path:'crear_evento',component:CrearEventoComponent},
       { path:'modificar_animal/:idAnimal',component:ModificarAnimalComponent},
       { path:'modificar_evento/:idEvento',component:ModificarEventoComponent},
-      { path:'estadisticas',component:EstadisticasComponent},
-      { path:'uso_aplicacion',component:UsoAplicacionComponent},
-      { path:'respuestas_trivia',component:RespuestasTriviaComponent},
-      { path:'areas-visitadas',component:AreasVisitadasComponent},
       { path:'mapa',component:MapaComponent},
       { path:'preguntas',component:ListarPreguntasComponent},
       { path:'crear_pregunta',component:CrearPreguntasComponent},
@@ -74,19 +71,26 @@ export const routes: Routes = [
       { path:'modificar_noticia/:idNoticia',component:ModificarNoticiaComponent},
       { path:'usuarios',component:ListarUsuariosComponent},
       { path:'ver_mas/:IdUsuario',component:VerMasComponent},
-      { path:'chat/:IdUsuario',component:ChatComponent},
       { path:'generar-codigo',component:GenerarCodigoComponent},
-      {path:'oirs-consulta',component:OirsConsultaComponent},
-      {path:'oirs-felicitacion',component:OirsFelicitacionComponent},
-      {path:'oirs-reclamo',component:OirsReclamoComponent},
-      {path:'oirs-sugerencia',component:OirsSugerenciaComponent},
       {path:'crear_pregunta_planta',component:CrearPreguntasPlantasComponent},
       { path:'modificar_pregunta_planta/:idPregunta',component:ModificarPreguntasPlantasComponent},
 
 
+      { path:'estadisticas2',component:EstadisticasComponent},
+      {path:'oirs-consulta',component:OirsConsultaComponent},
+      {path:'oirs-felicitacion',component:OirsFelicitacionComponent},
+      {path:'oirs-reclamo',component:OirsReclamoComponent},
+      {path:'oirs-sugerencia',component:OirsSugerenciaComponent},
+      { path:'chat/:IdUsuario',component:ChatComponent},
+      { path:'areas-visitadas',component:AreasVisitadasComponent},
+      { path:'uso_aplicacion',component:UsoAplicacionComponent},
+      { path:'respuestas_trivia',component:RespuestasTriviaComponent},
+
+
       { path:'prueba',component:DashboardComponent},
 
-      { path:'dashboard',component:DashboardEstadisticoComponent},
+      { path:'estadisticas',component:DashboardEstadisticoComponent},
+      {path:'oirs-rating-satisfaccion',component:OirsSatisfaccionComponent}
     ],
   },
   {
