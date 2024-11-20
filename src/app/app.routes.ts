@@ -37,6 +37,7 @@ import { CrearPreguntasPlantasComponent } from './Paginas/Preguntas/crear-pregun
 import { ModificarPreguntasPlantasComponent } from './Paginas/Preguntas/modificar-preguntas-plantas/modificar-preguntas-plantas.component';
 import { DashboardEstadisticoComponent } from './Paginas/Dashboard/dashboard-estadistico/dashboard-estadistico.component';
 import { OirsSatisfaccionComponent } from './Paginas/ApartadoGestion/oirs-satisfaccion/oirs-satisfaccion.component';
+import { UsoAppTriviasComponent } from './Paginas/ApartadoGestionAplicacion/uso-app-trivias/uso-app-trivias.component';
 
 export const routes: Routes = [
 
@@ -90,7 +91,9 @@ export const routes: Routes = [
       { path:'prueba',component:DashboardComponent},
 
       { path:'estadisticas',component:DashboardEstadisticoComponent},
-      {path:'oirs-rating-satisfaccion',component:OirsSatisfaccionComponent}
+      {path:'oirs-rating-satisfaccion',component:OirsSatisfaccionComponent},
+      {path:'uso-app-trivias',component:UsoAppTriviasComponent},
+
     ],
   },
   {

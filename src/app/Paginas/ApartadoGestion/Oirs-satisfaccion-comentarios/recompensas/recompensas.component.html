@@ -1,88 +1,24 @@
-<!-- <div class="bg-white p-6 rounded-lg shadow space-y-6">
-  <h3 class="text-lg font-semibold text-gray-700">Recompensas</h3>
-
-  <div class="flex flex-wrap gap-4">
-    <select class="border border-gray-300 rounded-md p-2">
-      <option value="">Todas</option>
-      <option value="reclamado">Reclamadas</option>
-      <option value="noReclamado">No Reclamadas</option>
-    </select>
-  </div>
-
-
-  <div class="overflow-x-auto">
-    <table class="min-w-full border border-gray-300">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="text-left p-2 border-b">Usuario</th>
-          <th class="text-left p-2 border-b">Premio</th>
-          <th class="text-left p-2 border-b">Código</th>
-          <th class="text-left p-2 border-b">Estado</th>
-          <th class="text-left p-2 border-b">Acción</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y">
-
-        <tr>
-          <td class="p-2">Juan Pérez</td>
-          <td class="p-2">Pelota de Fútbol</td>
-          <td class="p-2">ABCD1234</td>
-          <td class="p-2 text-green-500">Reclamado</td>
-          <td class="p-2">
-            <button
-              class="bg-gray-300 text-gray-700 px-3 py-1 rounded cursor-not-allowed"
-            >
-              Reclamado
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td class="p-2">Ana Martínez</td>
-          <td class="p-2">Gorra Deportiva</td>
-          <td class="p-2">EFGH5678</td>
-          <td class="p-2 text-red-500">No Reclamado</td>
-          <td class="p-2">
-            <button
-              class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-            >
-              Reclamar
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td class="p-2">Luis Gómez</td>
-          <td class="p-2">Botella Reutilizable</td>
-          <td class="p-2">IJKL9101</td>
-          <td class="p-2 text-red-500">No Reclamado</td>
-          <td class="p-2">
-            <button
-              class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-            >
-              Reclamar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-
-  <div class="flex justify-between items-center mt-4">
-    <button
-      class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-    >
-      Anterior
-    </button>
-    <button
-      class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-    >
-      Siguiente
-    </button>
-  </div>
-</div> -->
-
 <div class="bg-white p-6 rounded-lg shadow space-y-6">
   <h3 class="text-lg font-semibold text-gray-700">Recompensas</h3>
+
+<!-- Gráfico de recompensas -->
+<div class="bg-gray-50 p-4 rounded-md shadow-md">
+  <div class="flex justify-between items-center mb-4">
+    <h4 class="text-md font-semibold text-gray-600">Recompensas por Mes</h4>
+    <select
+      class="border border-gray-300 rounded-md p-2"
+      [(ngModel)]="selectedYear6"
+      (change)="updateRewardsGraph()"
+    >
+      <option *ngFor="let year of availableYears" [value]="year">
+        {{ year }}
+      </option>
+    </select>
+  </div>
+  <canvas id="rewardsChart" class="w-full h-[300px]"></canvas>
+</div>
+
+
 
   <!-- Filtros -->
   <div class="flex flex-wrap gap-4">

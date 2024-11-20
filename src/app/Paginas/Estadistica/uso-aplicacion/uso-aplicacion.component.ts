@@ -34,7 +34,7 @@ export class UsoAplicacionComponent implements OnInit {
   cargarTodosLosGraficos() {
     this.cargarGraficoPorDia();
     this.cargarGraficoPorSemana();
-    this.cargarGraficoPorAno();
+
   }
 
   cargarGraficoPorDia() {
@@ -52,14 +52,7 @@ export class UsoAplicacionComponent implements OnInit {
     });
   }
 
-  cargarGraficoPorAno() {
-    this.boletasService.obtenerBoletasPorAno().subscribe(({ labels, data }) => {
-      // Cambiar las etiquetas de los meses del año (enero, febrero, etc.)
-      const mesesAno = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-      const labelsAno = mesesAno.slice(0, labels.length);  // Ajustar los meses según los datos recibidos
-      this.generarGrafico('graficoAno', 'bar', labelsAno, data, 'Usuarios por Mes');
-    });
-  }
+
 
   private generarGrafico(id: string, tipo: string, labels: string[], data: number[], titulo: string) {
     const ctx = document.getElementById(id) as HTMLCanvasElement;

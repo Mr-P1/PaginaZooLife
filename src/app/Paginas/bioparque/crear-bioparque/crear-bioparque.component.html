@@ -1,36 +1,32 @@
 <!-- Main modal -->
-<div
-  id="updateProductModal"
-  tabindex="-1"
-  aria-hidden="true"
-  class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
->
-  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-    <!-- Modal content -->
-    <div class="relative p-4 rounded-lg shadow bg-orange-400 sm:p-5">
-      <!-- Modal header -->
-      <div class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800">
-        <h3 class="text-lg font-semibold text-white">Crear Planta</h3>
-      </div>
-      <!-- Modal body -->
-      <form [formGroup]="form" (ngSubmit)="submit()">
+<div class="max-w-4xl mx-auto p-6 bg-orange-400 shadow-md rounded-md mt-8">
+  <!-- Modal header -->
+      <h2 class="flex justify-center items-center text-2xl font-semibold text-white mb-6">
+        Crear plantas
+    </h2>
+
+       <!-- Modal body -->
+       <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
         <!-- comienzo -->
-        <div class="grid gap-4 mb-4 sm:grid-cols-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
 
           <!-- Nombre común -->
-          <div>
-            <label for="nombre_comun" class="block mb-2 text-sm font-medium text-white">Nombre común</label>
+          <div class="flex flex-col">
+            <label for="nombre_comun" class="text-white">Nombre Común</label>
             <input
               type="text"
               id="nombre_comun"
-              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
+              class="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
               placeholder="Nombre común de la planta"
               formControlName="nombre_comun"
+              required
             />
             <div *ngIf="form.get('nombre_comun')?.touched && form.get('nombre_comun')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('nombre_comun')?.errors?.['required']">Ingrese un nombre común para la planta</span>
             </div>
           </div>
+
 
           <!-- Nombre Científico -->
           <div>
@@ -114,122 +110,156 @@
         </div>
 
 
-          <!-- Altura y Formato -->
-          <div>
-            <label for="altura" class="block mb-2 text-sm font-medium text-white">Altura</label>
-            <div class="flex">
-              <input
-                type="number"
-                id="altura"
-                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
-                placeholder="Altura de la planta"
-                formControlName="altura"
-              />
-              <select
-                formControlName="altura_formato"
-                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-auto p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black ml-2"
-              >
-                <option selected disabled>Unidad</option>
-                <option value="Cm">Cm</option>
-                <option value="Mt">Mt</option>
-              </select>
-            </div>
-            <div *ngIf="form.get('altura')?.touched && form.get('altura')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('altura')?.errors?.['required']">Ingrese una altura</span>
-            </div>
-            <div *ngIf="form.get('altura_formato')?.touched && form.get('altura_formato')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('altura_formato')?.errors?.['required']">Seleccione un formato para la altura</span>
-            </div>
-          </div>
-
-          <!-- peso -->
-          <div>
-            <label for="Peso" class="block mb-2 text-sm font-medium text-white">Peso</label>
-            <div class="flex">
-              <input
-                type="number"
-                id="peso"
-                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
-                placeholder="Peso de la planta"
-                formControlName="peso"
-              />
-              <select
-                formControlName="peso_formato"
-                class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-auto p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black ml-2"
-              >
-                <option selected disabled>Unidad</option>
-                <option value="Gr">Gr</option>
-                <option value="Kg">Kg</option>
-              </select>
-            </div>
-            <div *ngIf="form.get('peso')?.touched && form.get('peso')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('peso')?.errors?.['required']">Ingrese una peso</span>
-            </div>
-            <div *ngIf="form.get('peso_formato')?.touched && form.get('peso_formato')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('peso_formato')?.errors?.['required']">Seleccione un formato para la peso</span>
-            </div>
-          </div>
-
-          <!-- Descripción 1 -->
-          <div>
-            <label for="descripcion_1" class="block mb-2 text-sm font-medium text-white">Descripción 1</label>
-            <textarea
-              id="descripcion_1"
-              formControlName="descripcion_1"
-              rows="3"
-              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Primera descripción de la planta"
-            ></textarea>
-            <div *ngIf="form.get('descripcion_1')?.touched && form.get('descripcion_1')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('descripcion_1')?.errors?.['required']">Ingrese la primera descripción de la planta</span>
-            </div>
-          </div>
-
-          <!-- Descripción 2 -->
-          <div>
-            <label for="descripcion_2" class="block mb-2 text-sm font-medium text-white">Descripción 2</label>
-            <textarea
-              id="descripcion_2"
-              formControlName="descripcion_2"
-              rows="3"
-              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Segunda descripción de la planta"
-            ></textarea>
-            <div *ngIf="form.get('descripcion_2')?.touched && form.get('descripcion_2')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('descripcion_2')?.errors?.['required']">Ingrese la segunda descripción de la planta</span>
-            </div>
-          </div>
-
-          <!-- Descripción 3 -->
-          <div>
-            <label for="descripcion_3" class="block mb-2 text-sm font-medium text-white">Descripción 3</label>
-            <textarea
-              id="descripcion_3"
-              formControlName="descripcion_3"
-              rows="3"
-              class="block p-2.5 w-full text-sm rounded-lg border focus:ring-primary-500 focus:border-primary-500 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Tercera descripción de la planta"
-            ></textarea>
-            <div *ngIf="form.get('descripcion_3')?.touched && form.get('descripcion_3')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('descripcion_3')?.errors?.['required']">Ingrese la tercera descripción de la planta</span>
-            </div>
-          </div>
-
-          <!-- Cuidados -->
-          <div>
-            <label for="cuidados" class="block mb-2 text-sm font-medium text-white">Cuidados</label>
+             <!-- Peso y Altura en una fila -->
+      <div class="flex gap-4">
+        <!-- Altura -->
+        <div class="flex flex-col w-1/2">
+          <label for="altura" class="text-white">Altura</label>
+          <div class="flex">
             <input
-              type="text"
-              id="cuidados"
-              class="border text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black"
-              placeholder="Periodo de floración"
-              formControlName="cuidados"
+              type="number"
+              id="altura"
+              class="p-2 border rounded-md w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Altura de la planta"
+              formControlName="altura"
+              required
             />
-            <div *ngIf="form.get('cuidados')?.touched && form.get('cuidados')?.invalid" class="text-sm text-white">
-              <span *ngIf="form.get('cuidados')?.errors?.['required']">Ingrese los cuidados de la planta</span>
-            </div>
+            <select
+              formControlName="altura_formato"
+              class="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300 ml-2"
+              required
+            >
+              <option selected disabled>Unidad</option>
+              <option value="Cm">Cm</option>
+              <option value="Mt">Mt</option>
+            </select>
           </div>
+          <div *ngIf="form.get('altura')?.touched && form.get('altura')?.invalid" class="text-sm text-white">
+            <span *ngIf="form.get('altura')?.errors?.['required']">Ingrese una altura</span>
+          </div>
+          <div *ngIf="form.get('altura_formato')?.touched && form.get('altura_formato')?.invalid" class="text-sm text-white">
+            <span *ngIf="form.get('altura_formato')?.errors?.['required']">Seleccione un formato para la altura</span>
+          </div>
+        </div>
 
+        <!-- Peso -->
+        <div class="flex flex-col w-1/2">
+          <label for="peso" class="text-white">Peso</label>
+          <div class="flex">
+            <input
+              type="number"
+              id="peso"
+              class="p-2 border rounded-md w-full focus:outline-none focus:ring focus:ring-blue-300"
+              placeholder="Peso de la planta"
+              formControlName="peso"
+              required
+            />
+            <select
+              formControlName="peso_formato"
+              class="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300 ml-2"
+              required
+            >
+              <option selected disabled>Unidad</option>
+              <option value="Gr">Gr</option>
+              <option value="Kg">Kg</option>
+            </select>
+          </div>
+          <div *ngIf="form.get('peso')?.touched && form.get('peso')?.invalid" class="text-sm text-white">
+            <span *ngIf="form.get('peso')?.errors?.['required']">Ingrese un peso</span>
+          </div>
+          <div *ngIf="form.get('peso_formato')?.touched && form.get('peso_formato')?.invalid" class="text-sm text-white">
+            <span *ngIf="form.get('peso_formato')?.errors?.['required']">Seleccione un formato para el peso</span>
+          </div>
+        </div>
+      </div>
+
+
+
+    <!-- Descripciones -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="flex flex-col">
+        <label for="descripcion_1" class="text-white">Descripción 1</label>
+        <textarea
+          formControlName="descripcion_1"
+          id="descripcion_1"
+          class="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Ingrese Descripción 1"
+          required
+        ></textarea>
+        <div
+        *ngIf="
+          form.get('descripcion_1')?.touched &&
+          form.get('descripcion_1')?.invalid
+        "
+        class="text-sm text-white"
+      >
+        <span *ngIf="form.get('descripcion_1')?.errors?.['required']"
+          >Ingrese una descripcion</span
+        >
+      </div>
+      </div>
+      <div class="flex flex-col">
+        <label for="descripcion_2" class="text-white">Descripción 2</label>
+        <textarea
+          formControlName="descripcion_2"
+          id="descripcion_2"
+          class="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Ingrese Descripción 2"
+          required
+        ></textarea>
+        <div
+        *ngIf="
+          form.get('descripcion_2')?.touched &&
+          form.get('descripcion_2')?.invalid
+        "
+        class="text-sm text-white"
+      >
+        <span *ngIf="form.get('descripcion_2')?.errors?.['required']"
+          >Ingrese una descripcion</span
+        >
+      </div>
+      </div>
+      <div class="flex flex-col">
+        <label for="descripcion_3" class="text-white">Descripción 3</label>
+        <textarea
+          formControlName="descripcion_3"
+          id="descripcion_3"
+          class="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Ingrese Descripción 3"
+          required
+        ></textarea>
+        <div
+        *ngIf="
+          form.get('descripcion_3')?.touched &&
+          form.get('descripcion_3')?.invalid
+        "
+        class="text-sm text-white"
+      >
+        <span *ngIf="form.get('descripcion_3')?.errors?.['required']"
+          >Ingrese una descripcion</span
+        >
+      </div>
+      </div>
+    </div>
+
+
+    <!-- Fila de Cuidados -->
+    <div class="flex justify-center">
+      <div class="flex flex-col w-full max-w-md">
+        <label for="cuidados" class="text-white">Cuidados</label>
+        <input
+          type="text"
+          id="cuidados"
+          class="p-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Cuidados necesarios para la planta"
+          formControlName="cuidados"
+          required
+        />
+        <div *ngIf="form.get('cuidados')?.touched && form.get('cuidados')?.invalid" class="text-sm text-white">
+          <span *ngIf="form.get('cuidados')?.errors?.['required']">Ingrese los cuidados de la planta</span>
+        </div>
+      </div>
+    </div>
           <!-- Floración -->
           <div>
             <label for="floracion" class="block mb-2 text-sm font-medium text-white">Floración</label>
@@ -414,6 +444,4 @@
         </div>
 
       </form>
-    </div>
-  </div>
 </div>

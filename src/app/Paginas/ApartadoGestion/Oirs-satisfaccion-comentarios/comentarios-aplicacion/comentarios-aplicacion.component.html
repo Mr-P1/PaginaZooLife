@@ -1,6 +1,22 @@
 <div class="bg-white p-6 rounded-lg shadow space-y-6">
   <h3 class="text-lg font-semibold text-gray-700">Comentarios sobre el Uso de la Aplicación</h3>
 
+
+  <!-- Gráfico de satisfacción por año -->
+  <div class="bg-gray-50 p-4 rounded-md shadow-md">
+    <div class="flex justify-between items-center mb-4">
+      <h4 class="text-md font-semibold text-gray-600">Satisfacción por Mes</h4>
+      <select
+        class="border border-gray-300 rounded-md p-2"
+        [(ngModel)]="selectedYear5"
+        (change)="updateRatingsGraph()"
+      >
+        <option *ngFor="let year of availableYears" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+    <canvas id="ratingsChart" class="w-full h-[300px]"></canvas>
+  </div>
+
   <!-- Filtros de comentarios -->
   <div class="flex flex-wrap gap-4">
     <select class="border border-gray-300 rounded-md p-2" [(ngModel)]="selectedRating" (change)="applyFilters()">

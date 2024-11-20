@@ -1,95 +1,22 @@
-<!-- <div class="bg-white p-6 rounded-lg shadow space-y-6">
+<div class="bg-white p-6 rounded-lg shadow space-y-6">
   <h3 class="text-lg font-semibold text-gray-700">Solicitudes OIRS</h3>
 
-
-<div class="flex flex-wrap gap-4">
-  <select id="tipoSolicitud" class="border border-gray-300 rounded-md p-2">
-    <option value="">Todos los Tipos</option>
-    <option value="felicitacion">Felicitación</option>
-    <option value="consulta">Consulta</option>
-    <option value="sugerencia">Sugerencia</option>
-    <option value="reclamo">Reclamo</option>
-  </select>
-  <select id="estadoSolicitud" class="border border-gray-300 rounded-md p-2">
-    <option value="">Todos los Estados</option>
-    <option value="respondido">Respondido</option>
-    <option value="noRespondido">No Respondido</option>
-  </select>
-</div>
-
-<div class="overflow-x-auto">
-  <table class="min-w-full border border-gray-300">
-    <thead class="bg-gray-50">
-      <tr>
-        <th class="text-left p-2 border-b">Tipo</th>
-        <th class="text-left p-2 border-b">Detalles</th>
-        <th class="text-left p-2 border-b">Estado</th>
-        <th class="text-left p-2 border-b">Acción</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y">
-      <tr>
-        <td class="p-2">Felicitación</td>
-        <td class="p-2">Buena experiencia en la aplicación</td>
-        <td class="p-2 text-green-500">Respondido</td>
-        <td class="p-2">
-          <button
-            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-          >
-            Responder
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="p-2">Reclamo</td>
-        <td class="p-2">Problemas al iniciar sesión</td>
-        <td class="p-2 text-red-500">No Respondido</td>
-        <td class="p-2">
-          <button
-            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-          >
-            Responder
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td class="p-2">Consulta</td>
-        <td class="p-2">¿Cómo recuperar mi cuenta?</td>
-        <td class="p-2 text-green-500">Respondido</td>
-        <td class="p-2">
-          <button
-            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-          >
-            Responder
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
-
-<div class="flex justify-between items-center mt-4">
-<button
-  class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
->
-  Anterior
-</button>
-<button
-  class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
->
-  Siguiente
-</button>
-</div>
-
-
-</div>
- -->
-
-
- <div class="bg-white p-6 rounded-lg shadow space-y-6">
-  <h3 class="text-lg font-semibold text-gray-700">Solicitudes OIRS</h3>
+  <!-- Gráfico de OIRS por año -->
+  <div class="bg-gray-50 p-4 rounded-md shadow-md">
+    <div class="flex justify-between items-center mb-4">
+      <h4 class="text-md font-semibold text-gray-600">Solicitudes por Mes</h4>
+      <select
+        class="border border-gray-300 rounded-md p-2"
+        [(ngModel)]="selectedYear3"
+        (change)="updateOirsGraph()"
+      >
+        <option *ngFor="let year of availableYears" [value]="year">
+          {{ year }}
+        </option>
+      </select>
+    </div>
+    <canvas id="oirsChart" class="w-full h-[300px]"></canvas>
+  </div>
 
   <!-- Filtros de OIRS -->
   <div class="flex flex-wrap gap-4">
@@ -141,14 +68,15 @@
             <button
               class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
               *ngIf="!oir.respondido"
-              (click)="responderOIR(oir.userId, oir.id)">
+              (click)="responderOIR(oir.userId, oir.id)"
+            >
               Responder
             </button>
             <span class="text-gray-500 italic" *ngIf="oir.respondido">Respondido</span>
           </td>
         </tr>
         <tr *ngIf="getPaginatedOirs().length === 0">
-          <td colspan="4" class="p-2 text-center text-gray-500">No hay solicitudes para mostrar</td>
+          <td colspan="5" class="p-2 text-center text-gray-500">No hay solicitudes para mostrar</td>
         </tr>
       </tbody>
     </table>
