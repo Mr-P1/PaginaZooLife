@@ -3,6 +3,7 @@ import { RecompensaService } from '../../../../data-acces/recompensas.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
+import { Chart } from 'chart.js';
 
 @Component({
   selector: 'app-recompensas',
@@ -20,10 +21,85 @@ export class RecompensasComponent implements OnInit{
   pageSize: number = 5;
   isLoading: boolean = false;
 
+  selectedYear6: number = new Date().getFullYear();
+  availableYears: number[] = [];
+  private chart: Chart | null = null;
+
   constructor(private recompensaService: RecompensaService) {}
 
+
   ngOnInit(): void {
+    this.initializeYears();
+    this.updateRewardsGraph();
     this.aplicarFiltros();
+  }
+
+    // Actualiza el gráfico con los datos del año seleccionado
+    updateRewardsGraph(): void {
+      if (this.chart) {
+        this.chart.destroy();
+      }
+
+      this.recompensaService.getPremiosPorAno(this.selectedYear6).subscribe(({ labels, data }) => {
+        const datasets = Object.keys(data).map((premio) => ({
+          label: premio,
+          data: data[premio],
+          borderColor: this.getRandomColor(),
+          borderWidth: 2,
+          fill: false,
+        }));
+
+        this.renderChart(labels, datasets);
+      });
+    }
+
+    // Renderiza el gráfico en el canvas
+    private renderChart(labels: string[], datasets: any[]): void {
+      const ctx = document.getElementById('rewardsChart') as HTMLCanvasElement;
+
+      this.chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets,
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: `Premios Canjeados (${this.selectedYear6})`,
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+
+    // Genera un color aleatorio para las líneas del gráfico
+    private getRandomColor(): string {
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+
+  // Inicializa el rango de años disponibles para el filtro
+  private initializeYears(): void {
+    const currentYear = new Date().getFullYear();
+    const startYear = 2018; // Cambiar según tus datos
+    this.availableYears = Array.from(
+      { length: currentYear - startYear + 1 },
+      (_, i) => startYear + i
+    );
   }
 
   aplicarFiltros(): void {

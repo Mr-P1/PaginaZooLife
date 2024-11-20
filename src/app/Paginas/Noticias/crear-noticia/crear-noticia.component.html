@@ -1,17 +1,9 @@
-<!-- Main modal -->
-<div
-  id="updateNoticiaModal"
-  tabindex="-1"
-  aria-hidden="true"
-  class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
->
-  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-    <!-- Modal content -->
-    <div class="relative p-4 rounded-lg shadow bg-orange-400 sm:p-5">
-      <!-- Modal header -->
-      <div class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800">
-        <h3 class="text-lg font-semibold text-white">Crear Noticia</h3>
-      </div>
+<div class="max-w-4xl mx-auto p-6 bg-orange-400 shadow-md rounded-md mt-8">
+
+  <!-- Encabezado -->
+  <h3 class="text-lg font-semibold text-white text-center mb-4">
+    Crear noticia
+ </h3>
       <!-- Modal body -->
       <form [formGroup]="form" (ngSubmit)="submit()">
         <!-- comienzo -->
@@ -48,15 +40,16 @@
           </div>
 
           <!-- Imagen -->
-          <div>
-            <label for="imagen" class="block mb-2 text-sm font-medium text-white">Imagen</label>
+          <div class="flex flex-col ">
+            <label for="imagen" class="text-white">Imagen</label>
             <input
-              type="file"
               id="imagen"
-              accept="image/*"
               formControlName="imagen"
+              type="file"
+              accept="image/*"
               (change)="cargarFoto($event)"
-              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+              class="block w-full text-sm text-gray-900 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              required
             />
             <div *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('imagen')?.errors?.['required']">Seleccione una imagen</span>
@@ -95,5 +88,3 @@
 
       </form>
     </div>
-  </div>
-</div>

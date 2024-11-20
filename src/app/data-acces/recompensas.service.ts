@@ -31,6 +31,7 @@ export interface PremioUsuario {
   codigo: string,
   estado: string, //Si es true es porque ya fue Reclamado, si es false es porque aun No se reclama
   premioId: string,
+  fecha:Timestamp
   usuarioId: string, //Esto es igual a auth_id del Usuario
 }
 
@@ -113,6 +114,62 @@ export class  RecompensaService {
     const premioUsuarioDoc = doc(this._rutaPremiosUsuarios, idPremioUsuario);
     return updateDoc(premioUsuarioDoc, { estado: false });
   }
+
+
+  getPremiosPorAno(ano: number): Observable<{ labels: string[]; data: { [key: string]: number[] } }> {
+    const inicioAno = new Date(ano, 0, 1); // Inicio del año
+    const finAno = new Date(ano, 11, 31, 23, 59, 59); // Fin del año
+
+    const premiosQuery = query(
+      this._rutaPremiosUsuarios,
+      where('fecha', '>=', Timestamp.fromDate(inicioAno)),
+      where('fecha', '<=', Timestamp.fromDate(finAno))
+    );
+
+    return collectionData(premiosQuery, { idField: 'id' }).pipe(
+      switchMap((premiosUsuarios: PremioUsuario[]) =>
+        premiosUsuarios.length > 0
+          ? forkJoin(
+              premiosUsuarios.map((premioUsuario) =>
+                this.getPremioDetalles(premioUsuario.premioId).pipe(
+                  map((premio) => ({
+                    ...premioUsuario,
+                    premioNombre: premio?.nombre || 'Desconocido', // Agrega el nombre del premio
+                    fecha: premioUsuario.fecha.toDate(),
+                  }))
+                )
+              )
+            )
+          : of([])
+      ),
+      map((premiosDetallados: any[]) => {
+        const data: { [key: string]: number[] } = {};
+        const labels = Array(12).fill(0).map((_, i) =>
+          new Date(0, i).toLocaleString('es', { month: 'long' })
+        );
+
+        // Organizar premios por mes
+        premiosDetallados.forEach((premio) => {
+          const mes = premio.fecha.getMonth(); // Mes (0-11)
+          const premioNombre = premio.premioNombre;
+
+          if (!data[premioNombre]) {
+            data[premioNombre] = Array(12).fill(0);
+          }
+          data[premioNombre][mes]++;
+        });
+
+        return { labels, data };
+      })
+    );
+  }
+
+  // Obtener los detalles del premio desde la colección PremiosTrivia
+  private getPremioDetalles(premioId: string): Observable<PremioTrivia | undefined> {
+    const premioDoc = doc(this._rutaPremiosTrivia, premioId);
+    return from(getDoc(premioDoc)).pipe(map((doc) => (doc.exists() ? doc.data() as PremioTrivia : undefined)));
+  }
+
 
 
 }

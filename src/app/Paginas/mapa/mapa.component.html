@@ -1,24 +1,12 @@
 <!-- Main modal -->
-<div
-  id="updateProductModal"
-  tabindex="-1"
-  aria-hidden="true"
-  class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
->
-  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-    <!-- Modal content -->
-    <div
-      class="relative p-4 rounded-lg shadow bg-orange-400 sm:p-5"
-    >
-      <!-- Modal header -->
-      <div
-        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800"
-      >
-        <h3 class="text-lg font-semibold text-white">
-          Mapa Actual Zoologico
-        </h3>
-      </div>
-      <!-- Modal body -->
+
+<div class="max-w-4xl mx-auto p-6 bg-orange-400 shadow-md rounded-md mt-8">
+
+  <!-- Encabezado -->
+  <h3 class="text-lg font-semibold text-white text-center mb-4">
+    Mapa Actual Zoologico
+ </h3>
+
 
 
       <form [formGroup]="form" (ngSubmit)="submit()">
@@ -97,5 +85,3 @@
         </div>
       </form>
     </div>
-  </div>
-</div>

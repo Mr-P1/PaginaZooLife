@@ -1,23 +1,11 @@
-<!-- Main modal -->
-<div
-  id="updateProductModal"
-  tabindex="-1"
-  aria-hidden="true"
-  class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
->
-  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-    <!-- Modal content -->
-    <div
-      class="relative p-4 rounded-lg shadow bg-orange-500 sm:p-5"
-    >
-      <!-- Modal header -->
-      <div
-        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800"
-      >
-        <h3 class="text-lg font-semibold  text-white">
-          Modificar Premio
-        </h3>
-      </div>
+<div class="max-w-4xl mx-auto p-6 bg-orange-400 shadow-md rounded-md mt-8">
+
+
+  <!-- Encabezado -->
+  <h3 class="text-lg font-semibold text-white text-center mb-4">
+   Modificar premio trivia
+ </h3>
+
       <!-- Modal body -->
       <form [formGroup]="form">
         <!-- comienzo -->
@@ -37,7 +25,7 @@
               name="nombre"
               id="nombre"
               class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-              placeholder="Nombre común"
+              placeholder="Nombre del premio"
               formControlName="nombre"
             />
 
@@ -68,8 +56,8 @@
               id="cantidad"
               min="0"
               class=" border   text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-              placeholder="cantidad de premios"
-              formControlName="cantidad"
+              placeholder="Cantidad de premios"
+              formControlName="Cantidad"
             />
 
             <div
@@ -199,5 +187,3 @@
 
       </form>
     </div>
-  </div>
-</div>

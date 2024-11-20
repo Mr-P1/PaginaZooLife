@@ -84,9 +84,12 @@
             <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
               {{ noticia.nombre }}
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
-              {{ noticia.descripcion }}
-            </td>
+            <td
+            class="px-6 py-4 font-medium text-black whitespace-nowrap overflow-hidden text-ellipsis max-w-xs"
+            title="{{ noticia.descripcion }}"
+          >
+            {{ noticia.descripcion }}
+          </td>
 
             <td class="px-6 py-4">
               <a

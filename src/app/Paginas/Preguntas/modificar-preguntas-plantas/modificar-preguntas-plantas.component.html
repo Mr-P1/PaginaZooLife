@@ -1,272 +1,264 @@
-<div
-  id="updateProductModal"
-  tabindex="-1"
-  class="justify-end items-end w-full md:inset-0 h-modal md:h-full"
->
-  <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
-    <div class="relative p-4 rounded-lg shadow bg-orange-500 sm:p-5">
-      <div
-        class="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5 border-orange-800"
-      >
-        <h3 class="text-lg font-semibold text-white">
-          Modificar Pregunta
-        </h3>
-        <div *ngIf="errorMessage" class="text-sm text-red-600">
-          {{ errorMessage }}
-        </div>
-        <div *ngIf="successMessage" class="text-sm text-green-600">
-          {{ successMessage }}
-        </div>
-      </div>
+<div class="max-w-4xl mx-auto p-6 bg-orange-400 shadow-md rounded-md mt-8">
 
-      <form [formGroup]="form">
-        <div class="grid gap-4 mb-4 sm:grid-cols-2">
+  <!-- Encabezado -->
+  <h3 class="text-lg font-semibold text-white text-center mb-4">
+   Modificar Pregunta (Planta)
+ </h3>
 
-          <!-- Pregunta -->
-          <div>
-            <label
-              for="pregunta"
-              class="block mb-2 text-sm font-medium text-white"
-              >Pregunta</label
-            >
-            <input
-              type="text"
-              id="pregunta"
-              formControlName="pregunta"
-              placeholder="Pregunta"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            />
+ <!-- Mensajes de error o éxito -->
+ <div *ngIf="errorMessage" class="text-sm text-red-600 text-center mb-2">
+   {{ errorMessage }}
+ </div>
+ <div *ngIf="successMessage" class="text-sm text-green-600 text-center mb-2">
+   {{ successMessage }}
+ </div>
 
-            <div
-              *ngIf="
-                form.get('pregunta')?.touched && form.get('pregunta')?.invalid
-              "
-              class="text-sm text-white"
-            >
-              <span *ngIf="form.get('pregunta')?.errors?.['required']"
-                >Ingrese una pregunta</span
-              >
-            </div>
-          </div>
+     <form [formGroup]="form">
+       <div class="grid gap-4 mb-4 sm:grid-cols-2">
 
-          <!-- Tipo de pregunta -->
-          <div>
-            <label for="tipo" class="block mb-2 text-sm font-medium text-white"
-              >Tipo de Pregunta</label
-            >
-            <select
-              id="tipo"
-              formControlName="tipo"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            >
-              <option selected disabled>Escoja una opción</option>
-              <option value="Adulto">Adulto</option>
-              <option value="Niño">Niño</option>
-            </select>
+         <!-- Pregunta -->
+         <div>
+           <label
+             for="pregunta"
+             class="block mb-2 text-sm font-medium text-white"
+             >Pregunta</label
+           >
+           <input
+             type="text"
+             id="pregunta"
+             formControlName="pregunta"
+             placeholder="Pregunta"
+             class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+           />
 
-            <div
-              *ngIf="form.get('tipo')?.touched && form.get('tipo')?.invalid"
-              class="text-sm text-white"
-            >
-              <span *ngIf="form.get('tipo')?.errors?.['required']"
-                >Ingrese un tipo de usuario para la pregunta</span
-              >
-            </div>
-          </div>
+           <div
+             *ngIf="
+               form.get('pregunta')?.touched && form.get('pregunta')?.invalid
+             "
+             class="text-sm text-white"
+           >
+             <span *ngIf="form.get('pregunta')?.errors?.['required']"
+               >Ingrese una pregunta</span
+             >
+           </div>
+         </div>
 
-          <!-- Respuestas -->
-          <div>
-            <label
-              for="respuesta_1"
-              class="block mb-2 text-sm font-medium text-white"
-              >Respuesta 1</label
-            >
-            <input
-              type="text"
-              id="respuesta_1"
-              formControlName="respuesta_1"
-              placeholder="Respuesta 1"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            />
+         <!-- Tipo de pregunta -->
+         <div>
+           <label for="tipo" class="block mb-2 text-sm font-medium text-white"
+             >Tipo de Pregunta</label
+           >
+           <select
+             id="tipo"
+             formControlName="tipo"
+             class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+           >
+             <option selected disabled>Escoja una opción</option>
+             <option value="Adulto">Adulto</option>
+             <option value="Niño">Niño</option>
+           </select>
 
-            <div
-              *ngIf="
-                form.get('respuesta_1')?.touched &&
-                form.get('respuesta_1')?.invalid
-              "
-              class="text-sm text-white"
-            >
-              <span *ngIf="form.get('respuesta_1')?.errors?.['required']"
-                >Ingrese la primera respuesta</span
-              >
-            </div>
-          </div>
+           <div
+             *ngIf="form.get('tipo')?.touched && form.get('tipo')?.invalid"
+             class="text-sm text-white"
+           >
+             <span *ngIf="form.get('tipo')?.errors?.['required']"
+               >Ingrese un tipo de usuario para la pregunta</span
+             >
+           </div>
+         </div>
 
-          <div>
-            <label
-              for="respuesta_2"
-              class="block mb-2 text-sm font-medium text-white"
-              >Respuesta 2</label
-            >
-            <input
-              type="text"
-              id="respuesta_2"
-              formControlName="respuesta_2"
-              placeholder="Respuesta 2"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            />
+         <!-- Respuestas -->
+         <div>
+           <label
+             for="respuesta_1"
+             class="block mb-2 text-sm font-medium text-white"
+             >Respuesta 1</label
+           >
+           <input
+             type="text"
+             id="respuesta_1"
+             formControlName="respuesta_1"
+             placeholder="Respuesta 1"
+             class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+           />
 
-            <div
-              *ngIf="
-                form.get('respuesta_2')?.touched &&
-                form.get('respuesta_2')?.invalid
-              "
-              class="text-sm text-white"
-            >
-              <span *ngIf="form.get('respuesta_2')?.errors?.['required']"
-                >Ingrese la segunda respuesta</span
-              >
-            </div>
-          </div>
+           <div
+             *ngIf="
+               form.get('respuesta_1')?.touched &&
+               form.get('respuesta_1')?.invalid
+             "
+             class="text-sm text-white"
+           >
+             <span *ngIf="form.get('respuesta_1')?.errors?.['required']"
+               >Ingrese la primera respuesta</span
+             >
+           </div>
+         </div>
 
-          <div>
-            <label
-              for="respuesta_3"
-              class="block mb-2 text-sm font-medium text-white"
-              >Respuesta 3</label
-            >
-            <input
-              type="text"
-              id="respuesta_3"
-              formControlName="respuesta_3"
-              placeholder="Respuesta 3"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            />
+         <div>
+           <label
+             for="respuesta_2"
+             class="block mb-2 text-sm font-medium text-white"
+             >Respuesta 2</label
+           >
+           <input
+             type="text"
+             id="respuesta_2"
+             formControlName="respuesta_2"
+             placeholder="Respuesta 2"
+             class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+           />
 
-            <div
-              *ngIf="
-                form.get('respuesta_3')?.touched &&
-                form.get('respuesta_3')?.invalid
-              "
-              class="text-sm text-white"
-            >
-              <span *ngIf="form.get('respuesta_3')?.errors?.['required']"
-                >Ingrese la tercera respuesta</span
-              >
-            </div>
-          </div>
+           <div
+             *ngIf="
+               form.get('respuesta_2')?.touched &&
+               form.get('respuesta_2')?.invalid
+             "
+             class="text-sm text-white"
+           >
+             <span *ngIf="form.get('respuesta_2')?.errors?.['required']"
+               >Ingrese la segunda respuesta</span
+             >
+           </div>
+         </div>
 
-          <div>
-            <label
-              for="respuesta_4"
-              class="block mb-2 text-sm font-medium text-white"
-              >Respuesta 4</label
-            >
-            <input
-              type="text"
-              id="respuesta_4"
-              formControlName="respuesta_4"
-              placeholder="Respuesta 4"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            />
-            <div
-              *ngIf="
-                form.get('respuesta_4')?.touched &&
-                form.get('respuesta_4')?.invalid
-              "
-              class="text-sm text-white"
-            >
-              <span *ngIf="form.get('respuesta_4')?.errors?.['required']"
-                >Ingrese la cuarta respuesta</span
-              >
-            </div>
-          </div>
+         <div>
+           <label
+             for="respuesta_3"
+             class="block mb-2 text-sm font-medium text-white"
+             >Respuesta 3</label
+           >
+           <input
+             type="text"
+             id="respuesta_3"
+             formControlName="respuesta_3"
+             placeholder="Respuesta 3"
+             class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+           />
 
-          <!-- Respuesta Correcta -->
-          <div>
-            <label
-              for="respuesta_correcta"
-              class="block mb-2 text-sm font-medium text-white"
-              >Respuesta Correcta</label
-            >
-            <select
-              id="respuesta_correcta"
-              formControlName="respuesta_correcta"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            >
-              <option selected disabled>Seleccione la correcta</option>
-              <option value="a">Respuesta 1</option>
-              <option value="b">Respuesta 2</option>
-              <option value="c">Respuesta 3</option>
-              <option value="d">Respuesta 4</option>
-            </select>
+           <div
+             *ngIf="
+               form.get('respuesta_3')?.touched &&
+               form.get('respuesta_3')?.invalid
+             "
+             class="text-sm text-white"
+           >
+             <span *ngIf="form.get('respuesta_3')?.errors?.['required']"
+               >Ingrese la tercera respuesta</span
+             >
+           </div>
+         </div>
 
-            <div
-              *ngIf="
-                form.get('respuesta_correcta')?.touched &&
-                form.get('respuesta_correcta')?.invalid
-              "
-              class="text-sm text-white"
-            >
-              <span *ngIf="form.get('respuesta_correcta')?.errors?.['required']"
-                >Seleccione la respuesta correcta</span
-              >
-            </div>
-          </div>
+         <div>
+           <label
+             for="respuesta_4"
+             class="block mb-2 text-sm font-medium text-white"
+             >Respuesta 4</label
+           >
+           <input
+             type="text"
+             id="respuesta_4"
+             formControlName="respuesta_4"
+             placeholder="Respuesta 4"
+             class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+           />
+           <div
+             *ngIf="
+               form.get('respuesta_4')?.touched &&
+               form.get('respuesta_4')?.invalid
+             "
+             class="text-sm text-white"
+           >
+             <span *ngIf="form.get('respuesta_4')?.errors?.['required']"
+               >Ingrese la cuarta respuesta</span
+             >
+           </div>
+         </div>
 
-          <!-- Selección de Animal Asociado -->
-          <div>
-            <label
-              for="planta_id"
-              class="block mb-2 text-sm font-medium text-white"
-              >Planta Asociada</label
-            >
-            <select
-              id="planta_id"
-              formControlName="planta_id"
-              class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
-            >
-              <option selected disabled>Seleccione una planta</option>
-              <option
-                *ngFor="let planta of plantas$ | async"
-                [value]="planta.id"
-              >
-                {{ planta.nombre_comun }}
-              </option>
-            </select>
-            <div
-              *ngIf="
-                form.get('planta_id')?.touched &&
-                form.get('planta_id')?.invalid
-              "
-              class="text-sm text-white"
-            >
-              <span *ngIf="form.get('planta_id')?.errors?.['required']"
-                >Seleccione al planta asociado</span
-              >
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center space-x-4">
-          <button
-            [disabled]="loading()"
-            (click)="actualizar()"
-            type="button submit"
-            class="w-full text-white bg-orange-600 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
-          >
-            {{ loading() ? "Actualizando ..." : "Actualizar pregunta" }}
-          </button>
+         <!-- Respuesta Correcta -->
+         <div>
+           <label
+             for="respuesta_correcta"
+             class="block mb-2 text-sm font-medium text-white"
+             >Respuesta Correcta</label
+           >
+           <select
+             id="respuesta_correcta"
+             formControlName="respuesta_correcta"
+             class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+           >
+             <option selected disabled>Seleccione la correcta</option>
+             <option value="a">Respuesta 1</option>
+             <option value="b">Respuesta 2</option>
+             <option value="c">Respuesta 3</option>
+             <option value="d">Respuesta 4</option>
+           </select>
 
-          <button
-            type="button"
-            [disabled]="loading2()"
-            (click)="borrarPregunta()"
-            class="w-full text-white bg-orange-600 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
-          >
-            {{ loading2() ? "Eliminando ..." : "Eliminar pregunta" }}
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+           <div
+             *ngIf="
+               form.get('respuesta_correcta')?.touched &&
+               form.get('respuesta_correcta')?.invalid
+             "
+             class="text-sm text-white"
+           >
+             <span *ngIf="form.get('respuesta_correcta')?.errors?.['required']"
+               >Seleccione la respuesta correcta</span
+             >
+           </div>
+         </div>
+
+         <!-- Selección de Animal Asociado -->
+         <div>
+           <label
+             for="planta_id"
+             class="block mb-2 text-sm font-medium text-white"
+             >Planta Asociada</label
+           >
+           <select
+             id="planta_id"
+             formControlName="planta_id"
+             class="border text-sm rounded-lg block w-full p-2.5 bg-white border-gray-600 placeholder-gray-400 text-black focus:ring-primary-500 focus:border-primary-500"
+           >
+             <option selected disabled>Seleccione una planta</option>
+             <option
+               *ngFor="let planta of plantas$ | async"
+               [value]="planta.id"
+             >
+               {{ planta.nombre_comun }}
+             </option>
+           </select>
+           <div
+             *ngIf="
+               form.get('planta_id')?.touched &&
+               form.get('planta_id')?.invalid
+             "
+             class="text-sm text-white"
+           >
+             <span *ngIf="form.get('planta_id')?.errors?.['required']"
+               >Seleccione al planta asociado</span
+             >
+           </div>
+         </div>
+       </div>
+       <div class="flex items-center space-x-4">
+         <button
+           [disabled]="loading()"
+           (click)="actualizar()"
+           type="button submit"
+           class="w-full text-white bg-orange-600 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+         >
+           {{ loading() ? "Actualizando ..." : "Actualizar pregunta" }}
+         </button>
+
+         <button
+           type="button"
+           [disabled]="loading2()"
+           (click)="borrarPregunta()"
+           class="w-full text-white bg-orange-600 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+         >
+           {{ loading2() ? "Eliminando ..." : "Eliminar pregunta" }}
+         </button>
+       </div>
+     </form>
+   </div>

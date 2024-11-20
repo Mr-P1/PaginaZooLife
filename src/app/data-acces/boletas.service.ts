@@ -9,14 +9,20 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 export interface Usuario {
-  auth_id: string;
-  correo: string;
-  nivel: number;
-  nombre: string;
-  puntos: number;
-  telefono: string;
-  tipo: string;
+  auth_id: string;              // Identificador único de autenticación
+  comuna: string;               // Comuna de residencia del usuario
+  correo: string;               // Correo electrónico del usuario
+  fechaNacimiento: Timestamp;   // Fecha de nacimiento del usuario (tipo timestamp)
+  fechaRegistro?: Timestamp;     // Fecha de registro en el sistema (tipo timestamp)
+  genero: string;               // Género del usuario ("Sin definir" como ejemplo)
+  nivel: number;                // Nivel del usuario (puede representar experiencia o categoría)
+  nombre: string;               // Nombre completo del usuario
+  patente: string;              // Patente (puede estar vacío si no aplica)
+  puntos: number;               // Puntos acumulados por el usuario
+  region: string;               // Región de residencia del usuario
+  telefono: string;             // Número de teléfono del usuario
 }
+
 
 interface BoletaUsada {
   fecha: string | Timestamp;
@@ -125,18 +131,21 @@ obtenerBoletasPorSemana(): Observable<any> {
   );
 }
 
-// Boletas por año
-obtenerBoletasPorAno(): Observable<any> {
-  const hoy = new Date();
-  const inicioAno = Timestamp.fromDate(startOfYear(hoy));
-  const finAno = Timestamp.fromDate(endOfYear(hoy));
+obtenerBoletasPorAno(anio: number): Observable<any> {
+  const inicioAno = Timestamp.fromDate(new Date(anio, 0, 1)); // 1 de Enero del año especificado
+  const finAno = Timestamp.fromDate(new Date(anio, 11, 31, 23, 59, 59)); // 31 de Diciembre del mismo año
 
-  const anoQuery = query(this.boletasUsadasRef, where('fecha', '>=', inicioAno), where('fecha', '<=', finAno));
+  const anoQuery = query(
+    this.boletasUsadasRef,
+    where('fecha', '>=', inicioAno),
+    where('fecha', '<=', finAno)
+  );
 
   return from(getDocs(anoQuery)).pipe(
     map(snapshot => this.mapDataToMonths(snapshot.docs))
   );
 }
+
 
 // Métodos de mapeo
 
@@ -298,6 +307,38 @@ obtenerUsuarios(): Observable<Usuario[]> {
   obtenerDatosVisitas(): Observable<any> {
     return this.http.get<any>(this.functionUrl);
   }
+
+
+
+  obtenerUsuariosNuevosPorMes(year: number): Observable<{ labels: string[]; data: number[] }> {
+    const inicioAno = Timestamp.fromDate(new Date(year, 0, 1)); // Inicio del año
+    const finAno = Timestamp.fromDate(new Date(year, 11, 31, 23, 59, 59)); // Fin del año
+
+    const usuariosQuery = query(
+      this._rutaUsuarios,
+      where('fechaRegistro', '>=', inicioAno),
+      where('fechaRegistro', '<=', finAno)
+    );
+
+    return from(getDocs(usuariosQuery)).pipe(
+      map(snapshot => {
+        const mesesAno = [
+          'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ];
+        const data = new Array(12).fill(0);
+
+        snapshot.forEach(doc => {
+          const usuario = doc.data() as Usuario;
+          const mes = usuario.fechaRegistro?.toDate().getMonth() !; // Obtener el mes (0-11)
+          data[mes]++;
+        });
+
+        return { labels: mesesAno, data };
+      })
+    );
+  }
+
 
 
 

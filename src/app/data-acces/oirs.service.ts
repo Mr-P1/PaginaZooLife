@@ -11,7 +11,7 @@ import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angula
 import { catchError, Observable, tap, throwError, from } from 'rxjs';
 import { AuthStateService } from './auth-state.service';
 import { map } from 'rxjs/operators';
-import { startOfDay, endOfDay } from 'date-fns';
+import { startOfDay, endOfDay, startOfYear, endOfYear } from 'date-fns';
 
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -176,6 +176,46 @@ export class OirsService {
     const oirsQuery = query(this._rutaOirs, ...constraints);
     return collectionData(oirsQuery, { idField: 'id' }) as Observable<Oirs[]>;
   }
+
+
+
+  getOirsPorAnoDesglosado(ano: number): Observable<{ labels: string[]; data: { [tipo: string]: number[] } }> {
+    const inicioAno = Timestamp.fromDate(startOfYear(new Date(ano, 0, 1))); // Inicio del año
+    const finAno = Timestamp.fromDate(endOfYear(new Date(ano, 11, 31))); // Fin del año
+
+    const anoQuery = query(
+      this._rutaOirs,
+      where('fechaEnvio', '>=', inicioAno),
+      where('fechaEnvio', '<=', finAno)
+    );
+
+    return from(getDocs(anoQuery)).pipe(
+      map((snapshot) => {
+        const tipos = ['sugerencia', 'felicitacion', 'consulta', 'reclamo'];
+        const data = tipos.reduce((acc, tipo) => {
+          acc[tipo] = Array(12).fill(0); // Inicializar arreglo de 12 meses para cada tipo
+          return acc;
+        }, {} as { [tipo: string]: number[] });
+
+        snapshot.forEach((doc) => {
+          const oir = doc.data() as Oirs;
+          const fecha = (oir.fechaEnvio as Timestamp).toDate(); // Convertir a fecha
+          const mes = fecha.getMonth(); // Obtener el índice del mes (0 a 11)
+          const tipo = oir.tipoSolicitud;
+
+          if (data[tipo]) {
+            data[tipo][mes]++;
+          }
+        });
+
+        return {
+          labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+          data,
+        };
+      })
+    );
+  }
+
 
 
 }
