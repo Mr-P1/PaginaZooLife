@@ -4,11 +4,12 @@ import { AnimalesService, AnimalConValoraciones } from '../../../data-acces/anim
 import { Observable, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule,FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-popularidad-animal',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,RouterLink],
   templateUrl: './popularidad-animal.component.html',
   styleUrl: './popularidad-animal.component.scss'
 })

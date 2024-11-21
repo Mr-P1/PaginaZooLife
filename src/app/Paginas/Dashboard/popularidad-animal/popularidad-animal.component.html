@@ -19,8 +19,8 @@
           <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Dislikes</th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let animal of animales">
+      <tbody >
+        <tr *ngFor="let animal of animales" class="hover:bg-orange-300"  [routerLink]="['/app/HistorialAnimal', animal.id]">
           <td class="py-2 px-4 border-b border-gray-200">
             <div class="flex items-center">
               <img [src]="animal.imagen" alt="{{animal.nombre_comun}}" class="w-8 h-8 rounded object-cover">

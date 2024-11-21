@@ -20,7 +20,7 @@
               </tr>
           </thead>
           <tbody>
-              <tr *ngFor="let planta of plantas">
+              <tr *ngFor="let planta of plantas" class="hover:bg-lime-400"  [routerLink]="['/app/HistorialPlanta', planta.id]">
                   <td class="py-2 px-4 border-b border-gray-200">
                       <div class="flex items-center">
                           <img [src]="planta.imagen" alt="{{planta.nombre_comun}}" class="w-8 h-8 rounded object-cover">

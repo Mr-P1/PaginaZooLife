@@ -38,6 +38,8 @@ import { ModificarPreguntasPlantasComponent } from './Paginas/Preguntas/modifica
 import { DashboardEstadisticoComponent } from './Paginas/Dashboard/dashboard-estadistico/dashboard-estadistico.component';
 import { OirsSatisfaccionComponent } from './Paginas/ApartadoGestion/oirs-satisfaccion/oirs-satisfaccion.component';
 import { UsoAppTriviasComponent } from './Paginas/ApartadoGestionAplicacion/uso-app-trivias/uso-app-trivias.component';
+import { GraficoHistorialAnimalComponent } from './Paginas/Dashboard/grafico-historial-animal/grafico-historial-animal.component';
+import { GraficoHistorialPlantaComponent } from './Paginas/Dashboard/grafico-historial-planta/grafico-historial-planta.component';
 
 export const routes: Routes = [
 
@@ -93,6 +95,8 @@ export const routes: Routes = [
       { path:'estadisticas',component:DashboardEstadisticoComponent},
       {path:'oirs-rating-satisfaccion',component:OirsSatisfaccionComponent},
       {path:'uso-app-trivias',component:UsoAppTriviasComponent},
+      { path:'HistorialAnimal/:IdAnimal',component:GraficoHistorialAnimalComponent},
+      { path:'HistorialPlanta/:IdPlanta',component:GraficoHistorialPlantaComponent},
 
     ],
   },

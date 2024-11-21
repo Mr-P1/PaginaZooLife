@@ -5,12 +5,13 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import {estadisticaService} from '../estadisitca.service'
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-popularidad-planta',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,RouterLink],
   templateUrl: './popularidad-planta.component.html',
   styleUrl: './popularidad-planta.component.scss'
 })
