@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { Chart } from 'chart.js';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-recompensas',
@@ -140,6 +141,26 @@ export class RecompensasComponent implements OnInit{
   reclamarPremio(idPremioUsuario: string): void {
     this.recompensaService.actualizarEstadoPremio(idPremioUsuario).then(() => {
       this.aplicarFiltros();
+
+      // Mostrar SweetAlert de confirmación
+      Swal.fire({
+        title: '¡Premio Reclamado!',
+        text: 'Se ha reclamado un premio exitosamente.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        backdrop: 'rgba(0, 0, 0, 0.8)',
+      });
+    }).catch((error) => {
+      console.error('Error al reclamar premio:', error);
+
+      // Mostrar SweetAlert de error
+      Swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al reclamar el premio. Inténtalo nuevamente.',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        backdrop: 'rgba(0, 0, 0, 0.8)',
+      });
     });
   }
 

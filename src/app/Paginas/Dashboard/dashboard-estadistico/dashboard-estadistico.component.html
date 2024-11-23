@@ -14,20 +14,23 @@
         </div> -->
 
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           <!-- Ingresos app -->
-          <app-ingresos-app></app-ingresos-app>
-
-          <!--Visitas hoy  -->
-          <app-visitas-hoy></app-visitas-hoy>
+          <div class="flex justify-center">
+            <app-ingresos-app class="w-full max-w-sm"></app-ingresos-app>
+          </div>
 
           <!-- Solicitudes oirs pendientes -->
-          <app-solicitudes-pendientes-oirs></app-solicitudes-pendientes-oirs>
+          <div class="flex justify-center">
+            <app-solicitudes-pendientes-oirs class="w-full max-w-sm"></app-solicitudes-pendientes-oirs>
+          </div>
 
-          <!-- Satisfaccion promedio -->
-          <app-satisfaccion-promedio></app-satisfaccion-promedio>
-
+          <!-- Satisfacción promedio -->
+          <div class="flex justify-center">
+            <app-satisfaccion-promedio class="w-full max-w-sm"></app-satisfaccion-promedio>
+          </div>
         </div>
+
 
         <!-- Charts Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
