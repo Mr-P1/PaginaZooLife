@@ -159,14 +159,6 @@ export class ListarUsuariosComponent implements OnInit {
 
 
 
-  private token2 = "eX6eSeIzQ0a-x4SmkcN_6l:APA91bGGp-VqCthb-UDisSzODv2Ekn85gTOitg1K28FhzNkxHis0sbK9R8nDRWejleSvHPAzTOp_T9Rd5BGaWUEZjo56npvnQ9er9IhA6HqyhVgdm8Lne-wqRvodQ6anDTDDzDMv36y-"
-
-
-  private token3 = "eyKAniVvQHiP_xs_7Cxkg8:APA91bEghwmEMzjudZdFzXdKy6CyUUJ4akGmXarTiiWPLyKwOVsK3heaOaQWKHK-b-OAxwf8ME59rpdwsdNFxF8rPvWGwMS6ukZzUIerZa1qrm0LnKq2lQQ"
-
-  private token = "d43dwQqYQQ-lQlhFCP1cbk:APA91bHrWcyNY2wpMf-00B7ITgR1HhCmHmQf5jEKCyJwgExPdabcG0Eo0MDBDZ-1Y7iXTT4IbvMazXmczIo2gndz-IpY90MJ_u565QKCzFlyAJXfmaYN2Zs"
-
-
 
   convertirImagenABase64(file: File): Promise<string | null> {
     return new Promise((resolve, reject) => {
@@ -211,7 +203,10 @@ export class ListarUsuariosComponent implements OnInit {
       if (result.isConfirmed) {
         const { titulo, contenido, imagenUrl } = result.value!;
         // Llama a enviarNotificacion2 pasando el token como un array y los datos de la notificación
-        this.enviarNotificacion(token ? [token] : [], titulo, contenido, imagenUrl);
+        this.enviarNotificacion(token ? [token] : [], titulo, contenido, imagenUrl)
+
+
+
       }
     });
   }
@@ -254,17 +249,32 @@ export class ListarUsuariosComponent implements OnInit {
 
 
   enviarNotificacion(tokens: string[], title: string, bodyContent: string, imageUrl: string | null = null) {
-    const data = {}; // Puedes agregar datos adicionales si deseas
+    const data = {};
 
     this.notificacionesService.sendPushNotification3(tokens, title, bodyContent, imageUrl, data).subscribe(
       (response) => {
         console.log('Notificación enviada con éxito:', response);
+        Swal.fire({
+          icon: 'success',
+          title: '¡Notificación Enviada!',
+          text: 'La notificación se ha enviado correctamente.',
+          confirmButtonText: 'Aceptar',
+          backdrop: 'rgba(0, 0, 0, 0.8)'
+        });
       },
       (error) => {
         console.error('Error al enviar la notificación:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al Enviar',
+          text: 'No se pudo enviar la notificación. Por favor, intenta nuevamente.',
+          confirmButtonText: 'Aceptar',
+          backdrop: 'rgba(0, 0, 0, 0.8)'
+        });
       }
     );
   }
+
 
 
 

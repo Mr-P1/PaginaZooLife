@@ -2,9 +2,6 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const nodemailer = require("nodemailer");
 const cors = require("cors")({ origin: true }); // Configura CORS
-import * as moment from 'moment';
-import { Timestamp } from 'firebase-admin/firestore';
-
 // Inicializa Firebase Admin SDK si no ha sido inicializado
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -129,63 +126,9 @@ exports.sendPushNotification = functions.https.onRequest((request: any, response
   });
 });
 
-interface BoletaUsada {
-  fecha: Timestamp;
-  id_usuario: string;
-  tipo: string;
-}
 
-export const calcularVisitasPorPeriodo = functions.https.onRequest((req:any, res:any) => {
-  cors(req, res, async () => {
-    try {
-      const boletasSnapshot = await firestore.collection(PATH_Boletas_usadas).get();
-      const data: Record<string, Record<string, number | Set<string>>> = {
-        anual: {},
-        mensual: {},
-        semanal: {},
-        diario: {}
-      };
 
-      boletasSnapshot.forEach((doc: any) => {
-        const boleta = doc.data() as BoletaUsada;
-        const fecha = boleta.fecha.toDate();
-        const idUsuario = boleta.id_usuario;
-
-        const year = fecha.getFullYear();
-        const month = fecha.getMonth() + 1;
-        const week = moment(fecha).isoWeek();
-        const day = fecha.getDate();
-
-        if (!data.anual[year]) data.anual[year] = new Set<string>();
-        (data.anual[year] as Set<string>).add(idUsuario);
-
-        const monthKey = `${year}-${month}`;
-        if (!data.mensual[monthKey]) data.mensual[monthKey] = new Set<string>();
-        (data.mensual[monthKey] as Set<string>).add(idUsuario);
-
-        const weekKey = `${year}-W${week}`;
-        if (!data.semanal[weekKey]) data.semanal[weekKey] = new Set<string>();
-        (data.semanal[weekKey] as Set<string>).add(idUsuario);
-
-        const dayKey = `${year}-${month}-${day}`;
-        if (!data.diario[dayKey]) data.diario[dayKey] = new Set<string>();
-        (data.diario[dayKey] as Set<string>).add(idUsuario);
-      });
-
-      for (const key in data.anual) data.anual[key] = (data.anual[key] as Set<string>).size;
-      for (const key in data.mensual) data.mensual[key] = (data.mensual[key] as Set<string>).size;
-      for (const key in data.semanal) data.semanal[key] = (data.semanal[key] as Set<string>).size;
-      for (const key in data.diario) data.diario[key] = (data.diario[key] as Set<string>).size;
-
-      res.json(data);
-    } catch (error) {
-      console.error('Error al calcular visitas:', error);
-      res.status(500).send('Error en el cálculo de visitas.');
-    }
-  });
-});
-
-//Envio correo
+// Envío correo
 // Función para enviar correos de felicitación o sugerencia
 const sendOIRSEmail = (oirsType:any, to:any) => {
   let subject;
@@ -194,19 +137,69 @@ const sendOIRSEmail = (oirsType:any, to:any) => {
   // Define el asunto y el mensaje dependiendo del tipo de OIRS
   if (oirsType === "felicitacion") {
     subject = "¡Gracias por tu felicitación!";
-    message = "Gracias por enviarnos tu felicitación. Nos complace saber que has tenido una buena experiencia.";
+    message = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
+        <h2 style="text-align: center; color: #4CAF50;">🎉 ¡Gracias por tu felicitación! 🎉</h2>
+        <p style="font-size: 16px; color: #333;">
+          Nos complace saber que has tenido una buena experiencia. Tus palabras nos motivan a seguir mejorando para ofrecerte el mejor servicio posible.
+        </p>
+        <p style="font-size: 14px; color: #555; text-align: center;">
+          ¡Esperamos verte pronto!
+        </p>
+        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;" />
+        <p style="font-size: 12px; color: #999; text-align: center;">
+          © 2024 Buin Zoo. Todos los derechos reservados.
+        </p>
+      </div>`;
   } else if (oirsType === "sugerencia") {
     subject = "¡Gracias por tu sugerencia!";
-    message = "Gracias por tomarte el tiempo de enviarnos tus sugerencias. Las valoramos mucho y nos ayudan a mejorar.";
+    message = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
+        <h2 style="text-align: center; color: #4CAF50;">💡 ¡Gracias por tu sugerencia! 💡</h2>
+        <p style="font-size: 16px; color: #333;">
+          Valoramos mucho tus comentarios y sugerencias. Nos ayudan a mejorar continuamente nuestros servicios para brindarte una mejor experiencia.
+        </p>
+        <p style="font-size: 14px; color: #555; text-align: center;">
+          Tu opinión cuenta. ¡Gracias por tomarte el tiempo de compartirla!
+        </p>
+        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;" />
+        <p style="font-size: 12px; color: #999; text-align: center;">
+          © 2024 Buin Zoo. Todos los derechos reservados.
+        </p>
+      </div>`;
   } else if (oirsType === "reclamo") {
     subject = "Hemos recibido tu reclamo";
-    message = "Lamentamos que hayas tenido una experiencia insatisfactoria. Apreciamos que nos hayas compartido tu opinión y estamos comprometidos a revisar tu situación para mejorar nuestro servicio. Nos pondremos en contacto contigo si necesitamos más información.";
-  }
-  else if (oirsType === "consulta") {
+    message = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
+        <h2 style="text-align: center; color: #F44336;">⚠️ Hemos recibido tu reclamo ⚠️</h2>
+        <p style="font-size: 16px; color: #333;">
+          Lamentamos que hayas tenido una experiencia insatisfactoria. Agradecemos que nos hayas compartido tu opinión y estamos comprometidos a revisar tu situación para mejorar nuestro servicio.
+        </p>
+        <p style="font-size: 14px; color: #555; text-align: center;">
+          Nos pondremos en contacto contigo si necesitamos más información.
+        </p>
+        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;" />
+        <p style="font-size: 12px; color: #999; text-align: center;">
+          © 2024 Buin Zoo. Todos los derechos reservados.
+        </p>
+      </div>`;
+  } else if (oirsType === "consulta") {
     subject = "Hemos recibido tu consulta";
-    message = "Gracias por contactarnos. Hemos recibido tu consulta y nuestro equipo la revisará para responderte a la brevedad. Si tienes más preguntas, no dudes en comunicarte nuevamente con nosotros.";
-  }
-   else {
+    message = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
+        <h2 style="text-align: center; color: #2196F3;">❓ Hemos recibido tu consulta ❓</h2>
+        <p style="font-size: 16px; color: #333;">
+          Gracias por contactarnos. Hemos recibido tu consulta y nuestro equipo la revisará para responderte a la brevedad.
+        </p>
+        <p style="font-size: 14px; color: #555; text-align: center;">
+          Si tienes más preguntas, no dudes en comunicarte nuevamente con nosotros.
+        </p>
+        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;" />
+        <p style="font-size: 12px; color: #999; text-align: center;">
+          © 2024 Buin Zoo. Todos los derechos reservados.
+        </p>
+      </div>`;
+  } else {
     console.log("El tipo de OIRS no requiere enviar un correo.");
     return Promise.resolve();
   }
@@ -216,15 +209,15 @@ const sendOIRSEmail = (oirsType:any, to:any) => {
     .sendMail({
       subject: subject,
       bcc: ["lilpepe@gmail.com"], // Dirección oculta (BCC)
-      html: `<p>${message}</p>`,
-      to: to
+      html: message,
+      to: to,
     })
-    .then((response:any) => {
+    .then((response: any) => {
       console.log("Correo enviado a:", to);
       console.log("Aceptado => ", response.accepted);
       console.log("Rechazado => ", response.rejected);
     })
-    .catch((error:any) => {
+    .catch((error: any) => {
       console.error("Error al enviar el correo:", error);
       throw error;
     });
@@ -253,7 +246,39 @@ exports.sendOIRSEmailFunction = functions.https.onRequest((request:any, response
 // Función para enviar un correo con un mensaje personalizado
 const sendEmailWithMessage = (to:any, customMessage:any) => {
   const subject = "Respuesta del equipo de soporte"; // Asunto genérico para la respuesta
-  const message = `<p>${customMessage}</p>`;
+const message = `
+  <div style="
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    max-width: 600px;
+    margin: auto;
+  ">
+    <h2 style=" text-align: center; margin-bottom: 20px;">
+       👷‍♂️🛠️ Respuesta del Equipo de Soporte 👷‍♂️🛠️
+    </h2>
+    <p style="font-size: 16px; text-align: justify; margin-bottom: 20px;">
+      ${customMessage}
+    </p>
+    <p style="font-size: 14px; color: #555; text-align: center;">
+      Si tienes más preguntas o inquietudes, no dudes en contactarnos nuevamente. ¡Estamos aquí para ayudarte!
+    </p>
+    <footer style="margin-top: 20px; text-align: center;">
+      <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+      <p style="font-size: 12px; color: #888;">
+        Este mensaje fue generado automáticamente. Por favor, no respondas a este correo.
+      </p>
+      <p style="font-size: 12px; color: #999; text-align: center;">
+        © 2024 Buin Zoo. Todos los derechos reservados.
+      </p>
+    </footer>
+  </div>
+`;
+
 
   // Envía el correo
   return transport
