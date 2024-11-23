@@ -21,7 +21,6 @@ export class RespuestasTriviaAppComponent implements OnInit {
   ngOnInit() {
     this.cargarTodosLosGraficos();
     this.cargarAniosDisponibles();
-    this.cargarGraficoRespuestasTriviaPorAno();
     this.cargarGraficoRespuestasTriviaPorTipoUsuario();
   }
 
@@ -31,11 +30,6 @@ export class RespuestasTriviaAppComponent implements OnInit {
     this.availableYears = Array.from({ length: currentYear - startYear + 1 }, (_, i) => startYear + i);
   }
 
-  cargarGraficoRespuestasTriviaPorAno() {
-    this.respuestasService.obtenerRespuestasTriviaPorAno(this.selectedYear2).subscribe(({ labels, correctas, incorrectas }) => {
-      this.generarGraficoMultiEjes('graficoRespuestasTrivia', labels, correctas, incorrectas, `Respuestas Trivia (${this.selectedYear2})`);
-    });
-  }
 
   private generarGraficoMultiEjes(id: string, labels: string[], correctas: number[], incorrectas: number[], titulo: string) {
     const ctx = document.getElementById(id) as HTMLCanvasElement;
@@ -114,9 +108,6 @@ export class RespuestasTriviaAppComponent implements OnInit {
     });
   }
 
-  onYearChange() {
-    this.cargarGraficoRespuestasTriviaPorAno();
-  }
 
   cargarTodosLosGraficos() {
     this.cargarGraficoPorDia();
