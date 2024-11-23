@@ -1,6 +1,6 @@
-<div class="flex flex-col items-center justify-center bg-gray-100 min-h-screen p-6">
+<div class="flex flex-col items-center justify-center bg-gradient-to-r from-green-500 via-green-400 to-green-300 min-h-screen p-6">
   <!-- Título -->
-  <h2 class="text-center text-2xl font-bold text-gray-800 mb-6">
+  <h2 class="text-center text-2xl font-bold text-white mb-6">
     Historial popularidad animal
   </h2>
 
@@ -10,9 +10,9 @@
       *ngIf="animal?.imagen"
       [src]="animal?.imagen"
       alt="{{ animal?.nombre_comun }}"
-      class="w-32 h-32 rounded-full object-cover mb-4"
+      class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-orange-400"
     />
-    <h3 class="text-lg font-semibold text-gray-700">{{ animal?.nombre_comun }}</h3>
+    <h3 class="text-lg font-semibold text-white">{{ animal?.nombre_comun }}</h3>
   </div>
 
   <!-- Contenedor del gráfico -->
