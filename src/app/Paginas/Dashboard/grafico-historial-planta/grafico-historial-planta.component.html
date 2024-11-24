@@ -1,5 +1,12 @@
 <div
-  class="flex flex-col items-center justify-center bg-gradient-to-r from-green-500 via-green-400 to-green-300 min-h-screen p-6"
+  class="min-h-screen p-6"
+  style="
+    background: rgba(50, 205, 50, 0.4); /* Verde translúcido con opacidad */
+    backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
+    -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Borde claro */
+    box-shadow: 0 8px 32px rgba(0, 128, 0, 0.25); /* Sombra con un toque verde */
+  "
 >
   <!-- Título -->
   <h2 class="text-center text-2xl font-bold text-white mb-6">
@@ -14,12 +21,11 @@
       alt="{{ planta?.nombre_comun }}"
       class="w-32 h-32 rounded-full object-cover mb-4 border-4 border-orange-400"
     />
-
     <h3 class="text-lg font-semibold text-white">{{ planta?.nombre_comun }}</h3>
   </div>
 
   <!-- Contenedor del gráfico -->
-  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-3xl">
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-3xl mx-auto">
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-lg font-semibold text-black">
         Historial Popularidad {{ planta?.nombre_comun }}
@@ -36,7 +42,9 @@
       </select>
     </div>
 
-    <!-- Canvas para el gráfico -->
-    <canvas id="plantaPopularityChart" class="w-full h-96"></canvas>
+    <!-- Canvas centrado -->
+    <div class="flex justify-center items-center">
+      <canvas id="plantaPopularityChart" class="w-full max-w-xl h-96"></canvas>
+    </div>
   </div>
 </div>

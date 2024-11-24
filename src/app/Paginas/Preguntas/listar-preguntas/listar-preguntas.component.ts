@@ -144,15 +144,55 @@ export class ListarPreguntasComponent implements OnInit {
   }
 
   onSearchChange(event: any) {
-    console.log()
-  }
-  navigateToEdit(item: PreguntaConEspecie) {
-    if ('animal_id' in item.pregunta) {
-      // Si la pregunta es sobre un animal
-      this.router.navigate(['/app/modificar_pregunta', item.pregunta.id]);
-    } else if ('planta_id' in item.pregunta) {
-      // Si la pregunta es sobre una planta
-      this.router.navigate(['/app/modificar_pregunta_planta', item.pregunta.id]);
+    const term = this.searchTerm.toLowerCase();  // Convertir el término de búsqueda a minúsculas para no ser sensible a mayúsculas
+
+    // Si ya tenemos las preguntas cargadas
+    if (this.preguntasConEspecies$) {
+      this.preguntasConEspecies$ = from(this.preguntasService.getPreguntasPaginadas(this.pageSize)).pipe(
+        switchMap(data => {
+          this.lastVisible = data.lastVisible;
+          this.firstVisible = data.firstVisible;
+          this.pageStack = [{ firstVisible: this.firstVisible, lastVisible: this.lastVisible }];
+          const preguntas = data.preguntas;
+
+          // Filtrar las preguntas según el término de búsqueda
+          const filteredQuestions = preguntas.filter((pregunta: PreguntaTrivia | PreguntaTriviaPlantas) => {
+            // Filtrar si el texto de la pregunta o alguna de sus respuestas contiene el término de búsqueda
+            const preguntaTexto = pregunta.pregunta.toLowerCase();
+            const respuestaCorrectaTexto = pregunta.respuestas[pregunta.respuesta_correcta]?.toLowerCase();
+
+            // Devuelve true si alguna de las cadenas contiene el término de búsqueda
+            return preguntaTexto.includes(term) || (respuestaCorrectaTexto && respuestaCorrectaTexto.includes(term));
+          });
+
+          const especieRequests = filteredQuestions.map((pregunta: PreguntaTrivia | PreguntaTriviaPlantas) => {
+            if ('animal_id' in pregunta) {
+              return this.animalesService.getAnimal(pregunta.animal_id).pipe(
+                map(animal => ({ pregunta, especie: animal }))
+              );
+            } else if ('planta_id' in pregunta) {
+              return this.plantasService.getPlanta(pregunta.planta_id).pipe(
+                map(planta => ({ pregunta, especie: planta }))
+              );
+            }
+            return null;
+          }).filter(request => request !== null) as Observable<PreguntaConEspecie>[];
+
+          this.loading = false;
+          return forkJoin(especieRequests);
+        })
+      );
     }
   }
+
+    // Método navigateToEdit
+    navigateToEdit(item: PreguntaConEspecie) {
+      if ('animal_id' in item.pregunta) {
+        // Si la pregunta es sobre un animal
+        this.router.navigate(['/app/modificar_pregunta', item.pregunta.id]);
+      } else if ('planta_id' in item.pregunta) {
+        // Si la pregunta es sobre una planta
+        this.router.navigate(['/app/modificar_pregunta_planta', item.pregunta.id]);
+      }
+    }
 }
