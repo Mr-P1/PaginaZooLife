@@ -3,69 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <title class="text-center justify-center">Dashboard Operativo</title> -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto p-6">
+<body
+    class="min-h-screen p-6"
+    style="
+      background: rgba(50, 205, 50, 0.4); /* Verde translúcido con opacidad */
+      backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
+      -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
+      border: 1px solid rgba(255, 255, 255, 0.2); /* Borde claro */
+      box-shadow: 0 8px 32px rgba(0, 128, 0, 0.25); /* Sombra con un toque verde */
+    "
+>
+    <div class="container mx-auto p-6 min-h-screen flex flex-col">
         <!-- Header -->
-        <!-- <div class=" flex justify-center  items-center mb-6">
-            <h1 class="text-3xl font-semibold text-gray-700 ">Dashboard Operativo</h1>
-        </div> -->
-
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          <!-- Ingresos app -->
-          <div class="flex justify-center">
-            <app-ingresos-app class="w-full max-w-sm"></app-ingresos-app>
-          </div>
-
-          <!-- Solicitudes oirs pendientes -->
-          <div class="flex justify-center">
-            <app-solicitudes-pendientes-oirs class="w-full max-w-sm"></app-solicitudes-pendientes-oirs>
-          </div>
-
-          <!-- Satisfacción promedio -->
-          <div class="flex justify-center">
-            <app-satisfaccion-promedio class="w-full max-w-sm"></app-satisfaccion-promedio>
-          </div>
+        <div class="mb-6">
+            <h1 class="text-3xl font-semibold  text-black text-center">Dashboard Operativo</h1>
         </div>
 
+        <!-- Content -->
+        <div class="flex-grow">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Ingresos app -->
+                <div class="flex justify-center">
+                    <app-ingresos-app class="w-full max-w-sm"></app-ingresos-app>
+                </div>
 
-        <!-- Charts Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <!-- Pie Chart Placeholder -->
-            <app-respuestas-trivia></app-respuestas-trivia>
+                <!-- Solicitudes oirs pendientes -->
+                <div class="flex justify-center">
+                    <app-solicitudes-pendientes-oirs class="w-full max-w-sm"></app-solicitudes-pendientes-oirs>
+                </div>
 
-            <!-- Bar Chart Placeholder -->
-            <app-grafico-oirs-hoy></app-grafico-oirs-hoy>
-         </div>
+                <!-- Satisfacción promedio -->
+                <div class="flex justify-center">
+                    <app-satisfaccion-promedio class="w-full max-w-sm"></app-satisfaccion-promedio>
+                </div>
+            </div>
 
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <app-respuestas-trivia></app-respuestas-trivia>
+                <app-grafico-oirs-hoy></app-grafico-oirs-hoy>
+            </div>
 
-        <!-- Recent OIRS Table -->
-        <app-solicitudes-oirs-recientes></app-solicitudes-oirs-recientes>
+            <!-- Recent OIRS Table -->
+            <div class="mb-6">
+                <app-solicitudes-oirs-recientes class="w-full max-w-4xl mx-auto"></app-solicitudes-oirs-recientes>
+            </div>
 
-         <!-- Premios no Reclamados -->
-         <app-premios-no-reclamados></app-premios-no-reclamados>
+            <!-- Premios no Reclamados -->
+            <div class="mb-6">
+                <app-premios-no-reclamados class="w-full max-w-4xl mx-auto"></app-premios-no-reclamados>
+            </div>
 
+            <!-- Popularidad Animales y Plantas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="flex justify-center">
+                    <app-popularidad-animal class="w-full max-w-lg"></app-popularidad-animal>
+                </div>
+                <div class="flex justify-center">
+                    <app-popularidad-planta class="w-full max-w-lg"></app-popularidad-planta>
+                </div>
+            </div>
 
-        <!-- Popularidad Animales -->
-        <app-popularidad-animal></app-popularidad-animal>
-
-        <!-- Popularidad Plantas -->
-        <app-popularidad-planta></app-popularidad-planta>
-
-
-
-        <!-- Escaneos por Área -->
-        <app-escaneo-areas-hoy></app-escaneo-areas-hoy>
-
-
+            <!-- Escaneos por Área -->
+            <div class="mb-6">
+                <app-escaneo-areas-hoy class="w-full max-w-4xl mx-auto"></app-escaneo-areas-hoy>
+            </div>
+        </div>
 
         <!-- Footer -->
-        <footer class="mt-8 text-gray-500 text-center">
-            &copy; 2024 Bioparque Dashboard
-        </footer>
+        <footer class="mt-8 text-black text-center font-bold">
+          &copy; 2024 Bioparque Dashboard
+      </footer>
+
+
     </div>
 </body>
 </html>
