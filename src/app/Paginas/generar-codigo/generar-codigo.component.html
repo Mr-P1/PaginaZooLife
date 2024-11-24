@@ -8,7 +8,7 @@ style="
   border-radius: 16px; /* Bordes redondeados */
 ">
   <div class="centered">
-    <h5 class="card-title text-xl font-semibold text-gray-800 mb-4 text-center">
+    <h5 class="card-title text-xl font-semibold text-white mb-4 text-center">
       Generar Boleta y QR
     </h5>
 
@@ -31,13 +31,13 @@ style="
 
     <!-- Select de usuarios -->
     <div *ngIf="qrGenerado" class="mb-6">
-      <label for="usuarioSelect" class="block text-gray-700 font-medium mb-2">
+      <label for="usuarioSelect" class="block text-white font-medium mb-2">
         Seleccione un usuario para enviar el QR:
       </label>
       <select
         id="usuarioSelect"
         [(ngModel)]="correoSeleccionado"
-        class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
       >
         <option
           *ngFor="let usuario of usuarios"
@@ -53,7 +53,7 @@ style="
     <div class="actions flex flex-wrap gap-4">
       <button
         (click)="generarQr()"
-        class="bg-indigo-600 text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        class="bg-green-600 text-white py-2 px-4 rounded-lg shadow hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
       >
         Generar QR
       </button>

@@ -318,7 +318,7 @@ style="
             accept="image/*"
             formControlName="imagen"
             (change)="cargarFoto($event)"
-            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            class="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
           />
           <div *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid" class="text-sm text-white">
             <span *ngIf="form.get('imagen')?.errors?.['required']">Seleccione una imagen</span>
@@ -334,7 +334,7 @@ style="
             accept="video/*"
             formControlName="video"
             (change)="cargarVideo($event)"
-            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            class="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
           />
           <div *ngIf="form.get('video')?.touched && form.get('video')?.invalid" class="text-sm text-white">
             <span *ngIf="form.get('video')?.errors?.['required']">Seleccione un video</span>
@@ -350,7 +350,7 @@ style="
             accept="audio/*"
             formControlName="audio"
             (change)="cargarAudio($event)"
-            class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+            class="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
           />
           <div *ngIf="form.get('audio')?.touched && form.get('audio')?.invalid" class="text-sm text-white">
             <span *ngIf="form.get('audio')?.errors?.['required']">Seleccione un audio</span>
@@ -364,7 +364,7 @@ style="
             [disabled]="loading()"
             (click)="actualizar()"
             type="button submit"
-            class="w-full text-white bg-orange-500 hover:bg-orange-400 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-green-600 hover:bg-green-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading() ? "Actualizando ..." : "Actualizar planta" }}
           </button>
@@ -373,7 +373,7 @@ style="
             type="button"
             [disabled]="loading2()"
             (click)="borrarPremio()"
-            class="w-full text-white bg-orange-500 hover:bg-orange-400 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-green-600 hover:bg-green-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading2() ? "Eliminando ..." : "Eliminar planta" }}
           </button>

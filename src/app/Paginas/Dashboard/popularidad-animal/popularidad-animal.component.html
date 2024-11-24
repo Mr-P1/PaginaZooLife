@@ -14,16 +14,20 @@
     <table class="w-full">
       <thead>
         <tr>
-          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Animal</th>
+          <th
+            class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md"
+          >
+            Animal
+          </th>
           <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Likes</th>
           <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Dislikes</th>
         </tr>
       </thead>
-      <tbody >
-        <tr *ngFor="let animal of animales" class="hover:bg-orange-300"  [routerLink]="['/app/HistorialAnimal', animal.id]">
+      <tbody>
+        <tr *ngFor="let animal of displayedAnimales" class="hover:bg-orange-300" [routerLink]="['/app/HistorialAnimal', animal.id]">
           <td class="py-2 px-4 border-b border-gray-200">
             <div class="flex items-center">
-              <img [src]="animal.imagen" alt="{{animal.nombre_comun}}" class="w-8 h-8 rounded object-cover">
+              <img [src]="animal.imagen" alt="{{ animal.nombre_comun }}" class="w-8 h-8 rounded object-cover" />
               <span class="text-gray-600 text-sm font-medium ml-2">{{ animal.nombre_comun }}</span>
             </div>
           </td>
@@ -31,12 +35,17 @@
           <td class="py-2 px-4 border-b border-gray-200">{{ animal.dislikes }} dislikes</td>
         </tr>
       </tbody>
+
     </table>
   </div>
 
   <!-- Paginación -->
   <div class="flex justify-between mt-4">
-    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="previousPage()" [disabled]="isPreviousDisabled">Anterior</button>
-    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="nextPage()" [disabled]="isNextDisabled">Siguiente</button>
+    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="previousPage()" [disabled]="isPreviousDisabled">
+      Anterior
+    </button>
+    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="nextPage()" [disabled]="isNextDisabled">
+      Siguiente
+    </button>
   </div>
 </div>
