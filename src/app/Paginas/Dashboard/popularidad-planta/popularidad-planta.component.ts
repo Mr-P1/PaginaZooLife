@@ -15,35 +15,72 @@ import { RouterLink } from '@angular/router';
   templateUrl: './popularidad-planta.component.html',
   styleUrl: './popularidad-planta.component.scss'
 })
-export class PopularidadPlantaComponent {
+export class PopularidadPlantaComponent implements OnInit, OnDestroy{
   plantas: PlantaConValoraciones[] = [];
-  private plantasSubscription!: Subscription;
+  displayedPlantas: PlantaConValoraciones[] = []; // Plantas que se muestran en la página actual
+  filteredPlantas: PlantaConValoraciones[] = []; // Resultado del filtro
   searchText: string = '';
+  currentPage: number = 1;
+  pageSize: number = 5;
   isPreviousDisabled: boolean = true;
   isNextDisabled: boolean = false;
 
-  constructor( private estadisticaService: PlantaService){}
+  private plantasSubscription!: Subscription;
 
+  constructor(private plantaService: PlantaService) {}
 
   ngOnInit(): void {
-    this.plantasSubscription = this.estadisticaService.getPlantasConValoraciones().subscribe({
+    this.plantasSubscription = this.plantaService.getPlantasConValoraciones().subscribe({
       next: (plantas) => {
         this.plantas = plantas;
+        this.filteredPlantas = [...this.plantas]; // Inicialmente, todas las plantas
+        this.applyPagination();
       },
-      error: (error) => console.error('Error al obtener plantas:', error)
+      error: (error) => console.error('Error al obtener plantas:', error),
     });
-
   }
 
-  searchPlantas() {
-
+  searchPlantas(): void {
+    const search = this.searchText.trim().toLowerCase();
+    if (search) {
+      this.filteredPlantas = this.plantas.filter((planta) =>
+        planta.nombre_comun.toLowerCase().includes(search)
+      );
+    } else {
+      this.filteredPlantas = [...this.plantas]; // Restablece el filtro
+    }
+    this.currentPage = 1; // Reinicia la paginación al buscar
+    this.applyPagination();
   }
 
-  nextPage() {
+  applyPagination(): void {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.displayedPlantas = this.filteredPlantas.slice(start, end);
 
+    // Actualiza el estado de los botones de paginación
+    this.isPreviousDisabled = this.currentPage === 1;
+    this.isNextDisabled = end >= this.filteredPlantas.length;
   }
 
-  previousPage() {
+  nextPage(): void {
+    if (!this.isNextDisabled) {
+      this.currentPage++;
+      this.applyPagination();
+    }
+  }
+
+  previousPage(): void {
+    if (!this.isPreviousDisabled) {
+      this.currentPage--;
+      this.applyPagination();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.plantasSubscription) {
+      this.plantasSubscription.unsubscribe();
+    }
   }
 
 }

@@ -11,32 +11,44 @@
     <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Buscar</button>
   </form>
   <div class="overflow-x-auto">
-      <table class="w-full">
-          <thead>
-              <tr>
-                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Planta</th>
-                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Likes</th>
-                  <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Dislikes</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr *ngFor="let planta of plantas" class="hover:bg-lime-400"  [routerLink]="['/app/HistorialPlanta', planta.id]">
-                  <td class="py-2 px-4 border-b border-gray-200">
-                      <div class="flex items-center">
-                          <img [src]="planta.imagen" alt="{{planta.nombre_comun}}" class="w-8 h-8 rounded object-cover">
-                          <span class="text-gray-600 text-sm font-medium ml-2">{{planta.nombre_comun}}</span>
-                      </div>
-                  </td>
-                  <td class="py-2 px-4 border-b border-gray-200">{{planta.likes}} likes</td>
-                  <td class="py-2 px-4 border-b border-gray-200">{{planta.dislikes}} dislikes</td>
-              </tr>
-          </tbody>
-      </table>
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th
+            class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md"
+          >
+            Planta
+          </th>
+          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Likes</th>
+          <th class="text-[12px] uppercase tracking-wide font-medium text-black py-2 px-4 bg-gray-50 text-left">Dislikes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let planta of displayedPlantas"
+          class="hover:bg-lime-400"
+          [routerLink]="['/app/HistorialPlanta', planta.id]"
+        >
+          <td class="py-2 px-4 border-b border-gray-200">
+            <div class="flex items-center">
+              <img [src]="planta.imagen" alt="{{ planta.nombre_comun }}" class="w-8 h-8 rounded object-cover" />
+              <span class="text-gray-600 text-sm font-medium ml-2">{{ planta.nombre_comun }}</span>
+            </div>
+          </td>
+          <td class="py-2 px-4 border-b border-gray-200">{{ planta.likes }} likes</td>
+          <td class="py-2 px-4 border-b border-gray-200">{{ planta.dislikes }} dislikes</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- Paginación -->
   <div class="flex justify-between mt-4">
-      <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"  (click)="previousPage()">Anterior</button>
-      <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="nextPage()">Siguiente</button>
+    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="previousPage()" [disabled]="isPreviousDisabled">
+      Anterior
+    </button>
+    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="nextPage()" [disabled]="isNextDisabled">
+      Siguiente
+    </button>
   </div>
 </div>

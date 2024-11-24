@@ -151,15 +151,17 @@ style="
 
 
 
-          <div>
-            <label for="imagen" class="block mb-2 text-sm font-medium text-white">Imagen</label>
+          <!-- Imagen -->
+          <div class="flex flex-col ">
+            <label for="imagen" class="text-white">Imagen</label>
             <input
-              type="file"
               id="imagen"
-              accept="image/*"
               formControlName="imagen"
+              type="file"
+              accept="image/*"
               (change)="cargarFoto($event)"
-              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:text-sm file:font-medium hover:file:bg-orange-700 hover:file:text-white"
+              class="block w-full text-sm text-gray-900 cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              required
             />
             <div *ngIf="form.get('imagen')?.touched && form.get('imagen')?.invalid" class="text-sm text-white">
               <span *ngIf="form.get('imagen')?.errors?.['required']">Seleccione una imagen</span>
@@ -178,7 +180,7 @@ style="
             [disabled]="loading()"
             (click)="actualizar()"
             type="button submit"
-            class="w-full text-white bg-orange-600 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-green-600 hover:bg-green-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading() ? "Actualizando ..." : "Actualizar premio" }}
           </button>
@@ -187,7 +189,7 @@ style="
             type="button"
             [disabled]="loading2()"
             (click)="borrarPremio()"
-            class="w-full text-white bg-orange-600 hover:bg-orange-500 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
+            class="w-full text-white bg-green-600 hover:bg-green-700 inline-flex justify-center items-center hover:text-white border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5"
           >
             {{ loading2() ? "Eliminando ..." : "Eliminar premio" }}
           </button>
