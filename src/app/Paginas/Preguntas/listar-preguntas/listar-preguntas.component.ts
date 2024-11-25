@@ -144,25 +144,31 @@ export class ListarPreguntasComponent implements OnInit {
   }
 
   onSearchChange(event: any) {
-    const term = this.searchTerm.toLowerCase();  // Convertir el término de búsqueda a minúsculas para no ser sensible a mayúsculas
+  const term = this.searchTerm.toLowerCase(); // Convertir a minúsculas para insensibilidad a mayúsculas
 
+  if (this.searchTerm.trim().length === 0) {
+    // Si el término de búsqueda está vacío, recarga la página inicial
+    this.loadInitialPage();
+    return;
+  }
     // Si ya tenemos las preguntas cargadas
     if (this.preguntasConEspecies$) {
-      this.preguntasConEspecies$ = from(this.preguntasService.getPreguntasPaginadas(this.pageSize)).pipe(
-        switchMap(data => {
-          this.lastVisible = data.lastVisible;
-          this.firstVisible = data.firstVisible;
-          this.pageStack = [{ firstVisible: this.firstVisible, lastVisible: this.lastVisible }];
-          const preguntas = data.preguntas;
+     // Obtener todas las preguntas (de animales y plantas)
+  this.preguntasConEspecies$ = from(this.preguntasService.getPreguntasPaginadas(this.pageSize)).pipe(
+    switchMap(data => {
+      const preguntas = data.preguntas;
 
-          // Filtrar las preguntas según el término de búsqueda
-          const filteredQuestions = preguntas.filter((pregunta: PreguntaTrivia | PreguntaTriviaPlantas) => {
-            // Filtrar si el texto de la pregunta o alguna de sus respuestas contiene el término de búsqueda
-            const preguntaTexto = pregunta.pregunta.toLowerCase();
-            const respuestaCorrectaTexto = pregunta.respuestas[pregunta.respuesta_correcta]?.toLowerCase();
+      // Filtrar las preguntas de animales y plantas que coincidan con el término de búsqueda
+        const filteredQuestions = preguntas.filter((pregunta: PreguntaTrivia | PreguntaTriviaPlantas) => {
+        const preguntaTexto = pregunta.pregunta.toLowerCase();
+        const respuestaCorrectaTexto = pregunta.respuestas[pregunta.respuesta_correcta]?.toLowerCase();
+        const tipo = 'animal_id' in pregunta ? 'animal' : 'planta'; // Determinar el tipo de pregunta
 
-            // Devuelve true si alguna de las cadenas contiene el término de búsqueda
-            return preguntaTexto.includes(term) || (respuestaCorrectaTexto && respuestaCorrectaTexto.includes(term));
+            return (
+              preguntaTexto.includes(term) ||
+              (respuestaCorrectaTexto && respuestaCorrectaTexto.includes(term)) ||
+              tipo.includes(term) // Opcional: incluir búsqueda por tipo (animal o planta)
+            );
           });
 
           const especieRequests = filteredQuestions.map((pregunta: PreguntaTrivia | PreguntaTriviaPlantas) => {
