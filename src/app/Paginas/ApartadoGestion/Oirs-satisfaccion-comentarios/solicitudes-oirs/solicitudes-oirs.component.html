@@ -66,7 +66,7 @@
           </td>
           <td class="p-2">
             <button
-              class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+              class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-700"
               *ngIf="!oir.respondido"
               (click)="responderOIR(oir.userId, oir.id)"
             >
@@ -85,7 +85,7 @@
   <!-- Botones de paginación -->
   <div class="flex justify-between items-center mt-4">
     <button
-      class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+      class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition"
       (click)="changePage('prev')"
       [disabled]="currentPage === 1"
     >
@@ -95,7 +95,7 @@
       Página {{ currentPage }} de {{ getTotalPages() }}
     </span>
     <button
-      class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+      class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition"
       (click)="changePage('next')"
       [disabled]="currentPage === getTotalPages()"
     >

@@ -51,36 +51,34 @@ export class UsuarioService {
   async crearUsuario(usuario: CrearUsuario) {
     return addDoc(this._rutaUsuarios, usuario);
   }
-
-  // Obtener usuarios paginados
-  async getUsuariosPaginados(pageSize: number, lastVisibleDoc: any = null): Promise<{ usuarios: Usuario[], lastVisible: any, firstVisible: any }> {
-    let q;
-    if (lastVisibleDoc) {
-      q = query(this._rutaUsuarios, orderBy('nombre'), startAfter(lastVisibleDoc), limit(pageSize));
-    } else {
-      q = query(this._rutaUsuarios, orderBy('nombre'), limit(pageSize));
-    }
-
-    const snapshot = await getDocs(q);
-    const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Usuario[];
-    const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-    const firstVisible = snapshot.docs[0];
-
-    return { usuarios, lastVisible, firstVisible };
+ // Obtener usuarios paginados
+ async getUsuariosPaginados(pageSize: number, lastVisibleDoc: any = null): Promise<{ usuarios: Usuario[], lastVisible: any, firstVisible: any }> {
+  let q;
+  if (lastVisibleDoc) {
+    q = query(this._rutaUsuarios, orderBy('nombre'), startAfter(lastVisibleDoc), limit(pageSize));
+  } else {
+    q = query(this._rutaUsuarios, orderBy('nombre'), limit(pageSize));
   }
 
-  // Obtener la página anterior de usuarios
-  async getUsuariosPaginadosAnterior(pageSize: number, firstVisibleDoc: any): Promise<{ usuarios: Usuario[], lastVisible: any, firstVisible: any }> {
-    const q = query(this._rutaUsuarios, orderBy('nombre'), startAt(firstVisibleDoc), limit(pageSize));
+  const snapshot = await getDocs(q);
+  const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Usuario[];
+  const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+  const firstVisible = snapshot.docs[0];
 
-    const snapshot = await getDocs(q);
-    const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Usuario[];
-    const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-    const firstVisible = snapshot.docs[0];
+  return { usuarios, lastVisible, firstVisible };
+}
 
-    return { usuarios, lastVisible, firstVisible };
-  }
+// Obtener la página anterior de usuarios
+async getUsuariosPaginadosAnterior(pageSize: number, firstVisibleDoc: any): Promise<{ usuarios: Usuario[], lastVisible: any, firstVisible: any }> {
+  const q = query(this._rutaUsuarios, orderBy('nombre'), startAt(firstVisibleDoc), limit(pageSize));
 
+  const snapshot = await getDocs(q);
+  const usuarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Usuario[];
+  const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+  const firstVisible = snapshot.docs[0];
+
+  return { usuarios, lastVisible, firstVisible };
+}
   // Buscar usuarios por término
   async buscarUsuarios(term: string): Promise<Usuario[]> {
     // Crear consultas por nombre, correo, teléfono y patente

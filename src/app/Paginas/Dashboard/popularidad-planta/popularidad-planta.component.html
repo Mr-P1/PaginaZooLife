@@ -8,7 +8,7 @@
       [(ngModel)]="searchText"
       name="searchText"
     />
-    <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Buscar</button>
+    <button type="submit" class="ml-2 bg-orange-500 text-white px-4 py-2 rounded">Buscar</button>
   </form>
   <div class="overflow-x-auto">
     <table class="w-full">
@@ -32,7 +32,7 @@
           <td class="py-2 px-4 border-b border-gray-200">
             <div class="flex items-center">
               <img [src]="planta.imagen" alt="{{ planta.nombre_comun }}" class="w-8 h-8 rounded object-cover" />
-              <span class="text-gray-600 text-sm font-medium ml-2">{{ planta.nombre_comun }}</span>
+              <span class="text-black text-sm font-medium ml-2">{{ planta.nombre_comun }}</span>
             </div>
           </td>
           <td class="py-2 px-4 border-b border-gray-200">{{ planta.likes }} likes</td>
@@ -44,10 +44,10 @@
 
   <!-- Paginación -->
   <div class="flex justify-between mt-4">
-    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="previousPage()" [disabled]="isPreviousDisabled">
+    <button class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition" (click)="previousPage()" [disabled]="isPreviousDisabled">
       Anterior
     </button>
-    <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg" (click)="nextPage()" [disabled]="isNextDisabled">
+    <button class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition" (click)="nextPage()" [disabled]="isNextDisabled">
       Siguiente
     </button>
   </div>

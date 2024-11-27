@@ -15,8 +15,8 @@ const messaging = admin.messaging(); // Inicializa el servicio de mensajería de
 const transport = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-    user: "lilpepe132@gmail.com", // Reemplazar con variables de entorno en producción
-    pass: "nudhjqinsitfqoqc" // Reemplazar con variables de entorno en producción
+    user: "capstoneduoc@gmail.com",
+    pass: "foupcsgbtgtrrddv"
   }
 });
 

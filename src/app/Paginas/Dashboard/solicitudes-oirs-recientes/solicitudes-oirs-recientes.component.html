@@ -25,11 +25,12 @@
         <td class="py-2">
           <!-- Botón de respuesta deshabilitado para sugerencias y felicitaciones -->
           <button
-            class="bg-blue-500 text-white px-2 py-1 rounded"
+            class="bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600"
             [disabled]="solicitud.tipoSolicitud === 'sugerencia' || solicitud.tipoSolicitud === 'felicitacion'"
             (click)="responderOIR(solicitud.userId, solicitud.id)">
             Responder
           </button>
+
         </td>
       </tr>
     </tbody>
