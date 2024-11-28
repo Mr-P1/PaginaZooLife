@@ -43,14 +43,14 @@
   <!-- Botones de paginación -->
   <div class="flex justify-between items-center mt-4">
     <button
-      class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+      class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition"
       [disabled]="currentPage === 1"
       (click)="changePage('prev')"
     >
       Anterior
     </button>
     <button
-      class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+      class="bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-700 transition"
       [disabled]="currentPage === totalPages"
       (click)="changePage('next')"
     >

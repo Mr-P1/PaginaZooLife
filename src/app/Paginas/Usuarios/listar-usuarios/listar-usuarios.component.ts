@@ -3,7 +3,6 @@ import { UsuarioService, Usuario } from '../../../data-acces/usuarios.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { OirsService } from '../../../data-acces/oirs.service'
 import { NotificacionesService } from '../../../data-acces/notificaciones.service'
 import Swal from 'sweetalert2';
 
@@ -23,49 +22,22 @@ export class ListarUsuariosComponent implements OnInit {
   loading = false;
   searchTerm: string = ''; // Variable para almacenar el término de búsqueda
 
-  // Pila para almacenar las referencias a los documentos de las páginas anteriores
+  // Almacena las referencias de las páginas anteriores
   pageStack: { firstVisible: any, lastVisible: any }[] = [];
-
-
-  // Contadores para los tipos de OIRS
-  cantidadConsulta: number = 0;
-  cantidadFelicitacion: number = 0;
-  cantidadReclamo: number = 0;
-  cantidadSugerencia: number = 0;
 
   constructor(
     private usuarioService: UsuarioService,
-    private oirsService: OirsService,
     private notificacionesService: NotificacionesService,
   ) { }
 
   ngOnInit() {
     this.loadInitialPage();
-    this.loadOirsCounts();
-  }
-
-  // Método para cargar la cantidad de OIRS por tipo
-  loadOirsCounts() {
-    this.oirsService.getOirsConsulta().subscribe((oirs) => {
-      this.cantidadConsulta = oirs.length;
-    });
-
-    this.oirsService.getOirsFelicitacion().subscribe((oirs) => {
-      this.cantidadFelicitacion = oirs.length;
-    });
-
-    this.oirsService.getOirsReclamo().subscribe((oirs) => {
-      this.cantidadReclamo = oirs.length;
-    });
-
-    this.oirsService.getOirsSugerencia().subscribe((oirs) => {
-      this.cantidadSugerencia = oirs.length;
-    });
   }
 
   // Cargar la primera página de usuarios
   async loadInitialPage() {
     this.loading = true;
+    this.pageStack = []; // Limpiar la pila al cargar la primera página
     try {
       const data = await this.usuarioService.getUsuariosPaginados(this.pageSize);
       const boletasPorUsuario = await this.usuarioService.getBoletasUsadasPorUsuario();
@@ -85,55 +57,60 @@ export class ListarUsuariosComponent implements OnInit {
     }
   }
 
-  // Cargar la siguiente página de usuarios
-  // Cargar la siguiente página de usuarios
-  loadNextPage() {
-    if (this.lastVisible) {
-      this.loading = true;
-      this.usuarioService.getUsuariosPaginados(this.pageSize, this.lastVisible).then(async data => {
+// Cargar la siguiente página de usuarios
+async loadNextPage() {
+  if (this.lastVisible) {
+    this.loading = true;
+    try {
+      const data = await this.usuarioService.getUsuariosPaginados(this.pageSize, this.lastVisible);
+      const boletasPorUsuario = await this.usuarioService.getBoletasUsadasPorUsuario();
+
+      this.usuarios = data.usuarios.map(usuario => ({
+        ...usuario,
+        boletasUsadas: boletasPorUsuario[usuario.auth_id] || 0
+      }));
+
+      // Guarda las referencias de la página actual en la pila
+      this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
+
+      this.firstVisible = data.firstVisible;
+      this.lastVisible = data.lastVisible;
+      this.currentPage++;
+    } catch (error) {
+      console.error('Error al cargar la siguiente página:', error);
+    } finally {
+      this.loading = false;
+    }
+  }
+}
+
+// Cargar la página anterior de usuarios
+async loadPreviousPage() {
+  if (this.pageStack.length > 0) {
+    this.loading = true;
+    const previousPage = this.pageStack.pop();
+    if (previousPage) {
+      try {
+        const data = await this.usuarioService.getUsuariosPaginadosAnterior(this.pageSize, previousPage.firstVisible);
         const boletasPorUsuario = await this.usuarioService.getBoletasUsadasPorUsuario();
 
-        // Combina usuarios con la cantidad de boletas usadas
         this.usuarios = data.usuarios.map(usuario => ({
           ...usuario,
           boletasUsadas: boletasPorUsuario[usuario.auth_id] || 0
         }));
 
-        this.lastVisible = data.lastVisible;
-        this.firstVisible = data.firstVisible;
-        this.pageStack.push({ firstVisible: this.firstVisible, lastVisible: this.lastVisible });
-        this.currentPage += 1;
+        // Actualiza las referencias de la página
+        this.firstVisible = previousPage.firstVisible;
+        this.lastVisible = previousPage.lastVisible;
+        this.currentPage--;
+      } catch (error) {
+        console.error('Error al cargar la página anterior:', error);
+      } finally {
         this.loading = false;
-      });
-    }
-  }
-
-
-  // Cargar la página anterior de usuarios
-  loadPreviousPage() {
-    if (this.currentPage > 1) {
-      this.pageStack.pop();
-      const previousPage = this.pageStack[this.pageStack.length - 1];
-
-      if (previousPage) {
-        this.loading = true;
-        this.usuarioService.getUsuariosPaginadosAnterior(this.pageSize, previousPage.firstVisible).then(async data => {
-          const boletasPorUsuario = await this.usuarioService.getBoletasUsadasPorUsuario();
-
-          // Combina usuarios con la cantidad de boletas usadas
-          this.usuarios = data.usuarios.map(usuario => ({
-            ...usuario,
-            boletasUsadas: boletasPorUsuario[usuario.auth_id] || 0
-          }));
-
-          this.lastVisible = data.lastVisible;
-          this.firstVisible = previousPage.firstVisible;
-          this.currentPage -= 1;
-          this.loading = false;
-        });
       }
     }
   }
+}
 
   // Manejar cambios en el campo de búsqueda
   onSearchChange(event: any) {
@@ -159,15 +136,6 @@ export class ListarUsuariosComponent implements OnInit {
 
 
 
-
-  convertirImagenABase64(file: File): Promise<string | null> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
-      reader.readAsDataURL(file);
-    });
-  }
 
 
   mostrarFormulario(token: string | null) {

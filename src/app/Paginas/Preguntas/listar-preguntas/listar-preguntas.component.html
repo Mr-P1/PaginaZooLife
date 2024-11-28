@@ -28,7 +28,6 @@
 
 <!-- Contenedor principal -->
 <div class="flex flex-col">
-
   <!-- Contenedor de botones alineados horizontalmente -->
   <div class="flex justify-between items-center mb-4">
     <!-- Botón para añadir pregunta (existente) -->
@@ -87,12 +86,12 @@
     <ng-container *ngIf="preguntasConEspecies$ | async as preguntasConEspecies; else noPreguntas">
       <table class="w-full text-sm text-left text-white"> <!-- Cambié text-gray-400 a text-white aquí -->
         <thead class="max-w-4xl mx-auto p-6 shadow-md rounded-md mt-8"
-        style="
-          background: rgba(29, 75, 29, 0.4); /* Fondo verde translúcido */
-          backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque de fondo */
-          -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad con Safari */
-          border: 1px solid rgba(119, 27, 27, 0.2); /* Borde suave y sutil */
-        ">
+          style="
+            background: rgba(29, 75, 29, 0.4); /* Fondo verde translúcido */
+            backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque de fondo */
+            -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad con Safari */
+            border: 1px solid rgba(119, 27, 27, 0.2); /* Borde suave y sutil */
+          ">
           <tr>
             <th scope="col" class="px-6 py-3">Pregunta</th>
             <th scope="col" class="px-6 py-3">Respuesta Correcta</th>
@@ -107,8 +106,7 @@
               background: rgba(14, 184, 14, 0.479); /* Verde translúcido con opacidad */
               backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
               -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
-            "
-          >
+            ">
             <td class="px-6 py-4 font-medium text-white whitespace-nowrap"> <!-- Cambié text-black a text-white aquí -->
               {{ item.pregunta.pregunta }}
             </td>
@@ -131,7 +129,7 @@
 
     <!-- Mensaje cuando no hay preguntas -->
     <ng-template #noPreguntas>
-      <div class="p-6 text-center text-gray-500">
+      <div class="p-6 text-center text-white">
         <p class="text-lg font-semibold">No se encontraron preguntas</p>
       </div>
     </ng-template>
