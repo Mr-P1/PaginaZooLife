@@ -3,6 +3,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CrearNoticia, Noticiaservice } from '../../../data-acces/noticias.service';
 import { Router, RouterLink } from '@angular/router';
+import { Timestamp } from 'firebase/firestore';  // Asegúrate de que esta importación esté presente
 
 // Sweetalert2
 import Swal from 'sweetalert2';
@@ -53,7 +54,8 @@ export class CrearNoticiaComponent {
       const noticia: CrearNoticia = {
         nombre: nombre!,
         descripcion: descripcion!,
-        imagen: ''
+        imagen: '',
+        fecha:Timestamp.now()
       };
 
       // Crear la noticia con la imagen cargada
