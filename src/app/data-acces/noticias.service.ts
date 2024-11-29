@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Firestore, collection, addDoc, collectionData, doc, getDoc, updateDoc, query,
-  where, deleteDoc, getDocs, orderBy, limit, startAfter, startAt
+  where, deleteDoc, getDocs, orderBy, limit, startAfter, startAt,
+  Timestamp
 } from '@angular/fire/firestore';
 
 import { Storage, ref, uploadBytes, getDownloadURL, deleteObject } from '@angular/fire/storage';
@@ -14,6 +15,7 @@ export interface Noticia {
   nombre: string;
   descripcion: string;
   imagen: string;
+  fecha: Timestamp;
 }
 
 // Lo siguiente tiene para omitir el id porque recien lo vamos a crear

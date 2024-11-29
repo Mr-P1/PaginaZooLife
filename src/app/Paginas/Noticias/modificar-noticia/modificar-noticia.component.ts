@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CrearNoticia, Noticiaservice } from '../../../data-acces/noticias.service';
+import { Timestamp } from 'firebase/firestore';  // Asegúrate de que esta importación esté presente
 
 // Sweetalert2
 import Swal from 'sweetalert2';
@@ -10,7 +11,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-modificar-noticia',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule,],
   templateUrl: './modificar-noticia.component.html',
   styleUrl: './modificar-noticia.component.scss'
 })
@@ -87,6 +88,7 @@ export class ModificarNoticiaComponent {
           nombre: nombre!,
           descripcion: descripcion!,
           imagen: '', // Se actualiza al subir el archivo
+          fecha:Timestamp.now()
         };
 
         await this._noticiaService.editarNoticia(this.idActiva, noticia, this.imagenFile!);

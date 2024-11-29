@@ -60,13 +60,13 @@
   <!-- Tabla de eventos -->
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <ng-container *ngIf="eventos.length > 0; else noEvento">
-      <table class="w-full text-sm text-left text-gray-400">
+      <table class="w-full text-sm text-left text-white">
         <thead class="max-w-4xl mx-auto p-6 shadow-md rounded-md mt-8"
         style="
           background: rgba(29, 75, 29, 0.4); /* Fondo verde translúcido */
           backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque de fondo */
           -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad con Safari */
-          border: 1px solid rgba(119, 27, 27, 0.2); /* Borde suave y sutil */
+
         " >
           <tr>
             <th scope="col" class="px-6 py-3">Imagen</th>
@@ -85,7 +85,7 @@
           -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
         "
             *ngFor="let evento of eventos"
-            class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100"
+            class=""
           >
             <td class="px-6 py-4">
               <img
@@ -94,19 +94,19 @@
                 class="h-16 w-16 object-cover rounded-lg"
               />
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ evento.nombre_evento }}
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ evento.fecha_inicio }}
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ evento.hora_inicio }}
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ evento.fecha_termino}}
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ evento.hora_termino }}
             </td>
             <td class="px-6 py-4">

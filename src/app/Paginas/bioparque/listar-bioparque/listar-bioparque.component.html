@@ -63,7 +63,7 @@
   -->
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <ng-container *ngIf="plantas.length > 0; else noBioparque">
-      <table class="w-full text-sm text-left text-gray-400">
+      <table class="w-full text-sm text-left text-white">
         <thead     class=" "
         style="
        background: rgba(29, 75, 29, 0.4); /* Fondo verde translúcido */
@@ -83,7 +83,7 @@
         <tbody>
           <tr
             *ngFor="let planta of plantas"
-            class="bg-orange-100 odd:bg-orange-300 even:bg-orange-100 border-b border-orange-100"  style="
+            class=""  style="
             background: rgba(14, 184, 14, 0.479); /* Verde translúcido con opacidad */
             backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
             -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
@@ -97,16 +97,16 @@
                 class="h-16 w-16 object-cover rounded-lg"
               />
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ planta.nombre_comun }}
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ planta.nombre_cientifico }}
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ planta.familia }}
             </td>
-            <td class="px-6 py-4 font-medium text-black whitespace-nowrap">
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
               {{ planta.posicion_mapa }}
             </td>
 
