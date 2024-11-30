@@ -79,13 +79,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="
-          background: rgba(14, 184, 14, 0.479); /* Verde translúcido con opacidad */
-          backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
-          -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
-        "
+          <tr 
             *ngFor="let evento of eventos"
-            class=""
+            style=" backdrop-filter: blur(5px); /* Desenfoque de fondo */"
+            class="bg-zoolife-verde odd:bg-zoolife-verde-oscuro even:bg-zoolife-verde border-b border-white/75 "
           >
             <td class="px-6 py-4">
               <img
@@ -112,7 +109,7 @@
             <td class="px-6 py-4">
               <a
                 [routerLink]="['/app/modificar_evento', evento.id]"
-                class="font-medium text-orange-700 hover:underline"
+                class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-700"
                 >Editar</a
               >
             </td>
