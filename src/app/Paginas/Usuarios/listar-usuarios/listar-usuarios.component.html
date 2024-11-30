@@ -90,10 +90,12 @@
               style=" backdrop-filter: blur(5px); /* Desenfoque de fondo */"
               class="bg-zoolife-verde odd:bg-zoolife-verde-oscuro even:bg-zoolife-verde border-b border-white/75 "
             >
-              <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              <td class="px-6 py-4 font-medium text-white whitespace-nowrap overflow-hidden text-ellipsis max-w-xs"
+              title="{{  usuario.nombre}}">
                 {{ usuario.nombre }}
               </td>
-              <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
+              <td class="px-6 py-4 font-medium text-white whitespace-nowrap overflow-hidden text-ellipsis max-w-xs"
+              title="{{  usuario.correo}}">
                 {{ usuario.correo }}
               </td>
               <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
