@@ -85,13 +85,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr style="
-            background: rgba(14, 184, 14, 0.479); /* Verde translúcido con opacidad */
-            backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
-            -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
-          "
+            <tr 
               *ngFor="let usuario of usuarios"
-              class=""
+              style=" backdrop-filter: blur(5px); /* Desenfoque de fondo */"
+              class="bg-zoolife-verde odd:bg-zoolife-verde-oscuro even:bg-zoolife-verde border-b border-white/75 "
             >
               <td class="px-6 py-4 font-medium text-white whitespace-nowrap">
                 {{ usuario.nombre }}
@@ -115,14 +112,14 @@
                 <!-- Botón Ver Información -->
                 <a
                   [routerLink]="['/app/ver_mas', usuario.auth_id]"
-                  class="font-medium text-orange-700 hover:underline whitespace-nowrap"
+                  class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-700  hover:underline whitespace-nowrap"
                 >
                   Ver más
                 </a>
                 <!-- Botón Enviar Notificación -->
                 <button
                   (click)="mostrarFormulario(usuario.token ?? null)"
-                  class="font-medium text-orange-700 hover:underline whitespace-nowrap"
+                  class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-700  hover:underline whitespace-nowrap"
                 >
                   Notificar
                 </button>

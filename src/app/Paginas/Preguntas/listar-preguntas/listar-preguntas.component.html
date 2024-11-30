@@ -86,12 +86,12 @@
     <ng-container *ngIf="preguntasConEspecies$ | async as preguntasConEspecies; else noPreguntas">
       <table class="w-full text-sm text-left text-white"> <!-- Cambié text-gray-400 a text-white aquí -->
         <thead class="max-w-4xl mx-auto p-6 shadow-md rounded-md mt-8"
-          style="
-            background: rgba(29, 75, 29, 0.4); /* Fondo verde translúcido */
-            backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque de fondo */
-            -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad con Safari */
-            border: 1px solid rgba(119, 27, 27, 0.2); /* Borde suave y sutil */
-          ">
+        style="
+        background: rgba(29, 75, 29, 0.4); /* Fondo verde translúcido */
+           backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque de fondo */
+           -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad con Safari */
+           border: 1px solid rgba(119, 27, 27, 0.2); /* Borde suave y sutil */
+         " >
           <tr>
             <th scope="col" class="px-6 py-3">Pregunta</th>
             <th scope="col" class="px-6 py-3">Respuesta Correcta</th>
@@ -102,15 +102,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of preguntasConEspecies"
-            style="
-              background: rgba(14, 184, 14, 0.479); /* Verde translúcido con opacidad */
-              backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
-              -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
-            ">
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap"> <!-- Cambié text-black a text-white aquí -->
+          style=" backdrop-filter: blur(5px); /* Desenfoque de fondo */"
+            class="bg-zoolife-verde odd:bg-zoolife-verde-oscuro even:bg-zoolife-verde border-b border-white/75 "
+           >
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap overflow-hidden text-ellipsis max-w-xs"
+            title="{{ item.pregunta.pregunta }}"> <!-- Cambié text-black a text-white aquí -->
               {{ item.pregunta.pregunta }}
             </td>
-            <td class="px-6 py-4 font-medium text-white whitespace-nowrap"> <!-- Cambié text-black a text-white aquí -->
+            <td class="px-6 py-4 font-medium text-white whitespace-nowrap overflow-hidden text-ellipsis max-w-xs"
+              title="{{ item.pregunta.respuestas[item.pregunta.respuesta_correcta]}}"> <!-- Cambié text-black a text-white aquí -->
               {{ item.pregunta.respuestas[item.pregunta.respuesta_correcta] }}
             </td>
             <td class="px-6 py-4 font-medium text-white whitespace-nowrap"> <!-- Cambié text-black a text-white aquí -->
@@ -119,8 +119,8 @@
             <td class="px-6 py-4 text-white font-medium whitespace-nowrap"> <!-- Cambié text-black a text-white aquí -->
               {{ item.especie?.nombre_comun || item.especie?.nombre_cientifico || 'Desconocido' }}
             </td>
-            <td class="px-6 py-4">
-              <a (click)="navigateToEdit(item)" class="font-medium text-orange-700 hover:underline">Editar</a>
+            <td  class="px-6 py-4">
+              <a (click)="navigateToEdit(item)"   class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-700">Editar</a>
             </td>
           </tr>
         </tbody>
@@ -129,7 +129,14 @@
 
     <!-- Mensaje cuando no hay preguntas -->
     <ng-template #noPreguntas>
-      <div class="p-6 text-center text-white">
+      <div class="p-6 text-center text-white" style="
+      background: rgba(255, 255, 255, 0.4); /* Verde translúcido con opacidad */
+      backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
+      -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
+      border: 1px solid rgba(255, 255, 255, 0.2); /* Borde claro */
+      box-shadow: 0 8px 32px rgba(0, 128, 0, 0.25); /* Sombra con un toque verde */
+      border-radius: 16px; /* Bordes redondeados */
+    ">
         <p class="text-lg font-semibold">No se encontraron preguntas</p>
       </div>
     </ng-template>

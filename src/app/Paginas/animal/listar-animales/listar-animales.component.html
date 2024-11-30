@@ -82,14 +82,8 @@
         <tbody>
           <tr
             *ngFor="let animal of animales"
-            class=" "
-            style="
-            background: rgba(14, 184, 14, 0.479); /* Verde translúcido con opacidad */
-            backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
-            -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
-
-          "
-          >
+            style=" backdrop-filter: blur(5px); /* Desenfoque de fondo */"
+            class="bg-zoolife-verde odd:bg-zoolife-verde-oscuro even:bg-zoolife-verde border-b border-white/75 ">
             <td class="px-6 py-4">
               <img
                 [src]="animal.imagen"
@@ -109,7 +103,7 @@
             <td class="px-6 py-4">
               <a
                 [routerLink]="['/app/modificar_animal', animal.id]"
-                class="font-medium  odd:text-orange-400 even:text-orange-500 hover:underline"
+                class="bg-orange-500 text-white font-medium px-4 py-2 rounded hover:bg-orange-700"
                 >Editar</a
               >
             </td>
