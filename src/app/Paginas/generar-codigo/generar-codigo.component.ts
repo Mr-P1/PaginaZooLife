@@ -22,6 +22,9 @@ export class GenerarCodigoComponent implements OnInit {
   public boletaId!: string;
   public qrGenerado: boolean = false;
   public qrCodeDownloadLink: SafeUrl = '';
+  public filtroBusqueda: string = ''; // Para el filtro de búsqueda
+
+
 
   @ViewChild('qrcode', { static: false }) qrcodeElement!: ElementRef;
   public correoSeleccionado: string = '';
@@ -77,9 +80,13 @@ export class GenerarCodigoComponent implements OnInit {
     }
   }
 
-  // ('../../../assets/plants-leaves-green-1841479-wallhere.com.jpg') ;
-
-  foto = '../../../assets/'
+   // Método para filtrar usuarios según el nombre o correo
+   get usuariosFiltrados(): Usuario[] {
+    return this.usuarios.filter(usuario =>
+      usuario.nombre.toLowerCase().includes(this.filtroBusqueda.toLowerCase()) ||
+      usuario.correo.toLowerCase().includes(this.filtroBusqueda.toLowerCase())
+    );
+  }
 
   sendEmail(correo: string): void {
     if (!correo) {

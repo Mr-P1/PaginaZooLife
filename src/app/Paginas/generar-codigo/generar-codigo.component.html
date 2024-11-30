@@ -29,8 +29,27 @@ style="
       </p>
     </div>
 
+
+<!-- Contenedor con Flexbox -->
+<div *ngIf="qrGenerado" class="mb-6 flex items-center space-x-4">
+
+
+  <!-- Buscador -->
+  <div class="w-1/2">
+    <label for="filtroBusqueda" class="block text-white font-medium mb-2">
+      Buscar por nombre o correo:
+    </label>
+    <input
+      type="text"
+      id="filtroBusqueda"
+      [(ngModel)]="filtroBusqueda"
+      class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+      placeholder="Buscar..."
+    />
+  </div>
+
     <!-- Select de usuarios -->
-    <div *ngIf="qrGenerado" class="mb-6">
+    <div class="w-1/2">
       <label for="usuarioSelect" class="block text-white font-medium mb-2">
         Seleccione un usuario para enviar el QR:
       </label>
@@ -40,14 +59,16 @@ style="
         class="w-full bg-gray-50 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
       >
         <option
-          *ngFor="let usuario of usuarios"
+          *ngFor="let usuario of usuariosFiltrados"
           [value]="usuario.correo"
           class="text-gray-700"
         >
-         Nombre del Usuario: {{usuario.nombre }}, Correo {{ usuario.correo }}
+          Nombre del Usuario: {{usuario.nombre }}, Correo: {{ usuario.correo }}
         </option>
       </select>
     </div>
+</div>
+
 
     <!-- Acciones -->
     <div class="actions flex flex-wrap gap-4">
