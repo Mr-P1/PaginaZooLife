@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { estadisticaService } from '../estadisitca.service';
+import { TriviaRealizadaService } from '../../../data-acces/triviasvisitas.service';
 import { Observable,of } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -7,17 +7,27 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-visitas-hoy',
   standalone: true,
-  imports: [AsyncPipe,RouterLink],
+  imports: [RouterLink],
   templateUrl: './visitas-hoy.component.html',
   styleUrl: './visitas-hoy.component.scss'
 })
 export class VisitasHoyComponent implements OnInit{
-  visitasHoy$: Observable<number> = of(0);
 
-  constructor(private estadisticaService: estadisticaService) {}
+  triviasRealizadas: number = 0;
+  completadas: number = 0;
+  noCompletadas: number = 0;
+  noRealizadas: number = 0;
+
+  constructor(private ratingService: TriviaRealizadaService) {}
 
   ngOnInit(): void {
-    this.visitasHoy$ = this.estadisticaService.getVisitsTodayCount();
+    // Obtener las trivias de esta semana
+    this.ratingService.getTriviasEstaSemana().subscribe(data => {
+      this.triviasRealizadas = data.triviasRealizadas;
+      this.completadas = data.completadas;
+      this.noCompletadas = data.noCompletadas;
+      this.noRealizadas = data.noRealizadas;
+    });
   }
 
 }

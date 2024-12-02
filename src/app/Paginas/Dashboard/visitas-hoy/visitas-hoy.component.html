@@ -1,4 +1,7 @@
-<div class="bg-white p-4 rounded-lg shadow  hover:bg-orange-300 "   [routerLink]="['/app/uso-app-trivias']">
-  <h2 class="text-gray-600 text-sm">Visitantes Esperados Hoy</h2>
-  <p class="text-2xl font-bold text-gray-800">{{ visitasHoy$ | async }}</p>
+<div class="bg-white p-4 rounded-lg shadow hover:bg-orange-300" [routerLink]="['/app/uso-app-trivias']">
+  <h2 class="text-gray-600 text-sm">Trivias realizadas esta semana</h2>
+  <p class="text-gray-800">Trivias realizadas: {{ triviasRealizadas }}</p>
+  <p class="text-green-600">Trivias completadas: {{ completadas }}</p>
+  <p class="text-red-600">Trivias no completadas: {{ noCompletadas }}</p>
+  <p class="text-yellow-600">Trivias no realizadas: {{ noRealizadas }}</p>
 </div>

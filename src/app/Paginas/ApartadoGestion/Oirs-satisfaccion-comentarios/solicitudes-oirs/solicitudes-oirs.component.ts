@@ -167,7 +167,7 @@ export class SolicitudesOirsComponent implements OnInit {
                   this.oirsService.updateOirsResponse(oirId, respuesta).then(() => {
                     Swal.fire({
                       title: 'Respuesta Enviada',
-                      text: 'La respuesta ha sido enviada y el OIRS ha sido actualizado.',
+                      text: 'La respuesta ha sido enviada correctamente.',
                       icon: 'success',
                     });
                   });

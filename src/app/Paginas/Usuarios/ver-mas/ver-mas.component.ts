@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { forkJoin, Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { BoletasService } from '../../../data-acces/boletas.service';
+import Swal from 'sweetalert2'; // Importar SweetAlert
 
 @Component({
   selector: 'app-ver-mas',
@@ -90,15 +91,47 @@ export class VerMasComponent implements OnInit {
   }
 
   canjearPremioUsuario(premioUsuarioId: string) {
-    this.premiosService.canjearPremioUsuario(premioUsuarioId).then(() => {
-      console.log(`Premio con ID ${premioUsuarioId} canjeado exitosamente.`);
-      // Actualizar el estado en la vista
-      const premio = this.premiosDetallados.find(detalle => detalle.premioUsuario.id === premioUsuarioId);
-      if (premio) {
-        premio.premioUsuario.estado = false; // Cambiar a booleano
+    // Mostrar la alerta de confirmación
+    Swal.fire({
+      title: '¿Estás seguro de canjearlo?',
+      text: 'Esta acción no puede deshacerse.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, canjear',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si el usuario confirma, realizar el canje
+        this.premiosService.canjearPremioUsuario(premioUsuarioId).then(() => {
+          console.log(`Premio con ID ${premioUsuarioId} canjeado exitosamente.`);
+
+          // Actualizar el estado en la vista
+          const premio = this.premiosDetallados.find(detalle => detalle.premioUsuario.id === premioUsuarioId);
+          if (premio) {
+            premio.premioUsuario.estado = false; // Cambiar a booleano
+          }
+
+          // Mostrar mensaje de éxito con SweetAlert
+          Swal.fire({
+            icon: 'success',
+            title: '¡Premio canjeado correctamente!',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }).catch(error => {
+          console.error('Error al canjear el premio:', error);
+
+          // Mostrar mensaje de error si ocurre algún problema
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al canjear el premio',
+            text: 'Ocurrió un problema, por favor intenta nuevamente.',
+          });
+        });
+      } else if (result.isDismissed) {
+        console.log('El canje fue cancelado');
       }
-    }).catch(error => {
-      console.error('Error al canjear el premio:', error);
     });
   }
 

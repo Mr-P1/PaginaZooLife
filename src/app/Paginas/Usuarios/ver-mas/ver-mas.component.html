@@ -1,43 +1,46 @@
 <div class="container mx-auto p-4 ">
-  <!-- Información del usuario -->
-  <div *ngIf="usuario" class=" shadow rounded-lg p-6 mb-4 " style="
-  background: rgba(225, 225, 225, 0.6); /* Fondo translúcido con efecto vidrio */
-  backdrop-filter: blur(20px); /* Desenfoque para el efecto vidrio */
-  border: 2px solid white; /* Bordes blancos */
-  border-radius: 20px; /* Bordes redondeados */
-  padding: 10px 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra inicial */
-
-  font-size: 12px;
-  ">
-    <!-- <h2 class="text-2xl font-semibold mb-4 text-center">Datos del usuario y resultados de la trivia</h2> -->
-
-    <!-- Contenedor principal en formato grid con dos columnas -->
+  <div *ngIf="usuario" class="shadow rounded-lg mb-4">
+    <!-- Contenedor de las tarjetas -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-      <!-- Columna izquierda: Datos del usuario -->
-      <div>
-        <h3 class="text-lg font-bold text-white mb-4">Datos del usuario</h3>
-        <p class="text-base font-bold text-black"><strong>Nombre:</strong> {{ usuario.nombre }}</p>
-        <p class="text-base font-bold text-black"><strong>Correo:</strong> {{ usuario.correo }}</p>
-        <p class="text-base font-bold text-black"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
-        <p class="text-base font-bold text-black"><strong>Nivel:</strong> {{ usuario.nivel }}</p>
-        <p class="text-base font-bold text-black"><strong>Puntos:</strong> {{ usuario.puntos }}</p>
-        <p class="text-base font-bold text-black"><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente' }}</p>
-        <p class="text-base font-bold text-black"><strong>Última visita:</strong>{{ ultimaVisita | date : "medium" }}</p>
-        <p class="text-base font-bold text-black"><strong>Boletas usadas:</strong> {{ boletasUsadas }}</p>
+      <!-- Tarjeta para Datos del usuario -->
+      <div class="shadow rounded-lg p-6 w-full" style="
+        background: rgba(60, 60, 60, 0.2); /* Fondo translúcido con efecto vidrio */
+        backdrop-filter: blur(30px); /* Desenfoque para el efecto vidrio */
+        border: 2px solid white; /* Bordes blancos */
+        border-radius: 20px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra inicial */
+        font-size: 12px;
+      ">
+        <h3 class="text-3xl font-bold text-white mb-4 text-center ">Datos del usuario</h3>
+        <p class="text-base font-bold text-white"><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+        <p class="text-base font-bold text-white"><strong>Correo:</strong> {{ usuario.correo }}</p>
+        <p class="text-base font-bold text-white"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+        <p class="text-base font-bold text-white"><strong>Nivel:</strong> {{ usuario.nivel }}</p>
+        <p class="text-base font-bold text-white"><strong>Puntos:</strong> {{ usuario.puntos }}</p>
+        <p class="text-base font-bold text-white"><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente' }}</p>
+        <p class="text-base font-bold text-white"><strong>Último ingreso app:</strong> {{ ultimaVisita | date : "medium" }}</p>
+        <p class="text-base font-bold text-white"><strong>Boletas usadas:</strong> {{ boletasUsadas }}</p>
       </div>
 
-      <!-- Columna derecha: Resultados de la trivia -->
-      <div>
-        <h3 class="text-lg font-bold text-white mb-4">Resultados de la trivia</h3>
-        <p class="text-green-800 text-base font-bold"><strong>Respuestas Correctas:</strong> {{ respuestasCorrectas }}</p>
-        <p class="text-red-600 text-base font-bold"><strong>Respuestas Incorrectas:</strong> {{ respuestasIncorrectas }}</p>
-        <p class="text-black text-base font-bold"><strong>Total Respuestas:</strong> {{ respuestasTotales }}</p>
-        <p class="text-blue-800 text-base font-bold"><strong>Promedio de Respuestas Correctas:</strong> {{ promedioCorrectas | number:'1.0-2' }}%</p>
+      <!-- Tarjeta para Resultados de la trivia -->
+      <div class="shadow rounded-lg p-6 w-full" style="
+         background: rgba(60, 60, 60, 0.2); /* Fondo translúcido con efecto vidrio */
+        backdrop-filter: blur(30px); /* Desenfoque para el efecto vidrio */
+        border: 2px solid white; /* Bordes blancos */
+        border-radius: 20px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra inicial */
+        font-size: 12px;
+      ">
+        <h3 class="text-3xl font-bold text-white mb-4 text-center">Resultados de la trivia</h3>
+        <p class="text-white text-base font-bold"><strong>Total Respuestas:</strong> {{ respuestasTotales }}</p>
+        <p class="text-green-500 text-base font-bold"><strong>Respuestas Correctas:</strong> {{ respuestasCorrectas }}</p>
+        <p class="text-red-500 text-base font-bold"><strong>Respuestas Incorrectas:</strong> {{ respuestasIncorrectas }}</p>
+        <p class="text-blue-500 text-base font-bold"><strong>Promedio de Respuestas Correctas:</strong> {{ promedioCorrectas | number:'1.0-2' }}%</p>
       </div>
     </div>
   </div>
+
+
 
 
   <!-- Listado de premios del usuario -->
