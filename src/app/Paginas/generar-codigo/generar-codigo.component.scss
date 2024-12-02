@@ -36,7 +36,6 @@
 
 button {
   padding: 10px 20px;
-  background-color: #16A34A;
   color: white;
   border: none;
   border-radius: 5px;
@@ -44,9 +43,9 @@ button {
   font-size: 16px;
 }
 
-button:hover:enabled {
-  background-color: #117937;
-}
+// button:hover:enabled {
+//   background-color:  rgb(194 65 12);
+// }
 
 button:disabled {
   background-color: #cccccc;

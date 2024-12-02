@@ -1,43 +1,62 @@
-<div class="container mx-auto p-4">
-  <!-- Información del usuario -->
-  <div *ngIf="usuario" class="bg-white shadow rounded-lg p-6 mb-4">
-    <!-- <h2 class="text-2xl font-semibold mb-4 text-center">Datos del usuario y resultados de la trivia</h2> -->
-
-    <!-- Contenedor principal en formato grid con dos columnas -->
+<div class="container mx-auto p-4 ">
+  <div *ngIf="usuario" class="shadow rounded-lg mb-4">
+    <!-- Contenedor de las tarjetas -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-      <!-- Columna izquierda: Datos del usuario -->
-      <div>
-        <h3 class="text-xl font-semibold mb-4">Datos del usuario</h3>
-        <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
-        <p><strong>Correo:</strong> {{ usuario.correo }}</p>
-        <p><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
-        <p><strong>Nivel:</strong> {{ usuario.nivel }}</p>
-        <p><strong>Puntos:</strong> {{ usuario.puntos }}</p>
-        <p><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente' }}</p>
-        <p><strong>Última visita:</strong>{{ ultimaVisita | date : "medium" }}</p>
-        <p><strong>Boletas usadas:</strong> {{ boletasUsadas }}</p>
+      <!-- Tarjeta para Datos del usuario -->
+      <div class="shadow rounded-lg p-6 w-full" style="
+        background: rgba(60, 60, 60, 0.2); /* Fondo translúcido con efecto vidrio */
+        backdrop-filter: blur(30px); /* Desenfoque para el efecto vidrio */
+        border: 2px solid white; /* Bordes blancos */
+        border-radius: 20px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra inicial */
+        font-size: 12px;
+      ">
+        <h3 class="text-3xl font-bold text-white mb-4 text-center ">Datos del usuario</h3>
+        <p class="text-base font-bold text-white"><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+        <p class="text-base font-bold text-white"><strong>Correo:</strong> {{ usuario.correo }}</p>
+        <p class="text-base font-bold text-white"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+        <p class="text-base font-bold text-white"><strong>Nivel:</strong> {{ usuario.nivel }}</p>
+        <p class="text-base font-bold text-white"><strong>Puntos:</strong> {{ usuario.puntos }}</p>
+        <p class="text-base font-bold text-white"><strong>Patente:</strong> {{ usuario.patente ? usuario.patente : 'Sin patente' }}</p>
+        <p class="text-base font-bold text-white"><strong>Último ingreso app:</strong> {{ ultimaVisita | date : "medium" }}</p>
+        <p class="text-base font-bold text-white"><strong>Boletas usadas:</strong> {{ boletasUsadas }}</p>
       </div>
 
-      <!-- Columna derecha: Resultados de la trivia -->
-      <div>
-        <h3 class="text-xl font-semibold mb-4">Resultados de la trivia</h3>
-        <p class="text-green-600"><strong>Respuestas Correctas:</strong> {{ respuestasCorrectas }}</p>
-        <p class="text-red-600"><strong>Respuestas Incorrectas:</strong> {{ respuestasIncorrectas }}</p>
-        <p class="text-black"><strong>Total Respuestas:</strong> {{ respuestasTotales }}</p>
-        <p class="text-blue-600"><strong>Promedio de Respuestas Correctas:</strong> {{ promedioCorrectas | number:'1.0-2' }}%</p>
+      <!-- Tarjeta para Resultados de la trivia -->
+      <div class="shadow rounded-lg p-6 w-full" style="
+         background: rgba(60, 60, 60, 0.2); /* Fondo translúcido con efecto vidrio */
+        backdrop-filter: blur(30px); /* Desenfoque para el efecto vidrio */
+        border: 2px solid white; /* Bordes blancos */
+        border-radius: 20px; /* Bordes redondeados */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra inicial */
+        font-size: 12px;
+      ">
+        <h3 class="text-3xl font-bold text-white mb-4 text-center">Resultados de la trivia</h3>
+        <p class="text-white text-base font-bold"><strong>Total Respuestas:</strong> {{ respuestasTotales }}</p>
+        <p class="text-green-500 text-base font-bold"><strong>Respuestas Correctas:</strong> {{ respuestasCorrectas }}</p>
+        <p class="text-red-500 text-base font-bold"><strong>Respuestas Incorrectas:</strong> {{ respuestasIncorrectas }}</p>
+        <p class="text-blue-500 text-base font-bold"><strong>Promedio de Respuestas Correctas:</strong> {{ promedioCorrectas | number:'1.0-2' }}%</p>
       </div>
     </div>
   </div>
 
 
+
+
   <!-- Listado de premios del usuario -->
-  <div *ngIf="premiosDetallados.length > 0" class="bg-white shadow rounded-lg p-6 mb-4">
-    <h2 class="text-2xl font-semibold mb-4 text-center">Premios del usuario</h2>
+  <div *ngIf="premiosDetallados.length > 0" class="bg-white shadow rounded-lg p-6 mb-4"
+    style="  background: rgba(255, 255, 255, 0.2); /* Fondo translúcido con efecto vidrio */
+    backdrop-filter: blur(20px); /* Desenfoque para el efecto vidrio */
+    border: 2px solid white; /* Bordes blancos */
+    border-radius: 20px; /* Bordes redondeados */
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra inicial */
+  ">
+    <h2 class="text-2xl text-white font-semibold mb-4 text-center">Premios del usuario</h2>
 
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div *ngFor="let detalle of premiosDetallados" class="border rounded-lg p-4 bg-gray-50">
+      <div *ngFor="let detalle of premiosDetallados" class="border rounded-lg p-4" style="background: #2f7652;">
         <!-- Imagen del premio -->
         <img
           *ngIf="detalle.premioTrivia?.imagen"
@@ -47,15 +66,15 @@
         />
         <div class="text-center">
           <!-- Información del premio -->
-          <h4 class="text-lg font-bold">{{ detalle.premioTrivia?.nombre }}</h4>
-          <p class="text-gray-600 mb-2">{{ detalle.premioTrivia?.descripcion }}</p>
-          <p class="text-gray-500 text-sm"><strong>Código:</strong> {{ detalle.premioUsuario.codigo }}</p>
-          <p class="text-gray-500 text-sm"><strong>Estado:</strong> {{ detalle.premioUsuario.estado ? 'Disponible' : 'Canjeado' }}</p>
+          <h4 class="text-lg font-bold text-white">{{ detalle.premioTrivia?.nombre }}</h4>
+          <p class="text-white mb-2">{{ detalle.premioTrivia?.descripcion }}</p>
+          <p class="text-white text-sm"><strong>Código:</strong> {{ detalle.premioUsuario.codigo }}</p>
+          <p class="text-white text-sm"><strong>Estado:</strong> {{ detalle.premioUsuario.estado ? 'Disponible' : 'Canjeado' }}</p>
 
           <!-- Botón dinámico según el estado del premio -->
           <button
           class="mt-4 px-4 py-2 w-full rounded-lg font-semibold text-white"
-          [ngClass]="detalle.premioUsuario.estado ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'"
+          [ngClass]="detalle.premioUsuario.estado ? 'text-white bg-green-600 hover:bg-green-700 border' : 'bg-gray-400 cursor-not-allowed border'"
           [disabled]="!detalle.premioUsuario.estado"
           (click)="canjearPremioUsuario(detalle.premioUsuario.id)"
         >
@@ -68,7 +87,14 @@
   </div>
 
   <!-- Mensaje cuando no tiene premios -->
-  <div *ngIf="premiosDetallados.length === 0" class="bg-white shadow rounded-lg p-6">
-    <p class="text-center text-gray-500">Este usuario no tiene premios.</p>
+  <div *ngIf="premiosDetallados.length === 0" class="p-6 text-center " style="
+  background: rgba(255, 255, 255, 0.4); /* Verde translúcido con opacidad */
+  backdrop-filter: blur(15px) saturate(1.8); /* Desenfoque y saturación */
+  -webkit-backdrop-filter: blur(15px) saturate(1.8); /* Compatibilidad Safari */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Borde claro */
+  box-shadow: 0 8px 32px rgba(0, 128, 0, 0.25); /* Sombra con un toque verde */
+  border-radius: 16px; /* Bordes redondeados */
+">
+    <p class="text-center text-white text-lg font-semibold">Este usuario no tiene premios.</p>
   </div>
 </div>

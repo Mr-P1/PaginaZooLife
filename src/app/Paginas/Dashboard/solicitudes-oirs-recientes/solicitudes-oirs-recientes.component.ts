@@ -63,7 +63,7 @@ export class SolicitudesOirsRecientesComponent implements OnInit{
                     console.log('OIRS actualizado correctamente.');
                     Swal.fire({
                       title: 'Respuesta Enviada',
-                      text: 'La respuesta ha sido enviada y el OIRS ha sido actualizado.',
+                      text: 'La respuesta ha sido enviada correctamente.',
                       icon: 'success'
                     });
                   }).catch((error) => {
